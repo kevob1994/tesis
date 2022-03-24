@@ -1,0 +1,129 @@
+@import './../../../styles/index.scss';
+
+.calendarContainer {
+	border: solid 1px #EFEFF1;
+	width: 100%;
+	.calendarHeader {
+			background-color: #F9F9F9;
+			height:85px;
+			justify-content: space-between;
+			padding:0 1rem;
+			.month {
+					font-size: 18px;
+					font-weight: bold;
+					text-align: center;
+			}
+			.year {
+					color: #696974;
+					font-size: 14px;
+					text-align: center;
+			}
+			:global .anticon {
+					font-size:16px;
+					cursor:pointer;
+			}
+	}
+	.days {
+			height:50px;
+			p {
+					color: #515571;
+					font-size: 16px;
+					font-weight: 700;
+					width: 100%;
+					text-align: center;
+			}
+	}
+	.dates {
+			display: grid;
+			grid-template-columns: calc(100% / 7) calc(100% / 7) calc(100% / 7) calc(100% / 7) calc(100% / 7) calc(100% / 7) calc(100% / 7);
+			.date {
+					border:1px solid #EFEFF1;
+					height:90px;
+					color: #515571;
+					
+					@media screen and (max-width: $screen-sm-max) {
+							height: fit-content;
+							align-items: center;
+							cursor: pointer;
+					}
+					&.today {
+							background-color: #E6F7FF;
+							color: #0678FE;
+					}
+					&.disabled {
+							background-color:#F9F9F9;
+					}
+					&.classroomDate {
+							cursor: pointer;
+					}
+					span {
+							font-weight: bold;
+							font-size: 16px;
+							line-height: 16px;
+							margin-left:9px;
+							margin-bottom: 9px;
+							margin-top:9px;
+							
+							@media screen and (max-width: $screen-sm-max) {
+									margin-left: 0px;
+									padding-top: 10px;
+									padding-bottom: 10px;
+									text-align: center;
+									border: solid 2px transparent;
+							}
+					}
+					.active {
+							// height: 27px;
+							border-left: 2px solid #67cb71;
+							background-color: #a9e1af;
+							width: 100%;
+							span {
+									font-weight: bold;
+									font-size: 12px;
+									color: #fff;
+									margin-left:4px;
+									line-height: 27px;
+							}
+					}
+					.activeMobile {
+							background: #a9e1af;
+							/* padding: 13px; */
+							border-radius: 60px;
+							color: white;
+							border: 2px solid #67cb71;
+							font-size: .9rem;
+							max-width: 40px;
+							width: 40px;
+					}
+			}
+	}
+}
+
+.popoverNotShow {
+	display: none !important; 
+}
+
+.detailsBookingWrapper {
+	:global {
+			.ant-modal {
+					width:auto !important;
+					max-width: 788px;
+					@media screen and (max-width: $screen-sm-max) {
+							height: 100vh !important;
+							padding: 0;
+							top: 0px !important;
+							margin: 0px !important;
+							.ant-modal-content {
+									height: 100%;
+									.ant-modal-body {
+											height: 100%;
+											@media screen and (max-width: $screen-sm-max) {
+													padding: 12px !important;
+											}
+									}
+							}
+					}
+
+			}
+	}
+}

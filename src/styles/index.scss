@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+@import './variables.scss';
+@import './mediaqueries.scss';
+@import './antd.scss';
+
+body {
+  font-family: 'Lato';
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+label {
+  font-weight: bold;
+  font-size: 1.1rem !important;
+}

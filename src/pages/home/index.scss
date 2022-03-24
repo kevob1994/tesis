@@ -1,0 +1,14 @@
+.content-home {
+	height: calc(100vh);
+	overflow: hidden !important;
+
+	.content-nav{
+    background: white;
+    border-radius: 20px;
+    -webkit-box-shadow: 1px 1px 11px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 1px 1px 11px 4px rgba(0, 0, 0, 0.05);
+		padding: 30px;
+		display: table;
+    height: 100%;
+	}
+}
