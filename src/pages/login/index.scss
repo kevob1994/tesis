@@ -1,0 +1,35 @@
+@import './../../styles/index.scss';
+
+.content-login {
+  padding: 100px 200px;
+  height: 100vh;
+	background: $background;
+  &-row {
+    background: white;
+    border-radius: 20px;
+    height: 100%;
+    -webkit-box-shadow: 1px 1px 11px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 1px 1px 11px 4px rgba(0, 0, 0, 0.05);
+
+    .content-form {
+      padding: 40px;
+
+      h1 {
+        margin-bottom: 70px;
+      }
+
+      .ant-form-item {
+        margin-bottom: 20px;
+      }
+
+			.btn-login {
+				margin-top: 50px;
+			}
+    }
+
+    .content-slide {
+      border-bottom-right-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+  }
+}
