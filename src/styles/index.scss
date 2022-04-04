@@ -15,3 +15,31 @@ label {
   font-weight: bold;
   font-size: 1.1rem !important;
 }
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f167;
+  border-radius: 10px;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(184, 184, 184, 0.788);
+  padding-left: 2px;
+  padding-right: 2px;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(184, 183, 183);
+  border-radius: 10px;
+  padding-left: 2px;
+  padding-right: 2px;
+}

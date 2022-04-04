@@ -7,6 +7,35 @@ const { Search } = Input;
 
 const onSearch = (value: any) => console.log(value);
 
+const list = [
+  {
+    id: 1,
+    title: 'Nombre del tema',
+    description: 'Descripcion del tema',
+    image:
+      'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    file: null,
+    user: {
+      name: 'Nombre del usuario',
+      photo:
+        'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    },
+  },
+  {
+    id: 2,
+    title: 'Nombre del tema',
+    description: 'Descripcion del tema',
+    image:
+      'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    file: null,
+    user: {
+      name: 'Nombre del usuario',
+      photo:
+        'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    },
+  },
+];
+
 const ListCourses = () => {
   return (
     <div className='content-login'>
@@ -28,7 +57,7 @@ const ListCourses = () => {
         </Col>
 
         <Col span={24}>
-          <ListElements />
+          <ListElements listItems={list} url='/home/id/course-program' />
         </Col>
       </Row>
     </div>

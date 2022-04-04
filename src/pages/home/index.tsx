@@ -11,11 +11,11 @@ const HomePage = () => {
       <HeaderNav />
       <Layout>
         <SlideNav />
-        <Layout style={{ padding: '30px 20px 30px 30px', overflowY: 'scroll' }}>
+        <div style={{ padding: '30px 20px 30px 30px', width: '100%' }}>
           <div className='content-nav'>
             <Outlet />
           </div>
-        </Layout>
+        </div>
       </Layout>
     </Layout>
   );

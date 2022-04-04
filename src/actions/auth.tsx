@@ -49,9 +49,11 @@ export const login =
     }
     const body = JSON.stringify({ email, password });
     try {
-      const resGet = await clientAxios.get('sanctum/csrf-cookie');
+      // const resGet = await clientAxios.get('sanctum/csrf-cookie');
 
       const res = await clientAxios.post('login', body);
+			console.log("res")
+			console.log(res)
 
       dispatch({
         type: LOGIN_SUCCESS,

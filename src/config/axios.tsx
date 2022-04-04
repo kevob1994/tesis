@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const clientAxios = axios.create({
-  baseURL: 'https://www.cjdonboscoboleita.com.ve/',
+  baseURL: 'https://cors-anywhere.herokuapp.com/http://127.0.0.1:8000/',
   headers: {
     'Content-Type': 'application/json',
   },

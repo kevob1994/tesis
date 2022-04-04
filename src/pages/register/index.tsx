@@ -271,9 +271,16 @@ const Register = () => {
           </Row>
           <div className='upload-image'>
             {imageUrl2 ? (
-              <Image src={imageUrl2} alt='avatar' width={200} height={200} />
+              <Image
+                preview={false}
+                src={imageUrl2}
+                alt='avatar'
+                width={200}
+                height={200}
+              />
             ) : (
               <Image
+                preview={false}
                 width={200}
                 height={200}
                 src='error'

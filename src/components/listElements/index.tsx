@@ -3,67 +3,63 @@ import { Col, Image, Row } from 'antd';
 import './index.scss';
 import { Link } from 'react-router-dom';
 
-const ListElements = () => {
+interface UserI {
+  name: string;
+  photo: string;
+}
+interface ItemI {
+  id: number;
+  title: string;
+  description: string;
+  image: string | null;
+  file: string | null;
+  user: UserI;
+}
+
+interface ListElementsI {
+  listItems: ItemI[];
+  url: string;
+  span?: number;
+}
+
+const ListElements = ({ listItems, url, span = 12 }: ListElementsI) => {
   return (
     <Row gutter={40}>
-      <Col span={12}>
-        <Link to={`/home/${1}/course-program`}>
-          <div className='content-list'>
-            <div className='item-list'>
-              <Row>
-                <Image
-                  width={300}
-                  height={200}
-                  src='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-                />
-                <Row className='info-course'>
-                  <div>
-                    <h2>Nombre de la materia</h2>
-                    <p>Descripcion</p>
-                  </div>
-                  <Row align='middle'>
+      {listItems.map((item) => (
+        <Col span={span}>
+          <Link to={url.replace('id', item.id.toString())}>
+            <div className='content-list'>
+              <div className='item-list'>
+                <Row>
+                  {item?.image && (
                     <Image
-                      width={50}
-                      height={50}
-                      src='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+                      preview={false}
+                      width={300}
+                      height={200}
+                      src={item.image}
                     />
-                    <p className='name-teacher'>Nombre del profesor</p>
+                  )}
+                  <Row className='info-course'>
+                    <div>
+                      <h2>{item.title}</h2>
+                      <p>{item.description}</p>
+                    </div>
+                    <Row align='middle'>
+                      <Image
+                        preview={false}
+                        width={50}
+                        height={50}
+                        src={item.user.photo}
+                      />
+                      <p className='name-teacher'>{item.user.name}</p>
+                    </Row>
                   </Row>
                 </Row>
-              </Row>
+              </div>
             </div>
-          </div>
-        </Link>
-      </Col>
-      <Col span={12}>
-        <Link to={`/home/${2}/course-program`}>
-        <div className='content-list'>
-          <div className='item-list'>
-            <Row>
-              <Image
-                width={300}
-                height={200}
-                src='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-              />
-              <Row className='info-course'>
-                <div>
-                  <h2>Nombre de la materia</h2>
-                  <p>Descripcion</p>
-                </div>
-                <Row align='middle'>
-                  <Image
-                    width={50}
-                    height={50}
-                    src='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-                  />
-                  <p className='name-teacher'>Nombre del profesor</p>
-                </Row>
-              </Row>
-            </Row>
-          </div>
-        </div>
-				</Link>
-      </Col>
+          </Link>
+        </Col>
+      ))}
     </Row>
   );
 };

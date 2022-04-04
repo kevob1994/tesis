@@ -1,0 +1,53 @@
+@import './../../../../../styles/index.scss';
+
+.item-user-chat {
+  padding: 20px;
+  display: flex;
+  border-bottom: 1px solid #99999929;
+  img {
+    border-radius: 50%;
+    margin-right: 20px;
+    min-width: 50px;
+  }
+  .info-chat {
+    padding-left: 20px;
+    width: calc(100% - 80px);
+
+    .name {
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 104.51%;
+      color: #2c2f46;
+    }
+    .last-msg {
+      padding-top: 10px;
+      font-size: 16px;
+      line-height: 104.51%;
+      color: #2c2f46;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .last-time {
+      font-size: 13px;
+      line-height: 104.51%;
+      color: #999;
+      padding-left: 5px;
+    }
+  }
+  &.selected {
+    background: $primary;
+    .info-chat {
+      .last-msg {
+        color: #ffffffd1;
+      }
+      .name {
+        color: #ffffffd1;
+      }
+    }
+    .last-time {
+      color: #ffffffd1;
+    }
+  }
+}
