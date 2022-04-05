@@ -78,6 +78,13 @@ const Register = () => {
       setFileList(newFileList);
     },
     beforeUpload: (file: any) => {
+      console.log('file');
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function () {
+        console.log('reader.result');
+        console.log(reader.result);
+      };
       setFileList([file, ...fileList]);
       setImageUrl2(URL.createObjectURL(file));
       return false;

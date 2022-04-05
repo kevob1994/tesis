@@ -62,6 +62,7 @@ export const login =
       dispatch(loadUser());
     } catch (error: any) {
       console.log(error);
+      console.log("error", error.response);
       const err = error.response.data.error;
       dispatch({
         type: LOGIN_FAIL,
