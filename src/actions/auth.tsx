@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { Dispatch } from 'redux';
 import setAuthToken from '../utils/setAuthToken';
-import clientAxios from './../config/axios';
+import {clientAxios} from './../config/axios';
 import {
   REGISTER_SUCCESS,
   AUTH_ERROR,
@@ -48,9 +48,24 @@ export const login =
       setAuthToken(localStorage.token);
     }
     const body = JSON.stringify({ email, password });
-    try {
-      // const resGet = await clientAxios.get('sanctum/csrf-cookie');
 
+    /*const http = axios.create({
+      baseURL:'http://localhost/8000/api',
+      headers:{
+        "Access-Control-Allow-Origin": "*",
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+      withCredentials: true,
+    })
+
+    const csrf = await http.get('/sanctum/csrf-cookie');
+    console.log('csrf =', csrf);*/
+    
+
+    try {
+      const resGet = await clientAxios.get('sanctum/csrf-cookie');
+      console.log("resGET")
+      console.log(resGet);
       const res = await clientAxios.post('login', body);
 			console.log("res")
 			console.log(res)
