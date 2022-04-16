@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Col, Input, Row } from 'antd';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import ListElements from '../../../components/listElements';
+import { ListElements } from '../../../components';
 
 const { Search } = Input;
 

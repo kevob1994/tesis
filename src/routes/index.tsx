@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
 import {
   LoginPage,
@@ -14,18 +15,49 @@ import {
   TasksPage,
   NotesPages,
   CreateCoursePage,
-	ForumInfoPage
+  ForumInfoPage,
 } from '../pages';
+import { StoreI } from '../utils/interfaces';
+import { ProtectedRoute } from './ProtectedRoute';
 
 export const RoutesPath = () => {
+  const auth = useSelector((state: StoreI) => state.auth);
   return (
     <Routes>
       <Route path='login' element={<LoginPage />} />
       <Route path='register' element={<RegisterPage />} />
-      <Route path='/' element={<ListCoursesPage />} />
-      <Route path='create-course' element={<CreateCoursePage />} />
-      <Route path='edit-course/:id' element={<CreateCoursePage />} />
-      <Route path='home/:id' element={<HomePage />}>
+      <Route
+        path='/'
+        element={
+          <ProtectedRoute>
+            <ListCoursesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path='create-course'
+        element={
+          <ProtectedRoute>
+            <CreateCoursePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path='edit-course/:id'
+        element={
+          <ProtectedRoute>
+            <CreateCoursePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path='home/:id'
+        element={
+          <ProtectedRoute>
+            <HomePage />
+          </ProtectedRoute>
+        }
+      >
         <Route path='course-program' element={<CourseProgramPage />} />
         <Route path='evaluation-plan' element={<EvaluationPlanPage />} />
         <Route path='calendar' element={<CalendarPage />} />
@@ -37,6 +69,14 @@ export const RoutesPath = () => {
         <Route path='tasks' element={<TasksPage />} />
         <Route path='notes' element={<NotesPages />} />
       </Route>
+      <Route
+        path='*'
+        element={
+          <ProtectedRoute>
+            <p>There's nothing here: 404!</p>
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 };

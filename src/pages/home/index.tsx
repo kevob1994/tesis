@@ -1,9 +1,8 @@
 import React from 'react';
 import { Layout } from 'antd';
 import './index.scss';
-import HeaderNav from '../../components/header';
-import SlideNav from '../../components/slide';
 import { Outlet } from 'react-router-dom';
+import { HeaderNav, SlideNav } from '../../components';
 
 const HomePage = () => {
   return (

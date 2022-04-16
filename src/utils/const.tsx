@@ -1,7 +1,6 @@
-export const dateFormat = 'YYYY/MM/DD';
+import { GenderE, RoleE } from './interfaces';
 
-const FEMENINE = 0,
-  MALE = 1;
+export const dateFormat = 'YYYY/MM/DD';
 
 const ARTS = 0,
   BIOLOGY = 1,
@@ -17,9 +16,14 @@ const ARTS = 0,
   CHEMISTRY = 11,
   TECHNOLOGY = 12;
 
-export const sexList = [
-  { id: FEMENINE, sex: 'femenino' },
-  { id: MALE, sex: 'masculino' },
+export const genderList = [
+  { id: GenderE.FEMININE, gender: 'femenino' },
+  { id: GenderE.MALE, gender: 'masculino' },
+];
+
+export const roleList = [
+  { id: RoleE.STUDENT, role: 'estudiante' },
+  { id: RoleE.TEACHER, role: 'profesor' },
 ];
 
 export const categoryClass = [

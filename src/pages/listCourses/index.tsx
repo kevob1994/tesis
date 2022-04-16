@@ -1,7 +1,7 @@
 import { Button, Col, Input, Row } from 'antd';
 import './index.scss';
-import ListElements from '../../components/listElements';
 import { Link } from 'react-router-dom';
+import { ListElements } from '../../components';
 
 const { Search } = Input;
 
