@@ -60,9 +60,9 @@ export const login = (params: UserLoginFormI) => async (dispatch: Dispatch) => {
 };
 
 export const loadUser = () => async (dispatch: Dispatch) => {
-	dispatch({
-		type: ActionTypesAuth.LOADING,
-	});
+  dispatch({
+    type: ActionTypesAuth.LOADING,
+  });
   try {
     const res = await clientAxios.get<AxiosAuth>('user', {
       headers: headerAuthToken(),
@@ -70,7 +70,7 @@ export const loadUser = () => async (dispatch: Dispatch) => {
     // debugger;
     dispatch({
       type: ActionTypesAuth.LOGIN_SUCCESS,
-      payload: {...res.data, token: localStorage.token },
+      payload: { ...res.data, token: localStorage.token },
     });
   } catch (error: any) {
     console.log('error', error.response);
@@ -79,4 +79,10 @@ export const loadUser = () => async (dispatch: Dispatch) => {
       type: ActionTypesAuth.REQUEST_AUTH_FAIL,
     });
   }
+};
+
+export const logout = () => async (dispatch: Dispatch) => {
+  dispatch({
+    type: ActionTypesAuth.LOGOUT,
+  });
 };

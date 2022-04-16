@@ -7,7 +7,7 @@ import { HeaderNav, SlideNav } from '../../components';
 const HomePage = () => {
   return (
     <Layout className='content-home'>
-      <HeaderNav />
+      <HeaderNav showLinkCourses={true}/>
       <Layout>
         <SlideNav />
         <div style={{ padding: '30px 20px 30px 30px', width: '100%' }}>

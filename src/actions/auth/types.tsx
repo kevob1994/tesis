@@ -8,6 +8,7 @@ export enum ActionTypesAuth {
   USER_LOADED = 'USER_LOADED',
   LOGIN_SUCCESS = 'LOGIN_SUCCESS',
   LOADING = 'LOADING',
+	LOGOUT = 'LOGOUT',
   REQUEST_AUTH_FAIL = 'REQUEST_AUTH_FAIL',
 }
 interface IPayloadAuth {
@@ -29,16 +30,22 @@ interface IActionAuthLoginSuccess {
   payload: IPayloadAuth;
 }
 
-interface IActionAuthRequestAuthfail {
+interface IActionAuthRequestAuthFail {
   type: ActionTypesAuth.REQUEST_AUTH_FAIL;
 }
 
 interface IActionAuthLoading {
   type: ActionTypesAuth.LOADING;
 }
+
+interface IActionLogout {
+	type: ActionTypesAuth.LOGOUT
+}
+
 export type TActionAuth =
   | IActionAuthUserLoaded
   | IActionAuthRegisterSuccess
   | IActionAuthLoginSuccess
-  | IActionAuthRequestAuthfail
-  | IActionAuthLoading;
+  | IActionAuthRequestAuthFail
+  | IActionAuthLoading
+	| IActionLogout;
