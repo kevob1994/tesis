@@ -1,35 +1,61 @@
-import { Button, DatePicker, Input, Row, Table } from 'antd';
+import {
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
+  CloseCircleTwoTone,
+  CloseOutlined,
+} from '@ant-design/icons';
+import {
+  Alert,
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Row,
+  Table,
+} from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import moment from 'moment';
-import React, { useState } from 'react';
-import { dateFormat } from '../../../../utils/const';
-
-interface ITableEvaluations {
-  // id: string;
-  // key: string;
-  evaluation: string;
-  description: string;
-  date: Date;
-  note: number;
+import React, { Dispatch, SetStateAction, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { dateFormat, dateFormatTime } from '../../../../utils/const';
+import { ITableEvaluations } from '../../../../utils/interfaces';
+import './index.scss';
+interface IStepEvaluationPlanProps {
+  prevStep: () => void;
+  nextStep: () => void;
+  listEvaluations: ITableEvaluations[];
+  setListEvaluations: Dispatch<SetStateAction<ITableEvaluations[]>>;
+  openModalCancel: () => void;
 }
 
-const initEvaluation: ITableEvaluations = {
-  evaluation: '',
-  description: '',
-  date: new Date(),
-  note: 0,
-};
-
-const StepEvaluationPlan = () => {
-  const [listEvaluations, setListEvaluations] = useState<ITableEvaluations[]>([
-    initEvaluation,
-  ]);
+const StepEvaluationPlan = ({
+  prevStep,
+  nextStep,
+  openModalCancel,
+  listEvaluations,
+  setListEvaluations,
+}: IStepEvaluationPlanProps) => {
+  const [form] = Form.useForm();
+  const [emptyForm, setEmptyForm] = useState(false);
 
   const addEvaluation = () => {
-    setListEvaluations([...listEvaluations, initEvaluation]);
+    setListEvaluations([
+      ...listEvaluations,
+      {
+        name: '',
+        description: '',
+        date: new Date(),
+        value: '',
+      },
+    ]);
   };
 
-  const deleteEvaluation = () => {};
+  const deleteEvaluation = (i: number) => {
+    setListEvaluations(
+      listEvaluations.filter((evaluation, index) => i !== index)
+    );
+  };
 
   const onInputChange =
     (key: string, index: number) =>
@@ -49,14 +75,25 @@ const StepEvaluationPlan = () => {
     setListEvaluations(newData);
   };
 
+  const noteChange = (
+    key: string,
+    index: number,
+    value?: string | undefined | number
+  ) => {
+    const newData: any = [...listEvaluations];
+    newData[index][key] = value ? value : '';
+    setListEvaluations(newData);
+  };
+
   const columns: ColumnProps<ITableEvaluations>[] = [
     {
       title: 'Evaluación',
-      dataIndex: 'evaluation',
-      key: 'evaluation',
+      dataIndex: 'name',
+      key: 'name',
       render: (text, record, index) => (
-        <Input value={text} onChange={onInputChange('evaluation', index)} />
+        <Input value={text} onChange={onInputChange('name', index)} />
       ),
+			width: '20%',
     },
     {
       title: 'Descripción',
@@ -65,6 +102,7 @@ const StepEvaluationPlan = () => {
       render: (text, record, index) => (
         <Input value={text} onChange={onInputChange('description', index)} />
       ),
+			width: '45%',
     },
     {
       title: 'Fecha',
@@ -73,10 +111,11 @@ const StepEvaluationPlan = () => {
       render: (text, record, index) => {
         return (
           <DatePicker
+            showTime
             size='large'
             placeholder='Seleccione una fecha'
-            value={moment(text, dateFormat)}
-            format={dateFormat}
+            value={moment(text, dateFormatTime)}
+            format={dateFormatTime}
             onChange={(e) => {
               dateChange('date', index, e?.format());
             }}
@@ -87,13 +126,50 @@ const StepEvaluationPlan = () => {
     },
     {
       title: 'Nota',
-      dataIndex: 'note',
-      key: 'note',
+      dataIndex: 'value',
+      key: 'value',
       render: (text, record, index) => (
-        <Input value={text} onChange={onInputChange('goals', index)} />
+        <InputNumber
+          value={text}
+          defaultValue={text}
+          onChange={(value) => noteChange('value', index, value)}
+          type='number'
+          min='0'
+          step='0'
+        />
       ),
+			width: '5%',
+    },
+    {
+      title: 'Eliminar',
+      dataIndex: 'delete',
+      key: 'delete',
+      render: (text, record, index) => (
+        <CloseCircleTwoTone
+          twoToneColor='#E2222E'
+          className='close-btn'
+          onClick={() => deleteEvaluation(index)}
+        />
+      ),
+			width: '1%',
     },
   ];
+
+  const submitNext = () => {
+    if (validateEvaluationPlanEmpty()) return setEmptyForm(true);
+    setEmptyForm(false);
+		nextStep();
+  };
+
+  const validateEvaluationPlanEmpty = () => {
+    const list = listEvaluations.filter((evaluation) =>
+      Object.values(evaluation).some(
+        (x) => x === null || x.toString().trim() === '' || x === 0
+      )
+    );
+
+    return list.length > 0;
+  };
   return (
     <div className='content'>
       <div className='content-course-form-row '>
@@ -103,11 +179,44 @@ const StepEvaluationPlan = () => {
             Agregar Evaluación
           </Button>
         </Row>
-        <Table
-          dataSource={listEvaluations}
-          columns={columns}
-          pagination={false}
-        />
+        {emptyForm ? (
+          <Alert description='Todos los campos son requeridos' type='error' />
+        ) : null}
+        <Form form={form} component={false}>
+          <Table
+            dataSource={listEvaluations}
+            columns={columns}
+            pagination={false}
+          />
+
+          <div className='steps-action' style={{ marginTop: 20 }}>
+            <Row justify='space-between'>
+              <Button
+                style={{ margin: '0 8px' }}
+                icon={<CloseOutlined />}
+                onClick={() => openModalCancel()}
+              >
+                Cancelar
+              </Button>
+              <Button
+                style={{ margin: '0 8px' }}
+                onClick={() => prevStep()}
+                icon={<ArrowLeftOutlined />}
+              >
+                Anterior
+              </Button>
+
+              <Button
+                type='primary'
+                htmlType='submit'
+                icon={<ArrowRightOutlined />}
+                onClick={() => submitNext()}
+              >
+                Siguiente
+              </Button>
+            </Row>
+          </div>
+        </Form>
       </div>
     </div>
   );

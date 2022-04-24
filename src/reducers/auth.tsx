@@ -3,8 +3,8 @@ import { AuthReducerI } from '../utils/interfaces';
 
 const initialState: AuthReducerI = {
   token: localStorage.getItem('token'),
-  isAuthenticate: null,
-  loading: false,
+  isAuthenticate: localStorage.getItem('token') ? true : null,
+  loading: localStorage.getItem('token') ? true : false,
   user: null,
 };
 
@@ -20,10 +20,12 @@ const authReducer = (state = initialState, action: TActionAuth) => {
 
     case ActionTypesAuth.REGISTER_SUCCESS:
     case ActionTypesAuth.LOGIN_SUCCESS:
-      localStorage.setItem('token', action.payload.token);
+      const { token, ...user } = action.payload;
+      localStorage.setItem('token', token);
+      console.log(user);
       return {
         ...state,
-        ...action.payload,
+        user: user,
         isAuthenticate: true,
         loading: false,
       };

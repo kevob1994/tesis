@@ -2,17 +2,32 @@ import { Row, Col, Form } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import './index.scss';
 import { useForm } from '../../../../hooks/useForm';
+import { CourseFormI } from '../../../../utils/interfaces';
+import { Button } from 'antd';
+import { Link } from 'react-router-dom';
+import {
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
+  CloseOutlined,
+} from '@ant-design/icons';
 
-const StepCourseProgram = () => {
-  const { courseProgram, onChange } = useForm({
-    courseProgram: '',
-  });
+interface IStepCourseProgramProps {
+  formCourse: CourseFormI;
+  nextStep: () => void;
+  prevStep: () => void;
+  openModalCancel: () => void;
+}
 
+const StepCourseProgram = ({
+  formCourse,
+  nextStep,
+  prevStep,
+  openModalCancel,
+}: IStepCourseProgramProps) => {
+  const { program, onChange } = formCourse;
   // const HandleLogin = () => dispatch(login(email, password));
 
-  const onFinish = (values: any) => {
-    // HandleLogin();
-  };
+  const onFinish = (values: any) => nextStep();
   return (
     <div className='content'>
       <div className='content-course-form-row '>
@@ -30,22 +45,50 @@ const StepCourseProgram = () => {
           <Row gutter={50}>
             <Col span={24}>
               <Form.Item
-                name='courseProgram'
+                name='program'
                 rules={[{ required: true, message: 'Campo requerido' }]}
+								initialValue={program}
               >
                 <TextArea
                   size='large'
-                  autoComplete='courseProgram'
+                  autoComplete='program'
                   placeholder='Descripción de los temas que tendrá el curso'
-                  value={courseProgram}
+                  value={program}
                   style={{ height: 300 }}
                   onChange={({ target }) =>
-                    onChange(target.value, 'courseProgram')
+                    onChange(target.value, 'program')
                   }
                 />
               </Form.Item>
             </Col>
           </Row>
+
+          <div className='steps-action'>
+            <Row justify='space-between'>
+              <Button
+                style={{ margin: '0 8px' }}
+                icon={<CloseOutlined />}
+                onClick={() => openModalCancel()}
+              >
+                Cancelar
+              </Button>
+              <Button
+                style={{ margin: '0 8px' }}
+                onClick={() => prevStep()}
+                icon={<ArrowLeftOutlined />}
+              >
+                Anterior
+              </Button>
+
+              <Button
+                type='primary'
+                htmlType='submit'
+                icon={<ArrowRightOutlined />}
+              >
+                Siguiente
+              </Button>
+            </Row>
+          </div>
         </Form>
       </div>
     </div>

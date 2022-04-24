@@ -1,6 +1,7 @@
 import { GenderE, RoleE } from './interfaces';
 
-export const dateFormat = 'YYYY/MM/DD';
+export const dateFormat = 'DD/MM/YYYY';
+export const dateFormatTime = 'DD/MM/YYYY hh:mm a';
 
 const ARTS = 0,
   BIOLOGY = 1,

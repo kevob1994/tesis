@@ -21,8 +21,8 @@ export interface UserI {
   updated_at: Date;
   created_at: Date;
   id: number;
+  email_verified_at: null | string;
 }
-
 
 export interface AuthReducerI {
   token: string | null;
@@ -33,6 +33,7 @@ export interface AuthReducerI {
 
 export interface StoreI {
   auth: AuthReducerI;
+  courses: CourseReducerI;
 }
 
 export interface UserRegisterFormI {
@@ -47,4 +48,57 @@ export interface UserRegisterFormI {
   biography: string;
   role: RoleE;
   photo: string;
+}
+
+export interface CourseFormI {
+  full_name: string;
+  short_name: string;
+  category: string;
+  date_begin: moment.Moment;
+  date_finish: moment.Moment;
+  description: string;
+  photo: string;
+  program: string;
+  onChange: (
+    value: string | Date | number | moment.Moment,
+    field:
+      | 'full_name'
+      | 'short_name'
+      | 'category'
+      | 'date_begin'
+      | 'date_finish'
+      | 'description'
+      | 'photo'
+      | 'program'
+  ) => void;
+}
+export interface ITableEvaluations {
+  name: string;
+  description: string;
+  date: Date;
+  value: number | string;
+}
+
+export interface CourseReducerI {
+  courses: CourseI[];
+  loading: boolean;
+}
+
+export interface CourseI extends CourseParamsI {
+  created_at: string;
+  id: number;
+  updated_at: string;
+}
+
+export interface CourseParamsI {
+  full_name: string;
+  short_name: string;
+  category: string;
+  description: string;
+  photo: string;
+  program: string;
+  date_begin: string;
+  date_finish: string;
+  evaluations?: string;
+  user_id: number;
 }

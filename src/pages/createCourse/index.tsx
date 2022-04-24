@@ -1,38 +1,62 @@
-import { Button, message, Row, Steps } from 'antd';
+import { Button, message, Modal, Row, Steps } from 'antd';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   StepCourseProgram,
   StepEndConfirm,
   StepEvaluationPlan,
   StepInfoCourse,
 } from './components';
+
+import {
+  CalendarOutlined,
+  CheckCircleOutlined,
+  ProfileOutlined,
+  ReadOutlined,
+} from '@ant-design/icons';
 import './index.scss';
+import moment from 'moment';
+import { dateFormat } from '../../utils/const';
+import { useForm } from '../../hooks/useForm';
+import { CourseFormI, ITableEvaluations } from '../../utils/interfaces';
 
 const { Step } = Steps;
 
-const StepsComponents = (step: number) => {
-  switch (step) {
-    case 0:
-      return <StepInfoCourse />;
-      break;
-    case 1:
-      return <StepCourseProgram />;
-      break;
-    case 2:
-      return <StepEvaluationPlan />;
-      break;
-    case 3:
-      return <StepEndConfirm />;
-      break;
-
-    default:
-      break;
-  }
+const initEvaluation: ITableEvaluations = {
+  name: '',
+  description: '',
+  date: new Date(),
+  value: '',
 };
 
 const CreateCoursePage = () => {
+  let navigate = useNavigate();
   const [current, setCurrent] = useState(0);
+  const [fileList, setFileList] = useState<any[]>([]);
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [listEvaluations, setListEvaluations] = useState<ITableEvaluations[]>([
+    initEvaluation,
+  ]);
+  const {
+    full_name,
+    short_name,
+    category,
+    date_begin,
+    date_finish,
+    description,
+    photo,
+    program,
+    onChange,
+  } = useForm({
+    full_name: '',
+    short_name: '',
+    category: '',
+    date_begin: moment(new Date(), dateFormat),
+    date_finish: moment(new Date(), dateFormat),
+    description: '',
+    program: '',
+    photo: '',
+  });
 
   const next = () => {
     setCurrent(current + 1);
@@ -42,47 +66,101 @@ const CreateCoursePage = () => {
     setCurrent(current - 1);
   };
 
+  const formCourse = {
+    full_name,
+    short_name,
+    category,
+    date_begin,
+    date_finish,
+    description,
+    photo,
+    program,
+    onChange,
+  };
+
+  const openModalCancel = () => setVisibleModal(true);
+
+  const StepsComponents = () => {
+    switch (current) {
+      case 0:
+        return (
+          <StepInfoCourse
+            formCourse={formCourse}
+            nextStep={next}
+            openModalCancel={openModalCancel}
+            fileList={fileList}
+            setFileList={setFileList}
+          />
+        );
+      case 1:
+        return (
+          <StepCourseProgram
+            formCourse={formCourse}
+            nextStep={next}
+            prevStep={prev}
+            openModalCancel={openModalCancel}
+          />
+        );
+      case 2:
+        return (
+          <StepEvaluationPlan
+            nextStep={next}
+            prevStep={prev}
+            listEvaluations={listEvaluations}
+            setListEvaluations={setListEvaluations}
+            openModalCancel={openModalCancel}
+          />
+        );
+      case 3:
+        return (
+          <StepEndConfirm
+            prevStep={prev}
+            openModalCancel={openModalCancel}
+            formCourse={formCourse}
+            listEvaluations={listEvaluations}
+            fileList={fileList}
+          />
+        );
+
+      default:
+        break;
+    }
+  };
+
   return (
-    <div className='content-create-course'>
-      <Steps current={current}>
-        <Step key='step1' title='step1' />
-        <Step key='step2' title='step2' />
-        <Step key='step3' title='step3' />
-        <Step key='step4' title='step4' />
-      </Steps>
+    <>
+      <Modal
+        title='Creación de curso'
+        visible={visibleModal}
+        onOk={() => setVisibleModal(false)}
+        onCancel={() => navigate('/', { replace: true })}
+        okText='No'
+        cancelText='Si'
+        centered
+        closable={false}
+        maskClosable={false}
+      >
+        <p>Se perderán todos los cambios. ¿Está seguro que desea cancelar?</p>
+      </Modal>
+      <div className='content-create-course'>
+        <Steps current={current}>
+          <Step key='step1' title='Información' icon={<ProfileOutlined />} />
+          <Step
+            key='step2'
+            title='Programa de la Materia'
+            icon={<ReadOutlined />}
+          />
+          <Step
+            key='step3'
+            title='Plan de Evaluación'
+            icon={<CalendarOutlined />}
+          />
+          <Step key='step4' title='Finalizar' icon={<CheckCircleOutlined />} />
+        </Steps>
 
-      {StepsComponents(current)}
-
-      <div className='steps-action'>
-        <Row justify='space-between'>
-          {current > 0 && (
-            <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-              Anterior
-            </Button>
-          )}
-          {current === 0 && (
-            <Link to='/'>
-              <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-                Cancelar
-              </Button>
-            </Link>
-          )}
-          {current < 3 && (
-            <Button type='primary' onClick={() => next()}>
-              Siguiente
-            </Button>
-          )}
-          {current === 3 && (
-            <Button
-              type='primary'
-              onClick={() => message.success('Processing complete!')}
-            >
-              Finalizar
-            </Button>
-          )}
-        </Row>
+        {StepsComponents()}
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,8 +1,5 @@
-import axios, { AxiosError } from 'axios';
 import { Dispatch } from 'redux';
 import {
-  GenderE,
-  RoleE,
   UserI,
   UserRegisterFormI,
 } from '../../utils/interfaces';
@@ -50,9 +47,9 @@ export const login = (params: UserLoginFormI) => async (dispatch: Dispatch) => {
       type: ActionTypesAuth.LOGIN_SUCCESS,
       payload: res.data,
     });
+		
   } catch (error: any) {
     console.log('error', error.response);
-    const err = error.response.data.error;
     dispatch({
       type: ActionTypesAuth.REQUEST_AUTH_FAIL,
     });
@@ -74,7 +71,6 @@ export const loadUser = () => async (dispatch: Dispatch) => {
     });
   } catch (error: any) {
     console.log('error', error.response);
-    const err = error.response.data.error;
     dispatch({
       type: ActionTypesAuth.REQUEST_AUTH_FAIL,
     });

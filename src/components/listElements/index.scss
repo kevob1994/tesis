@@ -1,3 +1,5 @@
+@import './../../styles/index.scss';
+
 .content-list {
   margin-top: 20px;
   .item-list {
@@ -48,4 +50,13 @@ p {
 
 a {
 	color: black !important;
+}
+
+.text-empty-list {
+	text-align: center;
+    width: 100%;
+    margin-top: 50px !important;
+    font-size: 1.5rem;
+    color: $primary;
+    font-weight: bold;
 }
