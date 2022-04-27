@@ -67,9 +67,9 @@ const LoginPage = () => {
                 name='password'
                 rules={[
                   { required: true, message: 'Please input your password!' },
-                  {
-                    validator: validatePassword,
-                  },
+                  // {
+                  //   validator: validatePassword,
+                  // },
                 ]}
               >
                 <Input.Password

@@ -11,6 +11,7 @@ const initialState: AuthReducerI = {
 const authReducer = (state = initialState, action: TActionAuth) => {
   switch (action.type) {
     case ActionTypesAuth.USER_LOADED:
+			console.log(action.payload)
       return {
         ...state,
         user: action.payload,
@@ -20,12 +21,12 @@ const authReducer = (state = initialState, action: TActionAuth) => {
 
     case ActionTypesAuth.REGISTER_SUCCESS:
     case ActionTypesAuth.LOGIN_SUCCESS:
-      const { token, ...user } = action.payload;
+      const { token, user } = action.payload;
       localStorage.setItem('token', token);
       console.log(user);
       return {
         ...state,
-        user: user,
+        user,
         isAuthenticate: true,
         loading: false,
       };

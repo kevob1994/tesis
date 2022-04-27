@@ -66,7 +66,7 @@ export const loadUser = () => async (dispatch: Dispatch) => {
     });
     // debugger;
     dispatch({
-      type: ActionTypesAuth.LOGIN_SUCCESS,
+      type: ActionTypesAuth.USER_LOADED,
       payload: { ...res.data, token: localStorage.token },
     });
   } catch (error: any) {
