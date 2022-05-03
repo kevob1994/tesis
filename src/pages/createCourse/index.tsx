@@ -1,6 +1,6 @@
 import { Button, message, Modal, Row, Steps } from 'antd';
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   StepCourseProgram,
   StepEndConfirm,
@@ -18,7 +18,14 @@ import './index.scss';
 import moment from 'moment';
 import { dateFormat } from '../../utils/const';
 import { useForm } from '../../hooks/useForm';
-import { CourseFormI, ITableEvaluations } from '../../utils/interfaces';
+import {
+  CourseFormI,
+  CourseI,
+  ITableEvaluations,
+  StoreI,
+} from '../../utils/interfaces';
+import { useDispatch, useSelector } from 'react-redux';
+import { getListEvaluationsCourse } from '../../actions/course/course';
 
 const { Step } = Steps;
 
@@ -30,13 +37,23 @@ const initEvaluation: ITableEvaluations = {
 };
 
 const CreateCoursePage = () => {
-  let navigate = useNavigate();
   const [current, setCurrent] = useState(0);
   const [fileList, setFileList] = useState<any[]>([]);
   const [visibleModal, setVisibleModal] = useState(false);
   const [listEvaluations, setListEvaluations] = useState<ITableEvaluations[]>([
     initEvaluation,
   ]);
+
+  const dispatch = useDispatch();
+  const loadEvaluations = (id: string) =>
+    dispatch(getListEvaluationsCourse(id));
+  const { id } = useParams();
+  let navigate = useNavigate();
+  const courses = useSelector((state: StoreI) => state.courses);
+  const courseEdit = (id: number | undefined): CourseI | undefined => {
+    return courses.courses.find((course) => course.id === Number(id));
+  };
+
   const {
     full_name,
     short_name,
@@ -48,15 +65,25 @@ const CreateCoursePage = () => {
     program,
     onChange,
   } = useForm({
-    full_name: '',
-    short_name: '',
-    category: '',
-    date_begin: moment(new Date(), dateFormat),
-    date_finish: moment(new Date(), dateFormat),
-    description: '',
-    program: '',
-    photo: '',
+    full_name: courseEdit(Number(id))?.full_name || '',
+    short_name: courseEdit(Number(id))?.short_name || '',
+    category: courseEdit(Number(id))?.category || '',
+    date_begin: moment(
+      new Date(courseEdit(Number(id))?.date_begin || ''),
+      dateFormat
+    ),
+    date_finish: moment(
+      new Date(courseEdit(Number(id))?.date_finish || ''),
+      dateFormat
+    ),
+    description: courseEdit(Number(id))?.description || '',
+    program: courseEdit(Number(id))?.program || '',
+    photo: courseEdit(Number(id))?.photo || '',
   });
+
+  useEffect(() => {
+    if (id) loadEvaluations(id);
+  }, []);
 
   const next = () => {
     setCurrent(current + 1);

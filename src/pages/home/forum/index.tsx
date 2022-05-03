@@ -61,7 +61,7 @@ const ForumRoomPage = () => {
         </Col>
 
         <Col span={24}>
-          <ListElements listItems={list} url={`${location.pathname}/id`} />
+          {/* <ListElements listItems={list} url={`${location.pathname}/id`} /> */}
         </Col>
       </Row>
     </div>

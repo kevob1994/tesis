@@ -88,6 +88,10 @@ export interface CourseI extends CourseParamsI {
   created_at: string;
   id: number;
   updated_at: string;
+  user_lastname: string;
+  user_name: string;
+  user_photo: string;
+  code: string;
 }
 
 export interface CourseParamsI {

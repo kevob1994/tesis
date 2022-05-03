@@ -98,7 +98,7 @@ const Days = () => {
 
 const Dates = (props: ICalendarProps) => {
   let d = moment().add(props.monthOffset, 'month').startOf('month');
-  debugger;
+  // debugger;
   const bp = useBreakpoint();
   const startOffset = d.day();
   const restOffset = 7 - d.clone().add(1, 'month').day();
@@ -139,7 +139,7 @@ const Dates = (props: ICalendarProps) => {
               .weekday(v.dayOfWeek)
               .set('hour', v.hour)
               .set('minute', v.minute);
-            debugger;
+            // debugger;
             const local = m.clone().local();
             if (local.weekday() === date.weekday()) {
               const s = date

@@ -20,7 +20,7 @@ import {
 } from '@ant-design/icons';
 import { categoryClass, dateFormat } from '../../../../utils/const';
 import { CourseFormI } from '../../../../utils/interfaces';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 interface IStepInfoCourseProps {
   formCourse: CourseFormI;
@@ -37,6 +37,7 @@ const StepInfoCourse = ({
   fileList,
   setFileList,
 }: IStepInfoCourseProps) => {
+  const { id } = useParams();
   const [imageUrl2, setImageUrl2] = useState<any>();
   const {
     full_name,
@@ -45,12 +46,19 @@ const StepInfoCourse = ({
     date_begin,
     date_finish,
     description,
+    photo,
     onChange,
   } = formCourse;
 
   useEffect(() => {
     if (fileList.length > 0) setImageUrl2(URL.createObjectURL(fileList[0]));
   }, [fileList]);
+
+  useEffect(() => {
+    if (id) {
+      setImageUrl2(photo);
+    }
+  }, []);
 
   const onFinish = (values: any) => {
     nextStep();
@@ -216,8 +224,10 @@ const StepInfoCourse = ({
             </Col>
           </Row>
 
-          <p style={{ textAlign: 'center', paddingTop: 20, color: '#939393' }}>Dimensiones: 300x200</p>
-          <div className='upload-image' style={{ width: 300, marginTop: 5}}>
+          <p style={{ textAlign: 'center', paddingTop: 20, color: '#939393' }}>
+            Dimensiones: 300x200
+          </p>
+          <div className='upload-image' style={{ width: 300, marginTop: 5 }}>
             <Image
               preview={false}
               src={imageUrl2 ? imageUrl2 : 'error'}
