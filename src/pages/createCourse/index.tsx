@@ -102,6 +102,13 @@ const CreateCoursePage = () => {
     if (id) loadEvaluations(id);
   }, []);
 
+  useEffect(() => {
+    if (type === StatusModalE.SUCCESS && show) {
+      setListEvaluations([initEvaluation]);
+      navigate('/', { replace: true });
+    }
+  }, [show, type]);
+
   const next = () => {
     setCurrent(current + 1);
   };
@@ -123,10 +130,6 @@ const CreateCoursePage = () => {
   };
 
   const openModalCancel = () => setVisibleModal(true);
-
-  useEffect(() => {
-    if (type === StatusModalE.SUCCESS && show) navigate('/', { replace: true });
-  }, [show, type]);
 
   const StepsComponents = () => {
     switch (current) {
