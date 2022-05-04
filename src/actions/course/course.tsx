@@ -2,11 +2,11 @@ import { Dispatch } from 'redux';
 
 import { clientAxios, headerAuthToken } from '../../config/axios';
 import { CourseI, CourseParamsI } from '../../utils/interfaces';
+import { ActionTypesAlert } from '../alert/types';
 import { ActionTypesCourse } from './types';
 
 export const createCourse =
   (params: CourseParamsI) => async (dispatch: Dispatch) => {
-    // debugger;
     dispatch({
       type: ActionTypesCourse.LOADING_COURSES,
     });
@@ -14,18 +14,28 @@ export const createCourse =
       const res = await clientAxios.post<CourseI[]>('course', params, {
         headers: headerAuthToken(),
       });
-      // debugger;
-      console.log('res');
-      console.log(res);
       dispatch({
         type: ActionTypesCourse.CREATE_COURSE_SUCCESS,
         payload: res.data,
       });
+      dispatch({
+        type: ActionTypesAlert.SUCCESS_ALERT,
+        payload: {
+          title: 'Creación de curso',
+          textBody: 'El curso ha sido creado de forma exitosa',
+        },
+      });
     } catch (error: any) {
-      console.log('error', error.response);
-      //   // const err = error.response.data.error;
       dispatch({
         type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+      });
+      dispatch({
+        type: ActionTypesAlert.ERROR_ALERT,
+        payload: {
+          title: 'Creación de curso',
+          textBody:
+            'Ocurrio un error! verifique la información e intente nuevamente',
+        },
       });
     }
   };
@@ -44,11 +54,9 @@ export const getCourses = () => async (dispatch: Dispatch) => {
       payload: res.data,
     });
   } catch (error: any) {
-    //   console.log('error', error.response);
-    //   // const err = error.response.data.error;
-    //   dispatch({
-    //     type: ActionTypesCourse.REQUEST_COURSE_FAIL,
-    //   });
+    dispatch({
+      type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+    });
   }
 };
 
@@ -112,13 +120,19 @@ export const deleteCourse = (id: number) => async (dispatch: Dispatch) => {
     const res = await clientAxios.delete<any>(`course/${id}`, {
       headers: headerAuthToken(),
     });
-    // debugger;
-    console.log('res');
-    console.log(res);
-    dispatch({
-      type: ActionTypesCourse.DELETE_COURSE_SUCCESS,
-      payload: res.data,
-    });
+    if (res.status === 200) {
+      dispatch({
+        type: ActionTypesCourse.DELETE_COURSE_SUCCESS,
+        payload: id,
+      });
+      dispatch({
+        type: ActionTypesAlert.SUCCESS_ALERT,
+        payload: {
+          title: 'Eliminar curso',
+          textBody: 'El curso ha sido eliminado de forma exitosa',
+        },
+      });
+    }
   } catch (error: any) {
     console.log('error', error.response);
     //   // const err = error.response.data.error;

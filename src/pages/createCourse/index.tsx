@@ -26,6 +26,8 @@ import {
 } from '../../utils/interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import { getListEvaluationsCourse } from '../../actions/course/course';
+import { ModalStatus } from '../../components';
+import { StatusModalE } from '../../hooks/useModalStatus';
 
 const { Step } = Steps;
 
@@ -50,8 +52,29 @@ const CreateCoursePage = () => {
   const { id } = useParams();
   let navigate = useNavigate();
   const courses = useSelector((state: StoreI) => state.courses);
-  const courseEdit = (id: number | undefined): CourseI | undefined => {
-    return courses.courses.find((course) => course.id === Number(id));
+  const { show, type, title, textBody } = useSelector(
+    (state: StoreI) => state.alert
+  );
+
+  const courseInfo = (id: number) => {
+    const course = courses.courses.find((course) => course.id === Number(id));
+    if (course) {
+      return {
+        ...course,
+        date_begin: new Date(course.date_begin),
+        date_finish: new Date(course.date_finish),
+      };
+    }
+    return {
+      full_name: '',
+      short_name: '',
+      category: '',
+      date_begin: new Date(),
+      date_finish: new Date(),
+      description: '',
+      program: '',
+      photo: '',
+    };
   };
 
   const {
@@ -65,20 +88,14 @@ const CreateCoursePage = () => {
     program,
     onChange,
   } = useForm({
-    full_name: courseEdit(Number(id))?.full_name || '',
-    short_name: courseEdit(Number(id))?.short_name || '',
-    category: courseEdit(Number(id))?.category || '',
-    date_begin: moment(
-      new Date(courseEdit(Number(id))?.date_begin || ''),
-      dateFormat
-    ),
-    date_finish: moment(
-      new Date(courseEdit(Number(id))?.date_finish || ''),
-      dateFormat
-    ),
-    description: courseEdit(Number(id))?.description || '',
-    program: courseEdit(Number(id))?.program || '',
-    photo: courseEdit(Number(id))?.photo || '',
+    full_name: courseInfo(Number(id))?.full_name,
+    short_name: courseInfo(Number(id))?.short_name,
+    category: courseInfo(Number(id))?.category,
+    date_begin: moment(courseInfo(Number(id))?.date_begin, dateFormat),
+    date_finish: moment(courseInfo(Number(id))?.date_finish, dateFormat),
+    description: courseInfo(Number(id))?.description,
+    program: courseInfo(Number(id))?.program,
+    photo: courseInfo(Number(id))?.photo,
   });
 
   useEffect(() => {
@@ -106,6 +123,10 @@ const CreateCoursePage = () => {
   };
 
   const openModalCancel = () => setVisibleModal(true);
+
+  useEffect(() => {
+    if (type === StatusModalE.SUCCESS && show) navigate('/', { replace: true });
+  }, [show, type]);
 
   const StepsComponents = () => {
     switch (current) {
@@ -156,6 +177,7 @@ const CreateCoursePage = () => {
 
   return (
     <>
+      <ModalStatus />
       <Modal
         title='Creación de curso'
         visible={visibleModal}

@@ -68,13 +68,18 @@ const StepEndConfirm = ({
 
   const saveCourse = () => {
     const { onChange, date_begin, date_finish, ...obj } = formCourse;
+
+    const evaluations = listEvaluations.map((course) => ({
+      ...course,
+      date: moment(course.date).format(dateFormatTime),
+    }));
     if (auth.user?.id)
       dispatch(
         createCourse({
           ...obj,
           date_begin: date_begin.format('YYYY/MM/DD'),
           date_finish: date_finish.format('YYYY/MM/DD'),
-          evaluations: [...listEvaluations].toString(),
+          evaluations: [...evaluations].toString(),
           user_id: auth.user.id,
         })
       );

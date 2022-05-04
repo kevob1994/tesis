@@ -1,7 +1,7 @@
 import { Button, Col, Form, Input, Modal, Row, Spin } from 'antd';
 import './index.scss';
 import { Link, useNavigate } from 'react-router-dom';
-import { HeaderNav, ListElements } from '../../components';
+import { HeaderNav, ListElements, ModalStatus } from '../../components';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -9,8 +9,9 @@ import {
   getCourses,
   joinCourse,
 } from '../../actions/course/course';
-import { RoleE, StoreI } from '../../utils/interfaces';
+import { listItemsI, RoleE, StoreI } from '../../utils/interfaces';
 import { useForm } from '../../hooks/useForm';
+import { StatusModalE, useModalStatus } from '../../hooks/useModalStatus';
 
 const { Search } = Input;
 
@@ -19,13 +20,17 @@ const onSearch = (value: any) => console.log(value);
 const ListCourses = () => {
   const [form] = Form.useForm();
   let navigate = useNavigate();
-  const [openModal, setOpenModal] = useState(false);
+  const [openModalShareCode, setOpenModalShareCode] = useState(false);
+  const [openModalDelete, setOpenModalDelete] = useState(false);
+  const [courseSelected, setCourseSelected] = useState<listItemsI>();
   const [codeCourse, setCodeCourse] = useState('');
   const dispatch = useDispatch();
   const loadCourses = () => dispatch(getCourses());
   const removeCourse = (id: number) => dispatch(deleteCourse(id));
   const joinWithCourse = (code: string) => dispatch(joinCourse(code));
-  const courses = useSelector((state: StoreI) => state.courses);
+  const { courses, loading: loadingCourse } = useSelector(
+    (state: StoreI) => state.courses
+  );
   const auth = useSelector((state: StoreI) => state.auth);
   const { code, onChange } = useForm({
     code: '',
@@ -39,7 +44,7 @@ const ListCourses = () => {
 
   const showModal = (code: string) => {
     setCodeCourse(code);
-    setOpenModal(true);
+    setOpenModalShareCode(true);
   };
 
   const handleCancel = () => {
@@ -50,7 +55,7 @@ const ListCourses = () => {
     onChange('', 'code');
     form.resetFields();
     setCodeCourse('');
-    setOpenModal(false);
+    setOpenModalShareCode(false);
   };
 
   const onFinish = (values: any) => {
@@ -58,8 +63,14 @@ const ListCourses = () => {
     resetValues();
   };
 
-  const handlerRemoveCourse = (id: number) => {
-    removeCourse(id);
+  const openModalRemoveCourse = (item: listItemsI) => {
+    setCourseSelected(item);
+    setOpenModalDelete(true);
+    // ;
+  };
+  const handlerRemoveCourse = () => {
+    if (courseSelected) removeCourse(courseSelected.id);
+    setOpenModalDelete(false);
   };
 
   const handlerEdit = (id: number) => {
@@ -67,7 +78,7 @@ const ListCourses = () => {
   };
 
   const transformListCourse = () => {
-    return courses.courses.map((course) => ({
+    return courses.map((course) => ({
       id: course.id,
       title: course.full_name,
       description: course.description,
@@ -83,22 +94,24 @@ const ListCourses = () => {
   return (
     <>
       <HeaderNav />
-      {/* <Modal
+      <ModalStatus />
+      <Modal
         title='Eliminar curso'
-        visible={visibleModal}
-        onOk={() => setVisibleModal(false)}
-        onCancel={() => navigate('/', { replace: true })}
-        okText='No'
-        cancelText='Si'
+        visible={openModalDelete}
+        onOk={() => handlerRemoveCourse()}
+        onCancel={() => setOpenModalDelete(false)}
+        okText='Eliminar'
+        cancelText='Cancelar'
         centered
         closable={false}
         maskClosable={false}
       >
-        <p>Se perderán todos los cambios. ¿Está seguro que desea cancelar?</p>
-      </Modal> */}
+        <p>Seguro desea eliminar el curso {courseSelected?.title}?</p>
+      </Modal>
+
       <Modal
         destroyOnClose={true}
-        visible={openModal}
+        visible={openModalShareCode}
         title={
           role === RoleE.TEACHER ? 'Código del curso' : 'Unirse a un curso'
         }
@@ -131,12 +144,11 @@ const ListCourses = () => {
               <Form.Item
                 name='code'
                 rules={[{ required: true, message: 'Campo requerido' }]}
-                // initialValue={code}
               >
                 <Input
                   size='large'
-                  // value={code}
-                  // defaultValue={code}
+                  value={code}
+                  defaultValue={code}
                   onChange={({ target }) => onChange(target.value, 'code')}
                 />
               </Form.Item>
@@ -144,13 +156,7 @@ const ListCourses = () => {
                 <Button key='back' onClick={handleCancel}>
                   Cancelar
                 </Button>
-                <Button
-                  key='submit'
-                  htmlType='submit'
-                  type='primary'
-                  // loading={loading}
-                  // onClick={handleOk}
-                >
+                <Button key='submit' htmlType='submit' type='primary'>
                   Unirse
                 </Button>
               </Row>
@@ -158,9 +164,10 @@ const ListCourses = () => {
           </div>
         )}
       </Modal>
+
       <div className='content-list-courses'>
         <h1>Cursos</h1>
-        {!courses.loading ? (
+        {!loadingCourse ? (
           <Row align='middle' gutter={50}>
             <Col span={20}>
               <Search
@@ -181,7 +188,7 @@ const ListCourses = () => {
                   size='large'
                   type='primary'
                   block
-                  onClick={() => setOpenModal(true)}
+                  onClick={() => setOpenModalShareCode(true)}
                 >
                   Unirse
                 </Button>
@@ -191,7 +198,7 @@ const ListCourses = () => {
             <Col span={24}>
               <ListElements
                 listItems={transformListCourse()}
-                deleteItem={handlerRemoveCourse}
+                deleteItem={openModalRemoveCourse}
                 editItem={handlerEdit}
                 shareElement={showModal}
                 url='/home/id/course-program'

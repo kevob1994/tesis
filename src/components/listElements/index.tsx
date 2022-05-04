@@ -1,36 +1,22 @@
 import React from 'react';
 import { Button, Col, Image, Row, Tooltip } from 'antd';
 import './index.scss';
-import { Link, useNavigate } from 'react-router-dom';
-import { RoleE, StoreI } from '../../utils/interfaces';
+import { useNavigate } from 'react-router-dom';
+import { listItemsI, RoleE, StoreI } from '../../utils/interfaces';
 import { useSelector } from 'react-redux';
 import {
   DeleteOutlined,
   EditOutlined,
   ShareAltOutlined,
-  UploadOutlined,
 } from '@ant-design/icons';
 
-interface UserI {
-  name: string;
-  photo: string;
-}
-interface ItemI {
-  id: number;
-  title: string;
-  description: string;
-  image: string | null;
-  user: UserI;
-  code: string;
-}
-
 interface ListElementsI {
-  listItems: ItemI[];
+  listItems: listItemsI[];
   url: string;
   span?: number;
   shareElement?: (code: string) => void;
   textDelete: string;
-  deleteItem?: (id: number) => void;
+  deleteItem?: (id: listItemsI) => void;
   editItem?: (id: number) => void;
 }
 
@@ -105,7 +91,7 @@ const ListElements = ({
                               shape='circle'
                               icon={<EditOutlined />}
                               onClick={(e) => {
-																if (editItem) editItem(item.id);
+                                if (editItem) editItem(item.id);
                                 e.stopPropagation();
                               }}
                               size='large'
@@ -117,7 +103,7 @@ const ListElements = ({
                             className='delete-btn'
                             shape='circle'
                             onClick={(e) => {
-                              if (deleteItem) deleteItem(item.id);
+                              if (deleteItem) deleteItem(item);
                               e.stopPropagation();
                             }}
                             icon={<DeleteOutlined />}

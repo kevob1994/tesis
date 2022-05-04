@@ -33,7 +33,7 @@ interface IActionCourseEdit {
 
 interface IActionCourseDelete {
   type: ActionTypesCourse.DELETE_COURSE_SUCCESS;
-  payload: any;
+  payload: number;
 }
 
 interface IActionCourseEvaluations {

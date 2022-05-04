@@ -1,3 +1,5 @@
+import { StatusModalE } from '../hooks/useModalStatus';
+
 export enum GenderE {
   FEMININE = 'F',
   MALE = 'M',
@@ -34,6 +36,7 @@ export interface AuthReducerI {
 export interface StoreI {
   auth: AuthReducerI;
   courses: CourseReducerI;
+  alert: AlertReducerI;
 }
 
 export interface UserRegisterFormI {
@@ -105,4 +108,23 @@ export interface CourseParamsI {
   date_finish: string;
   evaluations?: string;
   user_id: number;
+}
+
+export interface listItemsI {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  code: string;
+  user: {
+    name: string;
+    photo: string;
+  };
+}
+
+export interface AlertReducerI {
+  title: string;
+  textBody: string;
+  show: boolean;
+  type: StatusModalE | null;
 }

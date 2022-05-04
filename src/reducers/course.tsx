@@ -9,10 +9,19 @@ const initialState: CourseReducerI = {
 const courseReducer = (state = initialState, action: TActionCourse) => {
   switch (action.type) {
     case ActionTypesCourse.CREATE_COURSE_SUCCESS:
+      return {
+        ...state,
+      };
     case ActionTypesCourse.GET_COURSE_SUCCESS:
       return {
         ...state,
         courses: action.payload,
+        loading: false,
+      };
+    case ActionTypesCourse.DELETE_COURSE_SUCCESS:
+      return {
+        ...state,
+        courses: state.courses.filter((course) => course.id !== action.payload),
         loading: false,
       };
     case ActionTypesCourse.LOADING_COURSES:
