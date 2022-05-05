@@ -27,7 +27,7 @@ const alertReducer = (state = initialState, action: TActionAlert) => {
         title: action.payload.title,
         textBody: action.payload.textBody,
         show: true,
-        type: StatusModalE.SUCCESS,
+        type: StatusModalE.ERROR,
       };
     case ActionTypesAlert.CLOSE_ALERT:
       return { ...state, title: '', textBody: '', show: false, type: null };

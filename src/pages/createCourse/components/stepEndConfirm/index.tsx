@@ -79,7 +79,7 @@ const StepEndConfirm = ({
           ...obj,
           date_begin: date_begin.format('YYYY/MM/DD'),
           date_finish: date_finish.format('YYYY/MM/DD'),
-          evaluations: [...evaluations].toString(),
+          evaluations: JSON.stringify(evaluations),
           user_id: auth.user.id,
         })
       );

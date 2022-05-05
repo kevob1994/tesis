@@ -34,7 +34,7 @@ export const createCourse =
         payload: {
           title: 'Creación de curso',
           textBody:
-            'Ocurrio un error! verifique la información e intente nuevamente',
+            'Ocurrio un error! Verifique la información e intente nuevamente',
         },
       });
     }
