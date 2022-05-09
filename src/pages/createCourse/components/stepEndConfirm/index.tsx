@@ -9,7 +9,8 @@ import { ColumnProps } from 'antd/lib/table';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createCourse } from '../../../../actions/course/course';
+import { useParams } from 'react-router-dom';
+import { createCourse, editCourse } from '../../../../actions/course/course';
 import {
   categoryClass,
   dateFormat,
@@ -37,6 +38,7 @@ const StepEndConfirm = ({
   const [imageUrl2, setImageUrl2] = useState<any>();
   const auth = useSelector((state: StoreI) => state.auth);
   const dispatch = useDispatch();
+  const { id } = useParams();
 
   useEffect(() => {
     if (fileList.length > 0) setImageUrl2(URL.createObjectURL(fileList[0]));
@@ -68,21 +70,42 @@ const StepEndConfirm = ({
 
   const saveCourse = () => {
     const { onChange, date_begin, date_finish, ...obj } = formCourse;
-
+    console.log(moment(listEvaluations[0].date).format('YYYY-MM-DD HH:MM:SS'));
+    console.log(
+      moment(listEvaluations[0].date)
+        .subtract(2, 'minute')
+        .format('YYYY-MM-DD HH:MM:00')
+    );
     const evaluations = listEvaluations.map((course) => ({
       ...course,
-      date: moment(course.date).format(dateFormatTime),
+      date: moment(course.date).format('YYYY-MM-DD HH:MM:00'),
     }));
-    if (auth.user?.id)
-      dispatch(
-        createCourse({
-          ...obj,
-          date_begin: date_begin.format('YYYY/MM/DD'),
-          date_finish: date_finish.format('YYYY/MM/DD'),
-          evaluations: JSON.stringify(evaluations),
-          user_id: auth.user.id,
-        })
-      );
+    if (auth.user?.id) {
+      if (id) {
+        dispatch(
+          editCourse(
+            {
+              ...obj,
+              date_begin: date_begin.format('YYYY/MM/DD'),
+              date_finish: date_finish.format('YYYY/MM/DD'),
+              evaluations: JSON.stringify(evaluations),
+              user_id: auth.user.id,
+            },
+            Number(id)
+          )
+        );
+      } else {
+        dispatch(
+          createCourse({
+            ...obj,
+            date_begin: date_begin.format('YYYY/MM/DD'),
+            date_finish: date_finish.format('YYYY/MM/DD'),
+            evaluations: JSON.stringify(evaluations),
+            user_id: auth.user.id,
+          })
+        );
+      }
+    }
   };
 
   return (

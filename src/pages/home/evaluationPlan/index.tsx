@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Table, Tag, Space } from 'antd';
+import { StoreI } from '../../../utils/interfaces';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { getListEvaluationsCourse } from '../../../actions/course/course';
 
 const columns = [
   {
@@ -74,10 +78,22 @@ const data = [
   },
 ];
 const EvaluationPlanPage = () => {
+  const dispatch = useDispatch();
+  const loadEvaluations = (id: string) =>
+    dispatch(getListEvaluationsCourse(id));
+  const { id } = useParams();
+  const { courses, evaluations } = useSelector(
+    (state: StoreI) => state.courses
+  );
+
+  useEffect(() => {
+    if (id) loadEvaluations(id);
+  }, []);
+
   return (
     <div>
       <h1>Plan de evaluación</h1>
-      <Table pagination={false}  columns={columns} dataSource={data} />
+      <Table pagination={false} columns={columns} dataSource={data} />
     </div>
   );
 };

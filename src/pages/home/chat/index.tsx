@@ -4,9 +4,19 @@ import { UserItem } from './components/UserItem';
 import { SendOutlined } from '@ant-design/icons';
 
 import './index.scss';
+import { useDispatch } from 'react-redux';
+import { getCourses, getUsersCourse } from '../../../actions/course/course';
+import { useParams } from 'react-router-dom';
 
 const ChatPage = () => {
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const loadUsersCourse = (id: string) => dispatch(getUsersCourse(id));
+
+  useEffect(() => {
+    if (id) loadUsersCourse(id);
+  }, []);
 
   useEffect(() => {
     scrollToBottom();

@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 
 import { clientAxios, headerAuthToken } from '../../config/axios';
-import { CourseI, CourseParamsI } from '../../utils/interfaces';
+import { CourseI, CourseParamsI, EvaluationsI } from '../../utils/interfaces';
 import { ActionTypesAlert } from '../alert/types';
 import { ActionTypesCourse } from './types';
 
@@ -99,14 +99,25 @@ export const editCourse =
       console.log('res');
       console.log(res);
       dispatch({
-        type: ActionTypesCourse.CREATE_COURSE_SUCCESS,
-        payload: res.data,
+        type: ActionTypesAlert.SUCCESS_ALERT,
+        payload: {
+          title: 'Edición de curso',
+          textBody: 'El curso ha sido editado de forma exitosa',
+        },
       });
     } catch (error: any) {
       console.log('error', error.response);
       //   // const err = error.response.data.error;
       dispatch({
         type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+      });
+      dispatch({
+        type: ActionTypesAlert.ERROR_ALERT,
+        payload: {
+          title: 'Creación de curso',
+          textBody:
+            'Ocurrio un error! Verifique la información e intente nuevamente',
+        },
       });
     }
   };
@@ -144,17 +155,16 @@ export const deleteCourse = (id: number) => async (dispatch: Dispatch) => {
 
 export const getListEvaluationsCourse =
   (id: string) => async (dispatch: Dispatch) => {
-    // debugger;
     dispatch({
       type: ActionTypesCourse.LOADING_COURSES,
     });
     try {
-      const res = await clientAxios.get<any[]>(`course/${id}/evaluations`, {
-        headers: headerAuthToken(),
-      });
-      // debugger;
-      console.log('res');
-      console.log(res);
+      const res = await clientAxios.get<EvaluationsI[]>(
+        `course/${id}/evaluations`,
+        {
+          headers: headerAuthToken(),
+        }
+      );
       dispatch({
         type: ActionTypesCourse.LIST_EVALUATIONS_SUCCESS,
         payload: res.data,
@@ -167,3 +177,33 @@ export const getListEvaluationsCourse =
       });
     }
   };
+
+export const getUsersCourse = (id: string) => async (dispatch: Dispatch) => {
+  // debugger;
+  dispatch({
+    type: ActionTypesCourse.LOADING_COURSES,
+  });
+  try {
+    const res = await clientAxios.get<any[]>(`course/${id}/list`, {
+      headers: headerAuthToken(),
+    });
+    dispatch({
+      type: ActionTypesCourse.USERS_COURSE_SUCCESS,
+      payload: res.data,
+    });
+  } catch (error: any) {
+    console.log('error', error.response);
+    //   // const err = error.response.data.error;
+    dispatch({
+      type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+    });
+    dispatch({
+      type: ActionTypesAlert.ERROR_ALERT,
+      payload: {
+        title: 'Creación de curso',
+        textBody:
+          'Ocurrio un error! Verifique la información e intente nuevamente',
+      },
+    });
+  }
+};

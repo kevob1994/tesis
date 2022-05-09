@@ -76,6 +76,7 @@ export interface CourseFormI {
   ) => void;
 }
 export interface ITableEvaluations {
+  id?: number | null;
   name: string;
   description: string;
   date: Date;
@@ -84,6 +85,7 @@ export interface ITableEvaluations {
 
 export interface CourseReducerI {
   courses: CourseI[];
+  evaluations: EvaluationsI[];
   loading: boolean;
 }
 
@@ -95,6 +97,16 @@ export interface CourseI extends CourseParamsI {
   user_name: string;
   user_photo: string;
   code: string;
+}
+export interface EvaluationsI {
+  id: number;
+  course_id: number;
+  created_at: Date;
+  date: Date;
+  description: string;
+  name: string;
+  updated_at: Date;
+  value: 12;
 }
 
 export interface CourseParamsI {

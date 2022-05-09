@@ -3,6 +3,7 @@ import { CourseReducerI } from '../utils/interfaces';
 
 const initialState: CourseReducerI = {
   courses: [],
+  evaluations: [],
   loading: true,
 };
 
@@ -29,6 +30,13 @@ const courseReducer = (state = initialState, action: TActionCourse) => {
         ...state,
         loading: true,
       };
+
+			case ActionTypesCourse.LIST_EVALUATIONS_SUCCESS:
+				return {
+					...state,
+					loading: true,
+					evaluations: action.payload,
+				};
     default:
       return state;
   }

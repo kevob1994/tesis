@@ -1,4 +1,4 @@
-import { CourseI, UserI } from '../../utils/interfaces';
+import { CourseI, EvaluationsI, UserI } from '../../utils/interfaces';
 
 export enum ActionTypesCourse {
   CREATE_COURSE_SUCCESS = 'CREATE_COURSE_SUCCESS',
@@ -8,6 +8,7 @@ export enum ActionTypesCourse {
   JOIN_COURSE = 'JOIN_COURSE',
   REQUEST_COURSE_FAIL = 'REQUEST_COURSE_FAIL',
   LIST_EVALUATIONS_SUCCESS = 'LIST_EVALUATIONS_SUCCESS',
+  USERS_COURSE_SUCCESS = 'USERS_COURSE_SUCCESS',
   LOADING_COURSES = 'LOADING_COURSES',
 }
 
@@ -38,7 +39,11 @@ interface IActionCourseDelete {
 
 interface IActionCourseEvaluations {
   type: ActionTypesCourse.LIST_EVALUATIONS_SUCCESS;
-  payload: any;
+  payload: EvaluationsI[];
+}
+interface IActionCourseUsers {
+  type: ActionTypesCourse.LIST_EVALUATIONS_SUCCESS;
+  payload: any[];
 }
 interface IActionCourseLoading {
   type: ActionTypesCourse.LOADING_COURSES;
@@ -51,4 +56,5 @@ export type TActionCourse =
   | IActionCourseEdit
   | IActionCourseDelete
   | IActionCourseLoading
-  | IActionCourseEvaluations;
+  | IActionCourseEvaluations
+  | IActionCourseUsers;

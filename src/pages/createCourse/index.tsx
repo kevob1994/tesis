@@ -32,6 +32,7 @@ import { StatusModalE } from '../../hooks/useModalStatus';
 const { Step } = Steps;
 
 const initEvaluation: ITableEvaluations = {
+  id: null,
   name: '',
   description: '',
   date: new Date(),
@@ -51,13 +52,15 @@ const CreateCoursePage = () => {
     dispatch(getListEvaluationsCourse(id));
   const { id } = useParams();
   let navigate = useNavigate();
-  const courses = useSelector((state: StoreI) => state.courses);
+  const { courses, evaluations } = useSelector(
+    (state: StoreI) => state.courses
+  );
   const { show, type, title, textBody } = useSelector(
     (state: StoreI) => state.alert
   );
 
   const courseInfo = (id: number) => {
-    const course = courses.courses.find((course) => course.id === Number(id));
+    const course = courses.find((course) => course.id === Number(id));
     if (course) {
       return {
         ...course,
@@ -98,9 +101,29 @@ const CreateCoursePage = () => {
     photo: courseInfo(Number(id))?.photo,
   });
 
-  useEffect(() => {
+	useEffect(() => {
     if (id) loadEvaluations(id);
   }, []);
+
+  useEffect(() => {
+    if (evaluations.length > 0)
+      setListEvaluations(
+        evaluations.map((evaluations) => ({
+          id: evaluations.id,
+          name: evaluations.name,
+          description: evaluations.description,
+          date: new Date(evaluations.date),
+          value: evaluations.value,
+        }))
+      );
+  }, [evaluations]);
+
+  useEffect(() => {
+    if (type === StatusModalE.SUCCESS && show) {
+      setListEvaluations([initEvaluation]);
+      navigate('/', { replace: true });
+    }
+  }, [show, type]);
 
   useEffect(() => {
     if (type === StatusModalE.SUCCESS && show) {
