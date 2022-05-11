@@ -1,4 +1,4 @@
-import { CourseI, EvaluationsI, UserI } from '../../utils/interfaces';
+import { CourseI, EvaluationsI, ItemChatI, UserI } from '../../utils/interfaces';
 
 export enum ActionTypesCourse {
   CREATE_COURSE_SUCCESS = 'CREATE_COURSE_SUCCESS',
@@ -42,8 +42,8 @@ interface IActionCourseEvaluations {
   payload: EvaluationsI[];
 }
 interface IActionCourseUsers {
-  type: ActionTypesCourse.LIST_EVALUATIONS_SUCCESS;
-  payload: any[];
+  type: ActionTypesCourse.USERS_COURSE_SUCCESS;
+  payload: ItemChatI[];
 }
 interface IActionCourseLoading {
   type: ActionTypesCourse.LOADING_COURSES;

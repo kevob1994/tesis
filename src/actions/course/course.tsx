@@ -189,7 +189,7 @@ export const getUsersCourse = (id: string) => async (dispatch: Dispatch) => {
     });
     dispatch({
       type: ActionTypesCourse.USERS_COURSE_SUCCESS,
-      payload: res.data,
+      payload: res.data[0],
     });
   } catch (error: any) {
     console.log('error', error.response);

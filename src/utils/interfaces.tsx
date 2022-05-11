@@ -87,6 +87,17 @@ export interface CourseReducerI {
   courses: CourseI[];
   evaluations: EvaluationsI[];
   loading: boolean;
+  listChat: ItemChatI[];
+}
+
+export interface ItemChatI {
+  user_email: string;
+  user_id: number;
+  user_lastname: string;
+  user_name: string;
+  user_phone: string;
+  user_photo: string;
+  user_role: RoleE;
 }
 
 export interface CourseI extends CourseParamsI {

@@ -5,6 +5,7 @@ const initialState: CourseReducerI = {
   courses: [],
   evaluations: [],
   loading: true,
+  listChat: [],
 };
 
 const courseReducer = (state = initialState, action: TActionCourse) => {
@@ -30,13 +31,18 @@ const courseReducer = (state = initialState, action: TActionCourse) => {
         ...state,
         loading: true,
       };
-
-			case ActionTypesCourse.LIST_EVALUATIONS_SUCCESS:
-				return {
-					...state,
-					loading: true,
-					evaluations: action.payload,
-				};
+    case ActionTypesCourse.USERS_COURSE_SUCCESS:
+      return {
+        ...state,
+        listChat: action.payload,
+        loading: false,
+      };
+    case ActionTypesCourse.LIST_EVALUATIONS_SUCCESS:
+      return {
+        ...state,
+        loading: true,
+        evaluations: action.payload,
+      };
     default:
       return state;
   }
