@@ -12,7 +12,7 @@ import {
 import { listItemsI, RoleE, StoreI } from '../../utils/interfaces';
 import { useForm } from '../../hooks/useForm';
 import { StatusModalE, useModalStatus } from '../../hooks/useModalStatus';
-import Pusher from 'pusher-js';
+
 
 const { Search } = Input;
 
@@ -41,19 +41,6 @@ const ListCourses = () => {
 
   useEffect(() => {
     loadCourses();
-  }, []);
-
-  useEffect(() => {
-    Pusher.logToConsole = true;
-
-    const pusher = new Pusher('2e799d955f3afe27994d', {
-      cluster: 'us2',
-    });
-
-    const	 channel = pusher.subscribe('my-channel');
-    channel.bind('message', (data: any) => {
-      alert(JSON.stringify(data));
-    });
   }, []);
 
   const showModal = (code: string) => {

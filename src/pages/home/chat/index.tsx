@@ -44,13 +44,13 @@ const ChatPage = () => {
   useEffect(() => {
     Pusher.logToConsole = true;
 
-    const pusher = new Pusher('', {
-      cluster: '',
+    const pusher = new Pusher('2e799d955f3afe27994d', {
+      cluster: 'us2',
     });
 
     const channel = pusher.subscribe('chat');
     channel.bind('message', (data: any) => {
-      console.log(data);
+      alert(JSON.stringify(data));
     });
   }, []);
 
