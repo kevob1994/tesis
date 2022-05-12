@@ -65,17 +65,24 @@ export const joinCourse = (code: string) => async (dispatch: Dispatch) => {
     type: ActionTypesCourse.LOADING_COURSES,
   });
   try {
-    const res = await clientAxios.post<any>(
+    await clientAxios.post<any>(
       `course/registercourse/${code}`,
       {},
       {
         headers: headerAuthToken(),
       }
     );
-    // dispatch({
-    //   type: ActionTypesCourse.JOIN_COURSE,
-    //   payload: res.data,
-    // });
+    dispatch({
+      type: ActionTypesCourse.JOIN_COURSE,
+    });
+    const res = await clientAxios.get<CourseI[]>('course', {
+      headers: headerAuthToken(),
+    });
+
+    dispatch({
+      type: ActionTypesCourse.GET_COURSE_SUCCESS,
+      payload: res.data,
+    });
   } catch (error: any) {
     console.log('error', error.response);
     //   // const err = error.response.data.error;

@@ -93,7 +93,7 @@ const StepEvaluationPlan = ({
       render: (text, record, index) => (
         <Input value={text} onChange={onInputChange('name', index)} />
       ),
-			width: '20%',
+      width: '20%',
     },
     {
       title: 'Descripción',
@@ -102,7 +102,7 @@ const StepEvaluationPlan = ({
       render: (text, record, index) => (
         <Input value={text} onChange={onInputChange('description', index)} />
       ),
-			width: '45%',
+      width: '45%',
     },
     {
       title: 'Fecha',
@@ -138,7 +138,7 @@ const StepEvaluationPlan = ({
           step='0'
         />
       ),
-			width: '5%',
+      width: '5%',
     },
     {
       title: 'Eliminar',
@@ -151,22 +151,31 @@ const StepEvaluationPlan = ({
           onClick={() => deleteEvaluation(index)}
         />
       ),
-			width: '1%',
+      width: '1%',
     },
   ];
 
   const submitNext = () => {
     if (validateEvaluationPlanEmpty()) return setEmptyForm(true);
     setEmptyForm(false);
-		nextStep();
+    nextStep();
   };
 
   const validateEvaluationPlanEmpty = () => {
-    const list = listEvaluations.filter((evaluation) =>
-      Object.values(evaluation).some(
-        (x) => x === null || x.toString().trim() === '' || x === 0
-      )
-    );
+    console.log('listEvaluations');
+    console.log(listEvaluations);
+    const list = listEvaluations
+      .map(({ date, description, name, value }: ITableEvaluations) => ({
+        date,
+        description,
+        name,
+        value,
+      }))
+      .filter((evaluation) =>
+        Object.values(evaluation).some(
+          (x) => x === null || x.toString().trim() === '' || x === 0
+        )
+      );
 
     return list.length > 0;
   };

@@ -70,16 +70,12 @@ const StepEndConfirm = ({
 
   const saveCourse = () => {
     const { onChange, date_begin, date_finish, ...obj } = formCourse;
-    console.log(moment(listEvaluations[0].date).format('YYYY-MM-DD HH:MM:SS'));
-    console.log(
-      moment(listEvaluations[0].date)
-        .subtract(2, 'minute')
-        .format('YYYY-MM-DD HH:MM:00')
-    );
     const evaluations = listEvaluations.map((course) => ({
       ...course,
       date: moment(course.date).format('YYYY-MM-DD HH:MM:00'),
     }));
+		console.log('evaluations')
+		console.log(evaluations)
     if (auth.user?.id) {
       if (id) {
         dispatch(
