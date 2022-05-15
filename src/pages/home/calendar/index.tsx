@@ -2,11 +2,16 @@ import Modal from 'antd/lib/modal/Modal';
 import FlexView from 'react-flexview/lib';
 import classNames from 'classnames';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as _ from 'lodash';
 import moment from 'moment';
 import './index.scss';
 import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
+import { translateMonth } from '../../../utils/utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { getListEvaluationsCourse } from '../../../actions/course/course';
+import { useParams } from 'react-router-dom';
+import { EvaluationsI, StoreI } from '../../../utils/interfaces';
 
 export interface ICalendarData {
   date: string;
@@ -24,6 +29,7 @@ interface ICalendarProps {
   data?: ICalendarData[];
   startEnd?: moment.Moment[];
   classroomWeeks?: IClassRoomCallDateInfo[];
+  evaluationsByMonth?: EvaluationsI[];
 }
 
 const test = [
@@ -37,6 +43,29 @@ const test = [
 
 const CalendarPage = () => {
   const [monthOffset, setMonthOffset] = React.useState<number>(0);
+  const [evaluationsByMonth, setEvaluationsByMonth] = React.useState<
+    EvaluationsI[]
+  >([]);
+  const dispatch = useDispatch();
+  const loadEvaluations = (id: string) =>
+    dispatch(getListEvaluationsCourse(id));
+  const { id } = useParams();
+  const { evaluations } = useSelector((state: StoreI) => state.courses);
+
+  useEffect(() => {
+    if (id) loadEvaluations(id);
+  }, []);
+
+  useEffect(() => {
+    setEvaluationsByMonth(
+      evaluations.filter(
+        (evaluations) =>
+          moment(evaluations.date).format('M') ===
+          moment().add(monthOffset, 'month').format('M')
+      )
+    );
+  }, [evaluations]);
+
   return (
     <FlexView column className='calendarContainer'>
       <Header
@@ -49,6 +78,7 @@ const CalendarPage = () => {
         increaseMonth={(qty: number) => setMonthOffset(monthOffset + qty)}
         startEnd={[moment(new Date()), moment(new Date()).add(30)]}
         classroomWeeks={test}
+        evaluationsByMonth={evaluationsByMonth}
       />
     </FlexView>
   );
@@ -69,7 +99,12 @@ const Header = (props: ICalendarProps) => {
 
       <FlexView column>
         <p className='month'>
-          {moment().add(props.monthOffset, 'month').format('MMMM')}
+          {translateMonth(
+            moment()
+              .add(props.monthOffset, 'month')
+              .format('MMMM')
+              .toLocaleUpperCase()
+          )}
         </p>
         <p className='year'>
           {moment().add(props.monthOffset, 'month').format('YYYY')}
@@ -85,13 +120,13 @@ const Header = (props: ICalendarProps) => {
 const Days = () => {
   return (
     <FlexView vAlignContent='center' className='days'>
-      <p>Sun</p>
-      <p>Mon</p>
-      <p>Tue</p>
-      <p>Wed</p>
-      <p>Thu</p>
-      <p>Fri</p>
-      <p>Sat</p>
+      <p>Dom</p>
+      <p>Lun</p>
+      <p>Mar</p>
+      <p>Mie</p>
+      <p>Jue</p>
+      <p>Vie</p>
+      <p>Sab</p>
     </FlexView>
   );
 };
@@ -132,56 +167,27 @@ const Dates = (props: ICalendarProps) => {
         // if (!!props.startEnd && props.startEnd.length >= 2) {
         //   if (date.isBetween(props.startEnd[0], props.startEnd[1])) {
 
-        if (!!props.classroomWeeks) {
-          props.classroomWeeks.forEach((v) => {
-            const m = moment()
-              .utc()
-              .weekday(v.dayOfWeek)
-              .set('hour', v.hour)
-              .set('minute', v.minute);
-            // debugger;
-            const local = m.clone().local();
-            if (local.weekday() === date.weekday()) {
-              const s = date
-                .clone()
-                .startOf('day')
-                .add(local.hour(), 'hour')
-                .add(local.minute(), 'minute');
-              const e = date
-                .clone()
-                .startOf('day')
-                .add(local.hour(), 'hour')
-                .add(local.minute(), 'minute')
-                .add(v.duration, 'minute');
-              classroomBooking.push([s, e]);
-            }
-          });
-        }
-        //   }
-        // }
+        const infoEvaluation = (day: number) => {
+          const { evaluationsByMonth } = props;
+          if (evaluationsByMonth) {
+            const evaluationInDay = evaluationsByMonth.filter((evaluation) => {
+              console.log(moment(evaluation.date).format('D'));
+              return +moment(evaluation.date).format('D') === day;
+            });
+            if (evaluationInDay.length == 0) return null;
 
-        const contentHours = (
-          <>
-            {booking && (
-              <div className='active'>
-                <p>Descripcion de la evaluacion</p>
-                <span>{moment(booking.date).format('HH:mm')}</span>
-              </div>
-            )}
-            {!disabledDate &&
-              classroomBooking.map((v, idx) => {
-                if (idx >= 2) return null;
-                return (
-                  <div className='active'>
-									<p>Descripcion de la evaluacion</p>
-                    <span>{`${v[0].format('HH:mm')}-${v[1].format(
-                      'HH:mm'
-                    )}`}</span>
-                  </div>
-                );
-              })}
-          </>
-        );
+            return (
+              <>
+                <div className='active'>
+                  <p>{evaluationInDay[0].name}</p>
+                  <span>{moment(evaluationInDay[0].date).format('HH:MM')}</span>
+                </div>
+              </>
+            );
+          } else {
+            return null;
+          }
+        };
 
         return (
           <FlexView
@@ -209,7 +215,7 @@ const Dates = (props: ICalendarProps) => {
             >
               {date.date()}
             </span>
-            {bp.md ? contentHours : null}
+            {bp.md ? infoEvaluation(date.date()) : null}
           </FlexView>
         );
       })}

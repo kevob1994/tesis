@@ -39,7 +39,9 @@ const ChatPage = () => {
     }
   };
 
-  let allMessages = [];
+  const messageEventHandler = (message: any) => {
+    console.log(message);
+  };
 
   useEffect(() => {
     Pusher.logToConsole = true;
@@ -48,11 +50,18 @@ const ChatPage = () => {
       cluster: 'us2',
     });
 
-    const channel = pusher.subscribe('chat');
-    channel.bind('message', (data: any) => {
+    if (!chatSelected) return;
+
+    const channel = pusher.subscribe(`private_${chatSelected.user_id}_chat`);
+    channel.bind('MessageSent', (data: any) => {
       alert(JSON.stringify(data));
     });
-  }, []);
+
+    return () => {
+			console.log('UNSUBSCRIBE')
+      channel.unsubscribe();
+    };
+  }, [chatSelected]);
 
   const selectChat = async (user: ItemChatI) => {
     setChatSelected(user);

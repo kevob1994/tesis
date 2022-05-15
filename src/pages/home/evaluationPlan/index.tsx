@@ -1,88 +1,49 @@
 import React, { useEffect } from 'react';
 import { Table, Tag, Space } from 'antd';
-import { StoreI } from '../../../utils/interfaces';
+import { ITableEvaluations, StoreI } from '../../../utils/interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getListEvaluationsCourse } from '../../../actions/course/course';
+import { ColumnProps } from 'antd/lib/table';
 
-const columns = [
+const columns: ColumnProps<ITableEvaluations>[] = [
   {
-    title: 'Name',
+    title: 'Evaluación',
     dataIndex: 'name',
     key: 'name',
-    render: (text: any) => <a>{text}</a>,
+
+    width: '20%',
   },
   {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
+    title: 'Descripción',
+    dataIndex: 'description',
+    key: 'description',
+
+    width: '40%',
   },
   {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
+    title: 'Fecha',
+    dataIndex: 'date',
+    key: 'date',
+    render: (text, record, index) => {
+      return <p>{text}</p>;
+    },
+    width: '20%',
   },
   {
-    title: 'Tags',
-    key: 'tags',
-    dataIndex: 'tags',
-    render: (tags: any) => (
-      <>
-        {tags.map((tag: any) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
-            color = 'volcano';
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (text: any, record: any) => (
-      <Space size='middle'>
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
-      </Space>
-    ),
+    title: 'Nota',
+    dataIndex: 'value',
+    key: 'value',
+    width: '20%',
   },
 ];
 
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-];
 const EvaluationPlanPage = () => {
   const dispatch = useDispatch();
   const loadEvaluations = (id: string) =>
     dispatch(getListEvaluationsCourse(id));
   const { id } = useParams();
-  const { courses, evaluations } = useSelector(
+  const { evaluations } = useSelector(
     (state: StoreI) => state.courses
   );
 
@@ -93,7 +54,14 @@ const EvaluationPlanPage = () => {
   return (
     <div>
       <h1>Plan de evaluación</h1>
-      <Table pagination={false} columns={columns} dataSource={data} />
+      <Table
+        pagination={false}
+        columns={columns}
+        dataSource={evaluations.map((evaluation) => ({
+          ...evaluation,
+          key: evaluation.course_id,
+        }))}
+      />
     </div>
   );
 };
