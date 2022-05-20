@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Image, Input, Row } from 'antd';
 import { UserItem } from './components/UserItem';
 import { SendOutlined } from '@ant-design/icons';
@@ -8,8 +8,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUsersCourse } from '../../../actions/course/course';
 import { useParams } from 'react-router-dom';
 import { clientAxios, headerAuthToken } from '../../../config/axios';
-import { ItemChatI, StoreI } from '../../../utils/interfaces';
+import { ItemChatI, StoreI, UserI } from '../../../utils/interfaces';
 import Pusher from 'pusher-js';
+import { MessageRecieve } from './components/MessageRecieve';
+import { MessageSend } from './components/MessageSend';
+
+interface MessageI {
+  content: string;
+  created_at: string;
+  from_id: number;
+  id: number;
+  state: string;
+  to_id: number;
+  updated_at: string;
+  user_id: number;
+}
 
 const ChatPage = () => {
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
@@ -20,6 +33,14 @@ const ChatPage = () => {
   const { listChat, loading } = useSelector((state: StoreI) => state.courses);
   const loadUsersCourse = (id: string) => dispatch(getUsersCourse(id));
   const [message, setMessage] = useState('');
+  const [listMessage, setListMessage] = useState<MessageI[]>([]);
+
+  const handleMessageSent = useCallback(
+    (data: { user: UserI; message: MessageI }) => {
+      setListMessage((prevState) => [...prevState, data.message]);
+    },
+    []
+  );
 
   useEffect(() => {
     if (id) loadUsersCourse(id);
@@ -27,7 +48,7 @@ const ChatPage = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, []);
+  }, [listMessage]);
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -45,20 +66,22 @@ const ChatPage = () => {
 
   useEffect(() => {
     Pusher.logToConsole = true;
-
+    if (!user) return;
     const pusher = new Pusher('2e799d955f3afe27994d', {
       cluster: 'us2',
+      authEndpoint: 'http://localhost:8000/api/broadcasting/auth',
+      auth: {
+        params: user.id,
+        headers: headerAuthToken(),
+      },
     });
 
     if (!chatSelected) return;
 
-    const channel = pusher.subscribe(`private_${chatSelected.user_id}_chat`);
-    channel.bind('MessageSent', (data: any) => {
-      alert(JSON.stringify(data));
-    });
+    const channel = pusher.subscribe(`private-${chatSelected.user_id}-chat`);
+    channel.bind('MessageSent', handleMessageSent);
 
     return () => {
-			console.log('UNSUBSCRIBE')
       channel.unsubscribe();
     };
   }, [chatSelected]);
@@ -80,7 +103,6 @@ const ChatPage = () => {
   const isSelected = (id: number) => id === chatSelected?.user_id;
 
   const sendMessage = async () => {
-    console.log(message, chatSelected?.user_id);
     try {
       const res = await clientAxios.post<any[]>(
         `messages`,
@@ -89,7 +111,6 @@ const ChatPage = () => {
           headers: headerAuthToken(),
         }
       );
-      console.log(res);
       setMessage('');
     } catch (error) {
       console.log(error);
@@ -131,42 +152,18 @@ const ChatPage = () => {
                 </Row>
               </div>
               <div className='msgs-chat'>
-                <div className='text-received'>
-                  <p>Texto de prueba</p>
-                  <p className='hour'>08:00 pm</p>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'end' }}>
-                  <div className='text-send'>
-                    <p>Cuando es el parcial profe?</p>
-                    <p className='hour'>08:00 pm</p>
-                  </div>
-                </div>
-                <div className='text-received'>
-                  <p>Texto de prueba</p>
-                  <p className='hour'>08:00 pm</p>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'end' }}>
-                  <div className='text-send'>
-                    <p>Cuando es el parcial profe?</p>
-                    <p className='hour'>08:00 pm</p>
-                  </div>
-                </div>
-                <div className='text-received'>
-                  <p>Texto de prueba</p>
-                  <p className='hour'>08:00 pm</p>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'end' }}>
-                  <div className='text-send'>
-                    <p>Cuando es el parcial profe?</p>
-                    <p className='hour'>08:00 pm</p>
-                  </div>
-                </div>
-                <div className='text-received'>
-                  <p>Texto de prueba</p>
-                  <p className='hour'>08:00 pm</p>
-                </div>
-                {/* <div style={{ width: 20, height: 100 }}></div> */}
-                <div ref={messagesEndRef} />
+                {listMessage.map((message) => {
+                  if (message.from_id === user?.id) {
+                    return (
+                      <MessageSend text={message.content} hour={'08:00 pm'} />
+                    );
+                  }
+                  return (
+                    <MessageRecieve text={message.content} hour={'08:00 pm'} />
+                  );
+                })}
+
+                <div ref={messagesEndRef} style={{ marginTop: 100 }} />
               </div>
               <div className='input-chat'>
                 <Input

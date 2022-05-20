@@ -33,6 +33,7 @@
 
   .msgs-chat {
     padding: 20px;
+    min-height: calc(100% - 205px);
     .text-received {
       background: #fafafb;
       border: 1px solid #d7dce4;
