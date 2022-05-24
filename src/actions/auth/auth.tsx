@@ -1,8 +1,5 @@
 import { Dispatch } from 'redux';
-import {
-  UserI,
-  UserRegisterFormI,
-} from '../../utils/interfaces';
+import { UserI, UserRegisterFormI } from '../../utils/interfaces';
 import { clientAxios, headerAuthToken } from '../../config/axios';
 import { ActionTypesAuth } from './types';
 
@@ -47,7 +44,6 @@ export const login = (params: UserLoginFormI) => async (dispatch: Dispatch) => {
       type: ActionTypesAuth.LOGIN_SUCCESS,
       payload: res.data,
     });
-		
   } catch (error: any) {
     console.log('error', error.response);
     dispatch({
@@ -81,4 +77,8 @@ export const logout = () => async (dispatch: Dispatch) => {
   dispatch({
     type: ActionTypesAuth.LOGOUT,
   });
+};
+
+export const editUser = () => async (dispatch: Dispatch) => {
+
 };

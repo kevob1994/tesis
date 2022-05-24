@@ -17,6 +17,8 @@ import {
   NotesPages,
   CreateCoursePage,
   ForumInfoPage,
+  EditProfileUser,
+  ProfileUser,
 } from '../pages';
 import { StoreI } from '../utils/interfaces';
 import { ProtectedRoute } from './ProtectedRoute';
@@ -54,6 +56,22 @@ export const RoutesPath = () => {
             }
           />
           <Route
+            path='edit-profile'
+            element={
+              <ProtectedRoute>
+                <EditProfileUser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='profile-user/:id'
+            element={
+              <ProtectedRoute>
+                <ProfileUser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path='home/:id'
             element={
               <ProtectedRoute>
@@ -81,7 +99,9 @@ export const RoutesPath = () => {
             }
           />
         </Routes>
-      ) : <Loader visible={true} />}
+      ) : (
+        <Loader visible={true} />
+      )}
     </>
   );
 };

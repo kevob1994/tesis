@@ -9,7 +9,7 @@ import { getUsersCourse } from '../../../actions/course/course';
 import { useParams } from 'react-router-dom';
 import { clientAxios, headerAuthToken } from '../../../config/axios';
 import { ItemChatI, StoreI, UserI } from '../../../utils/interfaces';
-import Pusher from 'pusher-js';
+import Pusher, { Channel } from 'pusher-js';
 import { MessageRecieve } from './components/MessageRecieve';
 import { MessageSend } from './components/MessageSend';
 
@@ -50,20 +50,6 @@ const ChatPage = () => {
     scrollToBottom();
   }, [listMessage]);
 
-  const scrollToBottom = () => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'end',
-        inline: 'nearest',
-      });
-    }
-  };
-
-  const messageEventHandler = (message: any) => {
-    console.log(message);
-  };
-
   useEffect(() => {
     Pusher.logToConsole = true;
     if (!user) return;
@@ -78,13 +64,46 @@ const ChatPage = () => {
 
     if (!chatSelected) return;
 
-    const channel = pusher.subscribe(`private-${chatSelected.user_id}-chat`);
-    channel.bind('MessageSent', handleMessageSent);
+    // const response = getInfoChat();
+    // console.log(response);
+    let channel: Channel;
+
+    clientAxios
+      .post<any>(
+        `chat`,
+        { to_user: chatSelected?.user_id },
+        {
+          headers: headerAuthToken(),
+        }
+      )
+      .then((response: any) => {
+        console.log(response);
+        // debugger;
+        channel = pusher.subscribe(`private-${response.data.code}-chat`);
+        channel.bind('MessageSent', handleMessageSent);
+      });
+
+    // const channel = pusher.subscribe(`private-${chatSelected.user_id}-chat`);
+    // channel.bind('MessageSent', handleMessageSent);
 
     return () => {
-      channel.unsubscribe();
+      if (channel) channel.unsubscribe();
     };
   }, [chatSelected]);
+
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+        inline: 'nearest',
+      });
+    }
+  };
+
+  const messageEventHandler = (message: any) => {
+    console.log(message);
+  };
 
   const selectChat = async (user: ItemChatI) => {
     setChatSelected(user);
@@ -104,7 +123,7 @@ const ChatPage = () => {
 
   const sendMessage = async () => {
     try {
-      const res = await clientAxios.post<any[]>(
+      await clientAxios.post<any[]>(
         `messages`,
         { to_id: chatSelected?.user_id, content: message },
         {
@@ -112,6 +131,20 @@ const ChatPage = () => {
         }
       );
       setMessage('');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getInfoChat = async () => {
+    try {
+      return await clientAxios.post<any[]>(
+        `chat`,
+        { to_user: chatSelected?.user_id },
+        {
+          headers: headerAuthToken(),
+        }
+      );
     } catch (error) {
       console.log(error);
     }

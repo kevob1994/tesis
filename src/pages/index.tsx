@@ -15,3 +15,5 @@ export { default as TasksPage } from './home/tasks';
 export { default as NotesPages } from './home/notes';
 export { default as CreateCoursePage } from './createCourse';
 export { default as ForumInfoPage } from './home/forumInfo';
+export { default as EditProfileUser } from './editProfileUser';
+export { default as ProfileUser } from './profileUser';
