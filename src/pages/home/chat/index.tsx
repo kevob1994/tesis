@@ -33,6 +33,7 @@ const ChatPage = () => {
   const { listChat, loading } = useSelector((state: StoreI) => state.courses);
   const loadUsersCourse = (id: string) => dispatch(getUsersCourse(id));
   const [message, setMessage] = useState('');
+  const [chatId, setChatId] = useState('');
   const [listMessage, setListMessage] = useState<MessageI[]>([]);
 
   const handleMessageSent = useCallback(
@@ -79,6 +80,7 @@ const ChatPage = () => {
       .then((response: any) => {
         console.log(response);
         // debugger;
+        setChatId(response.data.code);
         channel = pusher.subscribe(`private-${response.data.code}-chat`);
         channel.bind('MessageSent', handleMessageSent);
       });
@@ -125,7 +127,7 @@ const ChatPage = () => {
     try {
       await clientAxios.post<any[]>(
         `messages`,
-        { to_id: chatSelected?.user_id, content: message },
+        { chat_id: chatId, content: message },
         {
           headers: headerAuthToken(),
         }
