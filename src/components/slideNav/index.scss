@@ -1,0 +1,29 @@
+.slide-profile {
+  position: absolute;
+  bottom: 0;
+  padding: 10px;
+	margin-bottom: 5px;
+	border-top: 1px solid rgb(207, 207, 207);
+	width: 100%;
+  img {
+    border-radius: 50%;
+    margin-right: 10px !important;
+  }
+  .name-user {
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 104.51%;
+    /* identical to box height, or 15px */
+
+    color: #2c2f46;
+    margin-bottom: 10px !important;
+  }
+  .text-profile {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 104.51%;
+    /* identical to box height, or 13px */
+
+    color: #515571;
+  }
+}

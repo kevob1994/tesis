@@ -6,22 +6,30 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  img {
+    background: transparent !important;
+  }
   .name-app {
     font-size: 1.8rem;
     font-weight: bold;
     color: white;
     margin-left: 20px !important;
   }
+  .name-course {
+    color: white;
+    margin-left: 40px !important;
+    font-size: 1.4rem;
+  }
   .options-header {
     display: flex;
     p {
       color: white;
-			margin-left: 40px !important;
-			font-size: 1.05rem;
+      margin-left: 40px !important;
+      font-size: 1.05rem;
     }
   }
 }
 
 .btn-logout {
-	cursor: pointer;
+  cursor: pointer;
 }

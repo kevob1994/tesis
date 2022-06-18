@@ -53,6 +53,20 @@ export interface UserRegisterFormI {
   photo: string;
 }
 
+export interface UserEditFormI {
+  name: string;
+  lastname: string;
+  email: string;
+  phone: string;
+  password?: string;
+  password_confirmation?: string;
+  birthday: string;
+  gender: GenderE;
+  biography: string;
+  role?: RoleE;
+  photo: string;
+}
+
 export interface CourseFormI {
   full_name: string;
   short_name: string;
@@ -87,7 +101,12 @@ export interface CourseReducerI {
   courses: CourseI[];
   evaluations: EvaluationsI[];
   loading: boolean;
+  loadingAction: boolean;
   listChat: ItemChatI[];
+  forum: ForumI[];
+  forumSelected: ForumI | null;
+  comments: CommentI[];
+  loadingComments: boolean;
 }
 
 export interface ItemChatI {
@@ -133,15 +152,22 @@ export interface CourseParamsI {
   user_id: number;
 }
 
+export interface ForumParamsI {
+  name: string;
+  description: string;
+  course_id: number;
+  photo: string;
+}
+
 export interface listItemsI {
   id: number;
   title: string;
   description: string;
-  image: string;
-  code: string;
+  image: string | null;
+  code?: string;
   user: {
     name: string;
-    photo: string;
+    photo: string | null;
   };
 }
 
@@ -150,4 +176,28 @@ export interface AlertReducerI {
   textBody: string;
   show: boolean;
   type: StatusModalE | null;
+}
+
+export interface ForumI {
+  id: number;
+  course_id: number;
+  name: string;
+  description: string;
+  created_at: Date;
+  updated_at: Date;
+  photo: string | null;
+  user_id: number;
+  user_name: string;
+  user_photo: string | null;
+}
+
+export interface CommentI {
+  content: string;
+  created_at: Date;
+  forum_id: number;
+  id: number;
+  updated_at: Date;
+  user_id: number;
+  user_name: string;
+  user_photo: string | null;
 }

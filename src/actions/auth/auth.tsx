@@ -1,5 +1,9 @@
 import { Dispatch } from 'redux';
-import { UserI, UserRegisterFormI } from '../../utils/interfaces';
+import {
+  UserEditFormI,
+  UserI,
+  UserRegisterFormI,
+} from '../../utils/interfaces';
 import { clientAxios, headerAuthToken } from '../../config/axios';
 import { ActionTypesAuth } from './types';
 
@@ -79,6 +83,20 @@ export const logout = () => async (dispatch: Dispatch) => {
   });
 };
 
-export const editUser = () => async (dispatch: Dispatch) => {
-
-};
+export const editUser =
+  (params: UserEditFormI, id: number) => async (dispatch: Dispatch) => {
+    try {
+      const res = await clientAxios.put<AxiosAuth>(`user/${id}`, params, {
+        headers: headerAuthToken(),
+      });
+      dispatch({
+        type: ActionTypesAuth.EDIT_SUCCESS,
+        payload: res.data,
+      });
+    } catch (error: any) {
+      console.log(error.response);
+      dispatch({
+        type: ActionTypesAuth.REQUEST_EDIT_AUTH_FAIL,
+      });
+    }
+  };

@@ -13,7 +13,6 @@ import { listItemsI, RoleE, StoreI } from '../../utils/interfaces';
 import { useForm } from '../../hooks/useForm';
 import { StatusModalE, useModalStatus } from '../../hooks/useModalStatus';
 
-
 const { Search } = Input;
 
 const onSearch = (value: any) => console.log(value);
@@ -200,11 +199,18 @@ const ListCourses = () => {
               <ListElements
                 listItems={transformListCourse()}
                 deleteItem={openModalRemoveCourse}
-                editItem={handlerEdit}
+                editItem={
+                  auth.user?.role === RoleE.TEACHER ? handlerEdit : undefined
+                }
                 shareElement={showModal}
                 url='/home/id/course-program'
                 textDelete={
                   role === RoleE.TEACHER ? 'Eliminar' : 'Salir del curso'
+                }
+                textEmpty={
+                  role === RoleE.TEACHER
+                    ? 'No tiene cursos creados'
+                    : 'No se ha unido a ningun curso'
                 }
               />
             </Col>

@@ -1,4 +1,4 @@
-import { Layout, Menu } from 'antd';
+import { Image, Layout, Menu, Row } from 'antd';
 import {
   UserOutlined,
   LaptopOutlined,
@@ -6,11 +6,15 @@ import {
 } from '@ant-design/icons';
 import './index.scss';
 import { Link, useParams } from 'react-router-dom';
+import { StoreI } from '../../utils/interfaces';
+import { useSelector } from 'react-redux';
+import './index.scss';
 
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 
 const SlideNav = () => {
+  const { user } = useSelector((state: StoreI) => state.auth);
   const { id } = useParams();
   console.log(id);
   return (
@@ -55,6 +59,27 @@ const SlideNav = () => {
             <Link to={`/home/${id}/notes`}>notas</Link>
           </Menu.Item>
         </SubMenu>
+        <div className='slide-profile'>
+          <Link to='/edit-profile'>
+            <Row align='middle'>
+              <Image
+                preview={false}
+                width={45}
+                height={45}
+                src={
+                  user?.photo ||
+                  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
+                }
+              />
+              <div style={{ marginLeft: 10 }}>
+                <p className='name-user'>
+                  {user?.name} {user?.lastname}
+                </p>
+                <p className='text-profile'>Perfil</p>
+              </div>
+            </Row>
+          </Link>
+        </div>
       </Menu>
     </Sider>
   );

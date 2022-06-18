@@ -2,9 +2,10 @@ import React from 'react';
 import { Image, Layout, Menu } from 'antd';
 import logo from './../../assets/imgs/icon-light-background-primary.svg';
 import './index.scss';
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../actions/auth/auth';
+import { StoreI } from '../../utils/interfaces';
 
 const { Header } = Layout;
 
@@ -14,6 +15,10 @@ interface IHeaderNav {
 
 const HeaderNav = ({ showLinkCourses = false }) => {
   const dispatch = useDispatch();
+  const { courses } = useSelector((state: StoreI) => state.courses);
+  const { id } = useParams();
+
+  const course = courses.find((course) => course.id === Number(id));
 
   const onHandlerLogout = () => dispatch(logout());
 
@@ -22,6 +27,14 @@ const HeaderNav = ({ showLinkCourses = false }) => {
       <div style={{ display: 'flex' }}>
         <Image preview={false} width={70} src={logo} />
         <p className='name-app'>Edujoint</p>
+        {course ? (
+          <p className='name-course'>
+            {course.full_name} -  {' '}
+            <span>
+              {course.user_name} {course.user_lastname}
+            </span>
+          </p>
+        ) : null}
       </div>
       <div className='options-header'>
         <Link to='/'>{showLinkCourses ? <p>Materias</p> : null}</Link>

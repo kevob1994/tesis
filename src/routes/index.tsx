@@ -84,7 +84,7 @@ export const RoutesPath = () => {
             <Route path='calendar' element={<CalendarPage />} />
             <Route path='chat' element={<ChatPage />} />
             <Route path='forum' element={<ForumRoomPage />} />
-            <Route path='forum/:id' element={<ForumInfoPage />} />
+            <Route path='forum/:id_forum' element={<ForumInfoPage />} />
             <Route path='live-classes' element={<LiveClassesPage />} />
             <Route path='library' element={<LibraryPage />} />
             <Route path='tasks' element={<TasksPage />} />

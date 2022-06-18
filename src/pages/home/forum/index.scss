@@ -1,0 +1,50 @@
+.upload-image {
+  width: 200px;
+  position: relative;
+  margin: auto;
+  margin-bottom: 100px;
+
+  .ant-image-img {
+    border-radius: 50%;
+    object-fit: contain;
+  }
+
+  .ant-image-mask {
+    border-radius: 50%;
+  }
+  button {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+    width: 70px !important;
+    height: 70px !important;
+    margin-bottom: -40px;
+    border: 2px solid white;
+  }
+}
+
+.content-spiner {
+  margin: 20px 0;
+  margin-bottom: 20px;
+  padding: 30px 50px;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.content-forum {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.row-forum {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+  overflow: scroll;
+	overflow-x: hidden;
+}

@@ -12,6 +12,8 @@ import { ItemChatI, StoreI, UserI } from '../../../utils/interfaces';
 import Pusher, { Channel } from 'pusher-js';
 import { MessageRecieve } from './components/MessageRecieve';
 import { MessageSend } from './components/MessageSend';
+import moment from 'moment';
+import { dateFormatTime } from '../../../utils/const';
 
 interface MessageI {
   content: string;
@@ -22,6 +24,7 @@ interface MessageI {
   to_id: number;
   updated_at: string;
   user_id: number;
+  chat_id?: string;
 }
 
 const ChatPage = () => {
@@ -62,11 +65,8 @@ const ChatPage = () => {
         headers: headerAuthToken(),
       },
     });
-
     if (!chatSelected) return;
 
-    // const response = getInfoChat();
-    // console.log(response);
     let channel: Channel;
 
     clientAxios
@@ -78,20 +78,19 @@ const ChatPage = () => {
         }
       )
       .then((response: any) => {
-        console.log(response);
-        // debugger;
         setChatId(response.data.code);
         channel = pusher.subscribe(`private-${response.data.code}-chat`);
         channel.bind('MessageSent', handleMessageSent);
       });
 
-    // const channel = pusher.subscribe(`private-${chatSelected.user_id}-chat`);
-    // channel.bind('MessageSent', handleMessageSent);
-
     return () => {
       if (channel) channel.unsubscribe();
     };
   }, [chatSelected]);
+
+  useEffect(() => {
+    if (chatId !== '') getMessages();
+  }, [chatId]);
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -103,22 +102,8 @@ const ChatPage = () => {
     }
   };
 
-  const messageEventHandler = (message: any) => {
-    console.log(message);
-  };
-
   const selectChat = async (user: ItemChatI) => {
     setChatSelected(user);
-    try {
-      const res = await clientAxios.get<any[]>(
-        `messages?to_id=${user.user_id}`,
-        {
-          headers: headerAuthToken(),
-        }
-      );
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const isSelected = (id: number) => id === chatSelected?.user_id;
@@ -138,21 +123,20 @@ const ChatPage = () => {
     }
   };
 
-  const getInfoChat = async () => {
+  const getMessages = async () => {
     try {
-      return await clientAxios.post<any[]>(
-        `chat`,
-        { to_user: chatSelected?.user_id },
+      const response = await clientAxios.get<any>(
+        `messages?chat_id=${chatId}`,
         {
           headers: headerAuthToken(),
         }
       );
+      console.log(response);
+      setListMessage([...response.data.data]);
     } catch (error) {
       console.log(error);
     }
   };
-
-  const getMessage = (id: number, message: string) => {};
 
   return (
     <div className='content-chat'>
@@ -190,11 +174,11 @@ const ChatPage = () => {
                 {listMessage.map((message) => {
                   if (message.from_id === user?.id) {
                     return (
-                      <MessageSend text={message.content} hour={'08:00 pm'} />
+                      <MessageSend text={message.content} hour={moment(message.created_at).format(dateFormatTime)} />
                     );
                   }
                   return (
-                    <MessageRecieve text={message.content} hour={'08:00 pm'} />
+                    <MessageRecieve text={message.content} hour={moment(message.created_at).format(dateFormatTime)} />
                   );
                 })}
 
