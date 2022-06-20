@@ -201,3 +201,10 @@ export interface CommentI {
   user_name: string;
   user_photo: string | null;
 }
+
+export interface LibraryThemeParamsI {
+	title: string;
+	description: string;
+	file: any;
+  course_id: number;
+}

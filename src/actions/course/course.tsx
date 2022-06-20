@@ -9,6 +9,7 @@ import {
   EvaluationsI,
   ForumI,
   ForumParamsI,
+  LibraryThemeParamsI,
 } from '../../utils/interfaces';
 import { ActionTypesAlert } from '../alert/types';
 import { ActionTypesCourse } from './types';
@@ -340,9 +341,9 @@ export const newCommentForum =
       );
       dispatch<any>(getCommentsForum(forum_id));
 
-			dispatch({
-				type: ActionTypesCourse.NEW_COMMENT_FORUM,
-			});
+      dispatch({
+        type: ActionTypesCourse.NEW_COMMENT_FORUM,
+      });
     } catch (error: any) {
       console.log('error', error.response);
     }
@@ -434,3 +435,36 @@ export const deleteForum = (id: number) => async (dispatch: Dispatch) => {
     });
   }
 };
+
+export const createLibraryTheme =
+  (params: LibraryThemeParamsI) => async (dispatch: Dispatch) => {
+    // debugger;
+    dispatch({
+      type: ActionTypesCourse.LOADING_COURSES,
+    });
+    try {
+      const res = await clientAxios.post<any>(`files`, params, {
+        headers: headerAuthToken(),
+      });
+      console.log(res);
+      // if (res.status === 200) {
+      //   dispatch({
+      //     type: ActionTypesCourse.DELETE_FORUM_SUCCESS,
+      //     payload: id,
+      //   });
+      //   dispatch({
+      //     type: ActionTypesAlert.SUCCESS_ALERT,
+      //     payload: {
+      //       title: 'Eliminar tema de discusion',
+      //       textBody: 'El tema de discusion ha sido eliminado de forma exitosa',
+      //     },
+      //   });
+      // }
+    } catch (error: any) {
+      console.log('error', error.response);
+      //   // const err = error.response.data.error;
+      dispatch({
+        type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+      });
+    }
+  };

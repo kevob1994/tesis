@@ -27,8 +27,6 @@ import {
 } from '../../../actions/course/course';
 const { Search } = Input;
 
-const onSearch = (value: any) => console.log(value);
-
 const ForumRoomPage = () => {
   const location = useLocation();
   const { id } = useParams();
@@ -104,6 +102,8 @@ const ForumRoomPage = () => {
           course_id: +id,
         });
   };
+
+  const onSearch = (value: any) => console.log(value);
 
   const props = {
     onRemove: (file: any) => {
@@ -253,7 +253,7 @@ const ForumRoomPage = () => {
         </div>
 
         {!loading ? (
-          <Row align='middle' gutter={50} className="row-forum">
+          <Row align='middle' gutter={50} className='row-forum'>
             <Col span={24}>
               <ListElements
                 listItems={transformListForum()}
