@@ -3,12 +3,15 @@ import { Dispatch } from 'redux';
 
 import { clientAxios, headerAuthToken } from '../../config/axios';
 import {
+  AssignmentI,
   CommentI,
   CourseI,
   CourseParamsI,
+  EvaluationFileParamsI,
   EvaluationsI,
   ForumI,
   ForumParamsI,
+  LibraryI,
   LibraryThemeParamsI,
 } from '../../utils/interfaces';
 import { ActionTypesAlert } from '../alert/types';
@@ -174,6 +177,9 @@ export const getListEvaluationsCourse =
     dispatch({
       type: ActionTypesCourse.LOADING_COURSES,
     });
+    dispatch({
+      type: ActionTypesCourse.LOADING_ACTION,
+    });
     try {
       const res = await clientAxios.get<EvaluationsI[]>(
         `course/${id}/evaluations`,
@@ -184,6 +190,31 @@ export const getListEvaluationsCourse =
       dispatch({
         type: ActionTypesCourse.LIST_EVALUATIONS_SUCCESS,
         payload: res.data,
+      });
+    } catch (error: any) {
+      console.log('error', error.response);
+      //   // const err = error.response.data.error;
+      dispatch({
+        type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+      });
+    }
+  };
+
+export const getListEvaluationsCourseByStudent =
+  (id: string) => async (dispatch: Dispatch) => {
+    dispatch({
+      type: ActionTypesCourse.LOADING_COURSES,
+    });
+    try {
+      const res = await clientAxios.get<any[]>(
+        `course/${id}/assignmentsStudent`,
+        {
+          headers: headerAuthToken(),
+        }
+      );
+      dispatch({
+        type: ActionTypesCourse.LIST_EVALUATIONS_BY_STUDENT_SUCCESS,
+        payload: res.data[0],
       });
     } catch (error: any) {
       console.log('error', error.response);
@@ -406,27 +437,24 @@ export const getForumInfo = (id: number) => async (dispatch: Dispatch) => {
 };
 
 export const deleteForum = (id: number) => async (dispatch: Dispatch) => {
-  // debugger;
   dispatch({
-    type: ActionTypesCourse.LOADING_COURSES,
+    type: ActionTypesCourse.LOADING_ACTION,
   });
   try {
     const res = await clientAxios.delete<any>(`forum/${id}`, {
       headers: headerAuthToken(),
     });
-    if (res.status === 200) {
-      dispatch({
-        type: ActionTypesCourse.DELETE_FORUM_SUCCESS,
-        payload: id,
-      });
-      dispatch({
-        type: ActionTypesAlert.SUCCESS_ALERT,
-        payload: {
-          title: 'Eliminar tema de discusion',
-          textBody: 'El tema de discusion ha sido eliminado de forma exitosa',
-        },
-      });
-    }
+    dispatch({
+      type: ActionTypesCourse.DELETE_FORUM_SUCCESS,
+      payload: id,
+    });
+    dispatch({
+      type: ActionTypesAlert.SUCCESS_ALERT,
+      payload: {
+        title: 'Eliminar tema de discusion',
+        textBody: 'El tema de discusion ha sido eliminado de forma exitosa',
+      },
+    });
   } catch (error: any) {
     console.log('error', error.response);
     //   // const err = error.response.data.error;
@@ -438,28 +466,176 @@ export const deleteForum = (id: number) => async (dispatch: Dispatch) => {
 
 export const createLibraryTheme =
   (params: LibraryThemeParamsI) => async (dispatch: Dispatch) => {
-    // debugger;
+    const formData = new FormData();
+    formData.append('course_id', params.course_id);
+    formData.append('description', params.description);
+    formData.append('file', params.file);
+    formData.append('title', params.title);
+    dispatch({
+      type: ActionTypesCourse.LOADING_ACTION,
+    });
+    try {
+      const res = await clientAxios.post<{ file: LibraryI }>(
+        `files`,
+        formData,
+        {
+          headers: headerAuthToken(),
+        }
+      );
+
+      if (res.status === 200 || res.status === 201) {
+        dispatch({
+          type: ActionTypesCourse.CREATE_THEME_LIBRARY,
+          payload: res.data.file,
+        });
+        dispatch({
+          type: ActionTypesAlert.SUCCESS_ALERT,
+          payload: {
+            title: 'Nuevo material de apoyo',
+            textBody: 'El material de apoyo se cargó de forma exitosa',
+          },
+        });
+      }
+    } catch (error: any) {
+      console.log('error', error.response);
+      //   // const err = error.response.data.error;
+      dispatch({
+        type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+      });
+    }
+  };
+
+export const getLibraryTheme =
+  (course_id: string) => async (dispatch: Dispatch) => {
     dispatch({
       type: ActionTypesCourse.LOADING_COURSES,
     });
     try {
-      const res = await clientAxios.post<any>(`files`, params, {
+      const res = await clientAxios.get<LibraryI[]>(
+        `course/${course_id}/files`,
+        {
+          headers: headerAuthToken(),
+        }
+      );
+      if (res.status === 200) {
+        dispatch({
+          type: ActionTypesCourse.GET_THEME_LIBRARY,
+          payload: res.data,
+        });
+      }
+    } catch (error: any) {
+      console.log('error', error.response);
+      //   // const err = error.response.data.error;
+      dispatch({
+        type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+      });
+    }
+  };
+
+export const deleteLibraryTheme =
+  (id: number) => async (dispatch: Dispatch) => {
+    dispatch({
+      type: ActionTypesCourse.LOADING_ACTION,
+    });
+    try {
+      const res = await clientAxios.delete(`files/${id}`, {
         headers: headerAuthToken(),
       });
-      console.log(res);
-      // if (res.status === 200) {
-      //   dispatch({
-      //     type: ActionTypesCourse.DELETE_FORUM_SUCCESS,
-      //     payload: id,
-      //   });
-      //   dispatch({
-      //     type: ActionTypesAlert.SUCCESS_ALERT,
-      //     payload: {
-      //       title: 'Eliminar tema de discusion',
-      //       textBody: 'El tema de discusion ha sido eliminado de forma exitosa',
-      //     },
-      //   });
-      // }
+      dispatch({
+        type: ActionTypesAlert.SUCCESS_ALERT,
+        payload: {
+          title: 'Eliminar material de apoyo',
+          textBody: 'El material de apoyo se eliminó de forma exitosa',
+        },
+      });
+      dispatch({
+        type: ActionTypesCourse.DELETE_THEME_LIBRARY,
+        payload: id,
+      });
+    } catch (error: any) {
+      console.log('error', error.response);
+      //   // const err = error.response.data.error;
+      dispatch({
+        type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+      });
+    }
+  };
+
+export const getAssignments = (id: number) => async (dispatch: Dispatch) => {
+  dispatch({
+    type: ActionTypesCourse.LOADING_ACTION,
+  });
+  try {
+    const res = await clientAxios.get<AssignmentI[]>(
+      `evaluation/${id}/assignments`,
+      {
+        headers: headerAuthToken(),
+      }
+    );
+    dispatch({
+      type: ActionTypesCourse.GET_ASSIGNMENTS,
+      payload: res.data,
+    });
+  } catch (error: any) {
+    console.log('error', error.response);
+    //   // const err = error.response.data.error;
+    dispatch({
+      type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+    });
+  }
+};
+
+export const uploadEvaluationFile =
+  (params: EvaluationFileParamsI) => async (dispatch: Dispatch) => {
+    const formData = new FormData();
+    formData.append('file', params.file);
+
+    try {
+      const res = await clientAxios.post<any>(
+        `evaluation/${params.id_evaluation}/upload`,
+        formData,
+        {
+          headers: headerAuthToken(),
+        }
+      );
+
+      dispatch({
+        type: ActionTypesAlert.SUCCESS_ALERT,
+        payload: {
+          title: 'Entrega de tarea',
+          textBody: 'La tarea se guardo de forma correcta',
+        },
+      });
+    } catch (error: any) {
+      console.log('error', error.response);
+      //   // const err = error.response.data.error;
+      dispatch({
+        type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+      });
+    }
+  };
+
+export const updateEvaluationFile =
+  (params: EvaluationFileParamsI) => async (dispatch: Dispatch) => {
+    const formData = new FormData();
+    formData.append('file', params.file);
+
+    try {
+      const res = await clientAxios.post<any>(
+        `assignment/${params.id_evaluation}`,
+        formData,
+        {
+          headers: headerAuthToken(),
+        }
+      );
+
+      dispatch({
+        type: ActionTypesAlert.SUCCESS_ALERT,
+        payload: {
+          title: 'Entrega de tarea',
+          textBody: 'La tarea se ha actualizado de forma correcta',
+        },
+      });
     } catch (error: any) {
       console.log('error', error.response);
       //   // const err = error.response.data.error;

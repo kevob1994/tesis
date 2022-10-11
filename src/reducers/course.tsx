@@ -4,6 +4,7 @@ import { CourseReducerI } from '../utils/interfaces';
 const initialState: CourseReducerI = {
   courses: [],
   evaluations: [],
+  evaluationsByStudent: [],
   loading: true,
   loadingAction: false,
   listChat: [],
@@ -11,6 +12,8 @@ const initialState: CourseReducerI = {
   forumSelected: null,
   comments: [],
   loadingComments: false,
+  library: [],
+  assignments: [],
 };
 
 const courseReducer = (state = initialState, action: TActionCourse) => {
@@ -42,6 +45,13 @@ const courseReducer = (state = initialState, action: TActionCourse) => {
         ...state,
         loading: true,
         evaluations: action.payload,
+      };
+    case ActionTypesCourse.LIST_EVALUATIONS_BY_STUDENT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        loadingAction: false,
+        evaluationsByStudent: action.payload,
       };
     case ActionTypesCourse.GET_FORUM_SUCCESS:
       return {
@@ -91,6 +101,41 @@ const courseReducer = (state = initialState, action: TActionCourse) => {
         loadingAction: false,
         loading: false,
       };
+
+    case ActionTypesCourse.DELETE_FORUM_SUCCESS:
+      return {
+        ...state,
+        forum: [...state.forum.filter((theme) => theme.id !== action.payload)],
+        loadingAction: false,
+        loading: false,
+        loadingComments: false,
+      };
+    case ActionTypesCourse.CREATE_THEME_LIBRARY:
+      return {
+        ...state,
+        library: [...state.library, action.payload],
+        loadingAction: false,
+        loading: false,
+        loadingComments: false,
+      };
+    case ActionTypesCourse.GET_THEME_LIBRARY:
+      return {
+        ...state,
+        library: [...action.payload],
+        loadingAction: false,
+        loading: false,
+        loadingComments: false,
+      };
+    case ActionTypesCourse.DELETE_THEME_LIBRARY:
+      return {
+        ...state,
+        library: [
+          ...state.library.filter((theme) => theme.id !== action.payload),
+        ],
+        loadingAction: false,
+        loading: false,
+        loadingComments: false,
+      };
     case ActionTypesCourse.LOADING_COURSES:
       return {
         ...state,
@@ -105,6 +150,21 @@ const courseReducer = (state = initialState, action: TActionCourse) => {
       return {
         ...state,
         loadingAction: true,
+      };
+    case ActionTypesCourse.REQUEST_COURSE_FAIL:
+      return {
+        ...state,
+        loadingAction: false,
+        loading: false,
+        loadingComments: false,
+      };
+    case ActionTypesCourse.GET_ASSIGNMENTS:
+      return {
+        ...state,
+        assignments: action.payload,
+        loadingAction: false,
+        loading: false,
+        loadingComments: false,
       };
     default:
       return state;

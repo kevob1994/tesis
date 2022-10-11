@@ -42,3 +42,12 @@ export const categoryClass = [
   { id: CHEMISTRY, category: 'Química' },
   { id: TECHNOLOGY, category: 'Química' },
 ];
+
+export const TypeFiles = {
+  TYPE_PDF: 'pdf',
+  TYPE_WORD: 'docx',
+  TYPE_EXCEL: 'xlsx',
+  TYPE_IMG_PNG: 'png',
+  TYPE_IMG_JPEG: 'jpeg',
+  TYPE_IMG_JPG: 'jpg',
+};

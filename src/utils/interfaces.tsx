@@ -97,6 +97,14 @@ export interface ITableEvaluations {
   value: number | string;
 }
 
+export interface ITableEvaluationsStudent {
+  id?: number | null;
+  name: string;
+  description: string;
+  date: Date;
+  value: number | string;
+}
+
 export interface CourseReducerI {
   courses: CourseI[];
   evaluations: EvaluationsI[];
@@ -107,6 +115,16 @@ export interface CourseReducerI {
   forumSelected: ForumI | null;
   comments: CommentI[];
   loadingComments: boolean;
+  library: LibraryI[];
+  assignments: AssignmentI[];
+  evaluationsByStudent: EvaluationStudentI[];
+}
+
+export interface EvaluationStudentI {
+  evaluation_id: number;
+  evaluation_name: string;
+  upload: boolean;
+  file_id?: number;
 }
 
 export interface ItemChatI {
@@ -136,7 +154,8 @@ export interface EvaluationsI {
   description: string;
   name: string;
   updated_at: Date;
-  value: 12;
+  value: string;
+  available?: boolean;
 }
 
 export interface CourseParamsI {
@@ -171,6 +190,21 @@ export interface listItemsI {
   };
 }
 
+enum TypeFileE {
+  word = 'word',
+  pdf = 'pdf',
+  excel = 'excel',
+  img = 'img',
+}
+
+export interface listFilesI {
+  id: number;
+  title: string;
+  description: string;
+  type: any;
+  user_id: number;
+}
+
 export interface AlertReducerI {
   title: string;
   textBody: string;
@@ -203,8 +237,36 @@ export interface CommentI {
 }
 
 export interface LibraryThemeParamsI {
-	title: string;
-	description: string;
-	file: any;
+  title: string;
+  description: string;
+  file: any;
+  course_id: string;
+}
+
+export interface EvaluationFileParamsI {
+  file: any;
+  id_evaluation: string;
+}
+
+export interface LibraryI {
   course_id: number;
+  created_at: Date;
+  description: string;
+  extension: string;
+  file: string;
+  id: 2;
+  title: string;
+  updated_at: Date;
+  user_id: number;
+}
+
+export interface AssignmentI {
+  evaluation_id: number;
+  evaluation_name: string;
+  evaluation_value: number;
+  grade: number;
+  upload: number;
+  users_id: number;
+  users_lastname: string;
+  users_name: string;
 }

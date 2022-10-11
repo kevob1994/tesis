@@ -1,0 +1,92 @@
+@import './../../../../../styles/index.scss';
+
+.content-list {
+  margin-top: 20px;
+  .item-list {
+    background: #ffffff;
+    border: 1px solid #efeff1;
+    box-sizing: border-box;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+
+    img {
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .info-course {
+      margin-left: 30px;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1;
+
+      h2 {
+        font-weight: bold;
+      }
+      .ant-image {
+        margin-right: 20px;
+        img {
+          border-radius: 50%;
+        }
+      }
+
+      .name-teacher {
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 104.51%;
+      }
+
+      .content-top {
+        display: flex;
+        justify-content: space-between;
+        button {
+          margin-left: 5px;
+        }
+        .delete-btn {
+          background: $danger;
+          border-color: $danger !important;
+          color: white;
+        }
+      }
+    }
+
+    &:hover {
+      transform: scale(1.01);
+      box-shadow: 1px 1px 11px 4px rgb(0 0 0 / 5%);
+      transition: transform 0.5s;
+    }
+  }
+}
+
+p {
+  margin: 0px !important;
+}
+
+a {
+  color: black !important;
+}
+
+.text-empty-list {
+  text-align: center;
+  width: 100%;
+  margin-top: 50px !important;
+  font-size: 1.5rem;
+  color: $primary;
+  font-weight: bold;
+}
+
+.content-img-file {
+  width: 200px;
+  height: 150px;
+  background: #efefef;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  span {
+    svg {
+      width: 70px;
+      height: 100px;
+    }
+  }
+}

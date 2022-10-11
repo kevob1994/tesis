@@ -1,4 +1,6 @@
+import { FileExcelOutlined, FileImageOutlined, FilePdfOutlined, FileWordOutlined, InboxOutlined } from '@ant-design/icons';
 import { message } from 'antd';
+import { TypeFiles } from './const';
 
 export const getBase64 = (img: any, callback: any) => {
   const reader = new FileReader();
@@ -47,5 +49,26 @@ export const translateMonth = (month: string) => {
 
     default:
       return 'Not found';
+  }
+};
+
+export const getImageFile = (extension: string) => {
+  switch (extension.toLowerCase()) {
+    case TypeFiles.TYPE_PDF:
+      return <FilePdfOutlined style={{ color: '#ff5722', marginBottom: 10 }} />;
+    case TypeFiles.TYPE_WORD:
+      return (
+        <FileWordOutlined style={{ color: '#1553b6', marginBottom: 10 }} />
+      );
+    case TypeFiles.TYPE_EXCEL:
+      return (
+        <FileExcelOutlined style={{ color: '#107c42', marginBottom: 10 }} />
+      );
+    case TypeFiles.TYPE_IMG_PNG:
+    case TypeFiles.TYPE_IMG_JPEG:
+    case TypeFiles.TYPE_IMG_JPG:
+      return <FileImageOutlined style={{ color: 'black', marginBottom: 10 }} />;
+    default:
+      return <InboxOutlined style={{ marginBottom: 10 }} />;
   }
 };

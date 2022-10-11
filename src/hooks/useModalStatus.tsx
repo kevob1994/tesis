@@ -18,15 +18,14 @@ export const useModalStatus = () => {
     dispatch({
       type: ActionTypesAlert.CLOSE_ALERT,
     });
-    Modal.destroyAll();
   };
 
   const bodyModal = (title: string, textBody: string): ModalFuncProps => {
     return {
       title: title,
       centered: true,
-      okButtonProps: { onClick: closeModalStatus },
-      cancelButtonProps: { onClick: closeModalStatus },
+      okButtonProps: { onClick: () => Modal.destroyAll() },
+      cancelButtonProps: { onClick: () => Modal.destroyAll() },
       okText: 'Aceptar',
       content: (
         <>

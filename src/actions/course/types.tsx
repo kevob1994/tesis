@@ -1,8 +1,10 @@
 import {
+  AssignmentI,
   CourseI,
   EvaluationsI,
   ForumI,
   ItemChatI,
+  LibraryI,
   UserI,
 } from '../../utils/interfaces';
 
@@ -26,6 +28,12 @@ export enum ActionTypesCourse {
   LOADING_ACTION = 'LOADING_ACTION',
   LOADING_COMMENTS = 'LOADING_COMMENTS',
   NEW_COMMENT_FORUM = 'NEW_COMMENT_FORUM',
+  GET_THEME_LIBRARY = 'GET_THEME_LIBRARY',
+  CREATE_THEME_LIBRARY = 'CREATE_THEME_LIBRARY',
+  DELETE_THEME_LIBRARY = 'DELETE_THEME_LIBRARY',
+  GET_ASSIGNMENTS = 'GET_ASSIGNMENTS',
+  LIST_EVALUATIONS_BY_STUDENT_SUCCESS = 'LIST_EVALUATIONS_BY_STUDENT_SUCCESS',
+  UPLOAD_EVALUATION_FILE = 'UPLOAD_EVALUATION_FILE',
 }
 
 interface IActionCourseCreate {
@@ -57,6 +65,11 @@ interface IActionCourseEvaluations {
   type: ActionTypesCourse.LIST_EVALUATIONS_SUCCESS;
   payload: EvaluationsI[];
 }
+
+interface IActionCourseEvaluationsByStudent {
+  type: ActionTypesCourse.LIST_EVALUATIONS_BY_STUDENT_SUCCESS;
+  payload: any[];
+}
 interface IActionCourseUsers {
   type: ActionTypesCourse.USERS_COURSE_SUCCESS;
   payload: ItemChatI[];
@@ -81,6 +94,11 @@ interface IActionGetForumCourse {
   payload: ForumI[];
 }
 
+interface IActionDeleteForumCourse {
+  type: ActionTypesCourse.DELETE_FORUM_SUCCESS;
+  payload: number;
+}
+
 interface IActionGetCommentsForum {
   type: ActionTypesCourse.GET_COMMENTS_FORUM;
   payload: ForumI[];
@@ -98,7 +116,34 @@ interface IActionNewCommentForum {
 interface IActionLoadComments {
   type: ActionTypesCourse.LOADING_COMMENTS;
 }
+interface IActionCreateTheme {
+  type: ActionTypesCourse.CREATE_THEME_LIBRARY;
+  payload: LibraryI;
+}
 
+interface IActionGetTheme {
+  type: ActionTypesCourse.GET_THEME_LIBRARY;
+  payload: LibraryI[];
+}
+
+interface IActionDeleteTheme {
+  type: ActionTypesCourse.DELETE_THEME_LIBRARY;
+  payload: number;
+}
+
+interface IActionRequestFail {
+  type: ActionTypesCourse.REQUEST_COURSE_FAIL;
+}
+
+interface IActionGetAssignments {
+  type: ActionTypesCourse.GET_ASSIGNMENTS;
+  payload: AssignmentI[];
+}
+
+interface IUploadEvaluationFile {
+  type: ActionTypesCourse.UPLOAD_EVALUATION_FILE;
+  payload: any;
+}
 export type TActionCourse =
   | IActionCourseCreate
   | IActionCourseGet
@@ -115,4 +160,12 @@ export type TActionCourse =
   | IActionGetInfoForum
   | IActionNewCommentForum
   | IActionEditForumCourse
-  | IActionLoadComments;
+  | IActionDeleteForumCourse
+  | IActionLoadComments
+  | IActionCreateTheme
+  | IActionGetTheme
+  | IActionDeleteTheme
+  | IActionRequestFail
+  | IActionGetAssignments
+  | IActionCourseEvaluationsByStudent
+  | IUploadEvaluationFile;

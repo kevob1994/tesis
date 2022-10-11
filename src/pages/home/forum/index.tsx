@@ -16,12 +16,19 @@ import { useLocation } from 'react-router-dom';
 import { ListElements, ModalStatus } from '../../../components';
 import { useForm } from '../../../hooks/useForm';
 import { useDispatch, useSelector } from 'react-redux';
-import { ForumParamsI, StoreI } from '../../../utils/interfaces';
+import {
+  ForumI,
+  ForumParamsI,
+  listItemsI,
+  StoreI,
+} from '../../../utils/interfaces';
 import { UploadOutlined } from '@ant-design/icons';
 import './index.scss';
 import TextArea from 'antd/lib/input/TextArea';
 import {
   createForum,
+  deleteForum,
+  deleteLibraryTheme,
   editForum,
   getForums,
 } from '../../../actions/course/course';
@@ -35,7 +42,8 @@ const ForumRoomPage = () => {
   const [imageUrl2, setImageUrl2] = useState<any>();
   const [photo, setPhoto] = useState('');
   const [visibleModal, setVisibleModal] = useState(false);
-  const [forumEdit, setforumEdit] = useState<any>(null);
+  const [openModalDelete, setOpenModalDelete] = useState(false);
+  const [forumSelect, setForumSelect] = useState<any>(null);
 
   const dispatch = useDispatch();
   const { loadingAction, forum, loading } = useSelector(
@@ -70,9 +78,10 @@ const ForumRoomPage = () => {
   }, [loadingAction]);
 
   const loadForum = (id: string) => dispatch(getForums(id));
+  const removeCourse = (id: number) => dispatch(deleteForum(id));
 
   const openModalCreate = () => {
-    setforumEdit(null);
+    setForumSelect(null);
     setVisibleModal(true);
   };
 
@@ -82,9 +91,20 @@ const ForumRoomPage = () => {
   const onHandlerEditForum = (params: ForumParamsI, forum_id: number) =>
     dispatch(editForum(params, forum_id));
 
+  const handlerRemoveCourse = () => {
+    if (forumSelect) removeCourse(forumSelect.id);
+    setOpenModalDelete(false);
+  };
+
+  const openModalRemoveCourse = (item: listItemsI) => {
+    const themeForum = forum.find((x) => x.id === item.id);
+    if (themeForum) setForumSelect(themeForum);
+    setOpenModalDelete(true);
+  };
+
   const onFinish = (values: any) => {
     if (id)
-      if (forumEdit)
+      if (forumSelect)
         onHandlerEditForum(
           {
             name: values.name,
@@ -92,7 +112,7 @@ const ForumRoomPage = () => {
             photo,
             course_id: +id,
           },
-          forumEdit.id
+          forumSelect.id
         );
       else
         onHandlerCreateForum({
@@ -142,7 +162,7 @@ const ForumRoomPage = () => {
 
   const handlerEdit = (id: number) => {
     const themeForum = forum.find((x) => x.id === id);
-    setforumEdit(themeForum);
+    setForumSelect(themeForum);
     form.setFieldsValue({
       name: themeForum!.name,
       description: themeForum!.description,
@@ -155,6 +175,20 @@ const ForumRoomPage = () => {
   return (
     <>
       <ModalStatus />
+      <Modal
+        title='Eliminar tema del foro'
+        visible={openModalDelete}
+        onOk={() => handlerRemoveCourse()}
+        onCancel={() => setOpenModalDelete(false)}
+        okText='Eliminar'
+        cancelText='Cancelar'
+        centered
+        closable={false}
+        maskClosable={false}
+        confirmLoading={loadingAction}
+      >
+        <p>Seguro desea eliminar el tema del foro {forumSelect?.name}?</p>
+      </Modal>
       <Modal
         title='Nuevo tema de discusión'
         visible={visibleModal}
@@ -223,12 +257,12 @@ const ForumRoomPage = () => {
               type='primary'
               loading={loadingAction}
             >
-              {forumEdit ? 'Editar' : 'Crear'}
+              {forumSelect ? 'Editar' : 'Crear'}
             </Button>
           </Row>
         </Form>
       </Modal>
-      <div className='content-forum'>
+      <div className='content-module'>
         <div>
           <h1>Foro</h1>
           <Row align='middle' gutter={50}>
@@ -257,6 +291,7 @@ const ForumRoomPage = () => {
             <Col span={24}>
               <ListElements
                 listItems={transformListForum()}
+                deleteItem={openModalRemoveCourse}
                 url={`${location.pathname}/id`}
                 editItem={handlerEdit}
                 textEmpty='No existen temas de debates creados'

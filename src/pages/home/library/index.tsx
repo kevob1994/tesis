@@ -16,27 +16,31 @@ import {
   Row,
   Upload,
   UploadProps,
+  Spin,
 } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { createLibraryTheme } from '../../../actions/course/course';
-import { LibraryThemeParamsI, StoreI } from '../../../utils/interfaces';
+import {
+  createLibraryTheme,
+  deleteLibraryTheme,
+  getLibraryTheme,
+} from '../../../actions/course/course';
+import { ModalStatus } from '../../../components';
+import { clientAxios, headerAuthToken } from '../../../config/axios';
+import { TypeFiles } from '../../../utils/const';
+import {
+  LibraryThemeParamsI,
+  listFilesI,
+  StoreI,
+} from '../../../utils/interfaces';
+import { getImageFile } from '../../../utils/utils';
+import ListFiles from './components/ListFiles';
 import './index.scss';
 
 const { Search } = Input;
 const { Dragger } = Upload;
-
-const TYPE_PDF = 'application/pdf';
-const TYPE_WORD =
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-const TYPE_EXCEL =
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-const TYPE_EXCEL_2 = 'application/vnd.ms-excel';
-const TYPE_EXCEL_3 = 'application/vnd.ms-excel.sheet.binary.macroEnabled.12';
-const TYPE_IMG_PNG = 'image/png';
-const TYPE_IMG_JPEG = 'image/jpeg';
 
 const LibraryPage = () => {
   const [show, setShow] = useState(false);
@@ -45,20 +49,48 @@ const LibraryPage = () => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState<any[]>([]);
   const [imageUrl2, setImageUrl2] = useState<any>();
-  const onSearch = (value: any) => console.log(value);
   const [FileEdit, setFileEdit] = useState<any>(null);
+  const [openModalDelete, setOpenModalDelete] = useState(false);
+  const [librarySelect, setLibraryelect] = useState<listFilesI | null>(null);
+
+  const { library, loadingAction, forum, loading } = useSelector(
+    (store: StoreI) => store.courses
+  );
+
   const [error, setError] = useState(false);
 
   const dispatch = useDispatch();
-  const { loadingAction, forum, loading } = useSelector(
-    (store: StoreI) => store.courses
-  );
+  const removeLibrary = (id: number) => dispatch(deleteLibraryTheme(id));
+
+  useEffect(() => {
+    if (!loadingAction) setShow(false);
+  }, [loadingAction]);
 
   const newThema = (params: LibraryThemeParamsI) =>
     dispatch(createLibraryTheme(params));
 
+  const loadData = (id: string) => dispatch(getLibraryTheme(id));
+
+  const onSearch = (value: any) => console.log(value);
+
+  useEffect(() => {
+    if (id) {
+      loadData(id);
+    }
+  }, []);
+
   const openModalCreate = () => {
     setShow(true);
+  };
+
+  const handlerRemoveCourse = () => {
+    if (librarySelect) removeLibrary(librarySelect.id);
+    setOpenModalDelete(false);
+  };
+
+  const openModalRemoveTheme = (item: listFilesI) => {
+    setLibraryelect(item);
+    setOpenModalDelete(true);
   };
 
   const onFinish = (values: any) => {
@@ -67,7 +99,7 @@ const LibraryPage = () => {
         title: values.name,
         description: values.description,
         file: fileList[0],
-        course_id: +id,
+        course_id: id,
       });
     } else {
       setError(true);
@@ -82,16 +114,19 @@ const LibraryPage = () => {
       setFileList(newFileList);
     },
     beforeUpload: (file: any) => {
+      const type = file.name
+        .substr(file.name.lastIndexOf('.') + 1 - file.name.length)
+        .toLowerCase();
+
       const isValidFormat =
-        file.type === TYPE_PDF ||
-        file.type === TYPE_WORD ||
-        file.type === TYPE_EXCEL ||
-        file.type === TYPE_EXCEL_2 ||
-        file.type === TYPE_EXCEL_3 ||
-        file.type === TYPE_IMG_PNG ||
-        file.type === TYPE_IMG_JPEG;
+        type === TypeFiles.TYPE_PDF ||
+        type === TypeFiles.TYPE_WORD ||
+        type === TypeFiles.TYPE_EXCEL ||
+        type === TypeFiles.TYPE_IMG_PNG ||
+        type === TypeFiles.TYPE_IMG_JPEG ||
+        type === TypeFiles.TYPE_IMG_JPG;
       if (isValidFormat) {
-				setError(false);
+        setError(false);
         setFileList([file]);
       } else {
         message.error(
@@ -108,36 +143,68 @@ const LibraryPage = () => {
     if (!fileList[0]) {
       return <InboxOutlined style={{ marginBottom: 10 }} />;
     }
-    switch (fileList[0].type) {
-      case TYPE_PDF:
-        return (
-          <FilePdfOutlined style={{ color: '#ff5722', marginBottom: 10 }} />
-        );
-      case TYPE_WORD:
-        return (
-          <FileWordOutlined style={{ color: '#1553b6', marginBottom: 10 }} />
-        );
-      case TYPE_EXCEL:
-      case TYPE_EXCEL_2:
-      case TYPE_EXCEL_3:
-        return (
-          <FileExcelOutlined style={{ color: '#107c42', marginBottom: 10 }} />
-        );
-      case TYPE_IMG_PNG:
-      case TYPE_IMG_JPEG:
-        return (
-          <FileImageOutlined style={{ color: 'black', marginBottom: 10 }} />
-        );
-      default:
-        return <InboxOutlined style={{ marginBottom: 10 }} />;
-    }
+
+    return getImageFile(
+      fileList[0].name
+        .substr(fileList[0].name.lastIndexOf('.') + 1 - fileList[0].name.length)
+        .toLowerCase()
+    );
+  };
+
+  const getFileToDownload = (id_file: number, course_id: string) => {
+    return clientAxios.get(`files/${id_file}?course_id=${course_id}`, {
+      responseType: 'arraybuffer',
+      headers: headerAuthToken(),
+    });
+  };
+
+  const downloadFile = (id_file: number, name_file: string) => {
+    if (id)
+      getFileToDownload(id_file, id).then((response) => {
+				console.log('response')
+				console.log(response)
+        const type = response.headers['content-type'];
+        const blob = new Blob([response.data], { type: type });
+        const link = document.createElement('a');
+				link.setAttribute('download', name_file);
+        link.href = window.URL.createObjectURL(blob);
+        // link.download = 'file.xlsx';
+        link.click();
+      });
+  };
+
+  const transforListFiles = () => {
+    return library.map((item) => ({
+      id: item.id,
+      title: item.title,
+      description: item.description,
+      type: item.extension,
+			user_id: item.user_id
+    }));
   };
 
   return (
     <>
-      {' '}
+      <ModalStatus />
       <Modal
-        title='Nuevo tema de discusión'
+        title='Eliminar material de apoyo'
+        visible={openModalDelete}
+        onOk={() => handlerRemoveCourse()}
+        onCancel={() => setOpenModalDelete(false)}
+        okText='Eliminar'
+        cancelText='Cancelar'
+        centered
+        closable={false}
+        maskClosable={false}
+      >
+        <p>
+          Seguro desea eliminar el material de apoyo {librarySelect?.title}?
+        </p>
+      </Modal>
+      <Modal
+        title={
+          FileEdit ? 'Editar material de apoyo' : 'Nuevo material de apoyo'
+        }
         visible={show}
         onOk={() => setShow(false)}
         onCancel={() => setShow(false)}
@@ -200,29 +267,55 @@ const LibraryPage = () => {
               key='submit'
               htmlType='submit'
               type='primary'
-              // loading={loadingAction}
+              loading={loadingAction}
             >
               {FileEdit ? 'Editar' : 'Crear'}
             </Button>
           </Row>
         </Form>
       </Modal>
-      <div>
-        <h1>Biblioteca</h1>
-        <Row align='middle' gutter={50}>
-          <Col span={20}>
-            <Search
-              size='large'
-              placeholder='input search text'
-              onSearch={onSearch}
-            />
-          </Col>
-          <Col span={4}>
-            <Button size='large' type='primary' block onClick={openModalCreate}>
-              Crear
-            </Button>
-          </Col>
-        </Row>
+      <div className='content-module'>
+        <div>
+          <h1>Biblioteca</h1>
+          <Row align='middle' gutter={50}>
+            <Col span={20}>
+              <Search
+                size='large'
+                placeholder='input search text'
+                onSearch={onSearch}
+              />
+            </Col>
+            <Col span={4}>
+              <Button
+                size='large'
+                type='primary'
+                block
+                onClick={openModalCreate}
+              >
+                Crear
+              </Button>
+              {/* <Button size='large' type='primary' block onClick={downloadFile}>
+                download
+              </Button> */}
+            </Col>
+          </Row>
+        </div>
+        {!loading ? (
+          <Row align='middle' gutter={50} className='row-forum'>
+            <Col span={24}>
+              <ListFiles
+                listItems={transforListFiles()}
+                deleteItem={openModalRemoveTheme}
+                textEmpty='No hay archivos de descarga'
+                handlerDownload={downloadFile}
+              />
+            </Col>
+          </Row>
+        ) : (
+          <div className='content-spiner'>
+            <Spin />
+          </div>
+        )}
       </div>
     </>
   );

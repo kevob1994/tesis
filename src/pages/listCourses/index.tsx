@@ -11,7 +11,6 @@ import {
 } from '../../actions/course/course';
 import { listItemsI, RoleE, StoreI } from '../../utils/interfaces';
 import { useForm } from '../../hooks/useForm';
-import { StatusModalE, useModalStatus } from '../../hooks/useModalStatus';
 
 const { Search } = Input;
 
@@ -68,6 +67,7 @@ const ListCourses = () => {
     setOpenModalDelete(true);
     // ;
   };
+
   const handlerRemoveCourse = () => {
     if (courseSelected) removeCourse(courseSelected.id);
     setOpenModalDelete(false);
