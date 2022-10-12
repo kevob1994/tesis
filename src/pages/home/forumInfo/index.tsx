@@ -8,7 +8,7 @@ import {
   getCommentsForum,
   getForumInfo,
   newCommentForum,
-} from '../../../actions/course/course';
+} from '../../../actions/course';
 import { dateFormat } from '../../../utils/const';
 import { ForumI, StoreI } from '../../../utils/interfaces';
 import { Comment } from './components/comment';

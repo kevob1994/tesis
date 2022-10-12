@@ -1,8 +1,8 @@
-import React from 'react';
-import { Button, Col, Empty, Image, Row, Tooltip } from 'antd';
+import React, { FunctionComponent } from 'react';
+import { Button, Col, Image, Row, Tooltip } from 'antd';
 import './index.scss';
 import { useNavigate } from 'react-router-dom';
-import { listItemsI, RoleE, StoreI } from '../../utils/interfaces';
+import { listItemsI, StoreI } from '../../utils/interfaces';
 import { useSelector } from 'react-redux';
 import {
   DeleteOutlined,
@@ -21,7 +21,7 @@ interface ListElementsI {
   textEmpty: string;
 }
 
-const ListElements = ({
+const ListElements: FunctionComponent<ListElementsI> = ({
   listItems,
   url,
   span = 12,
@@ -30,8 +30,7 @@ const ListElements = ({
   editItem,
   deleteItem,
   textEmpty,
-}: ListElementsI) => {
-  const auth = useSelector((state: StoreI) => state.auth);
+}) => {
   let navigate = useNavigate();
 
   const goItem = (id: string) => {

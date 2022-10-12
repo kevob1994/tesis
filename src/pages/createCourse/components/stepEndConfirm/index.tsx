@@ -10,7 +10,7 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { createCourse, editCourse } from '../../../../actions/course/course';
+import { createCourse, editCourse } from '../../../../actions/course';
 import {
   categoryClass,
   dateFormat,

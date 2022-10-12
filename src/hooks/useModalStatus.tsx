@@ -1,6 +1,6 @@
 import { Modal, Button, Space, ModalFuncProps, Row } from 'antd';
 import { useDispatch } from 'react-redux';
-import { closeModal } from '../actions/alert/alert';
+import { closeModal } from '../actions/alert';
 import { ActionTypesAlert } from '../actions/alert/types';
 
 export enum StatusModalE {

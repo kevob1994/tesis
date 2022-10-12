@@ -25,7 +25,7 @@ import {
   StoreI,
 } from '../../utils/interfaces';
 import { useDispatch, useSelector } from 'react-redux';
-import { getListEvaluationsCourse } from '../../actions/course/course';
+import { getListEvaluationsCourse } from '../../actions/course';
 import { ModalStatus } from '../../components';
 import { StatusModalE } from '../../hooks/useModalStatus';
 

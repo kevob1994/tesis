@@ -29,7 +29,7 @@ import {
 import {
   getAssignments,
   getListEvaluationsCourse,
-} from '../../../../actions/course/course';
+} from '../../../../actions/course';
 import { TypeFiles } from '../../../../utils/const';
 import { clientAxios, headerAuthToken } from '../../../../config/axios';
 import './index.scss';

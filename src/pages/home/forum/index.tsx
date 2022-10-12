@@ -31,7 +31,7 @@ import {
   deleteLibraryTheme,
   editForum,
   getForums,
-} from '../../../actions/course/course';
+} from '../../../actions/course';
 const { Search } = Input;
 
 const ForumRoomPage = () => {

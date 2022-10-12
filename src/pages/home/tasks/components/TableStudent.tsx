@@ -28,7 +28,7 @@ import {
   getListEvaluationsCourseByStudent,
   updateEvaluationFile,
   uploadEvaluationFile,
-} from '../../../../actions/course/course';
+} from '../../../../actions/course';
 import { TypeFiles } from '../../../../utils/const';
 import { clientAxios, headerAuthToken } from '../../../../config/axios';
 import './index.scss';

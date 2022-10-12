@@ -5,7 +5,7 @@ import { SendOutlined } from '@ant-design/icons';
 
 import './index.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUsersCourse } from '../../../actions/course/course';
+import { getUsersCourse } from '../../../actions/course';
 import { useParams } from 'react-router-dom';
 import { clientAxios, headerAuthToken } from '../../../config/axios';
 import { ItemChatI, StoreI, UserI } from '../../../utils/interfaces';

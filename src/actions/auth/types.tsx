@@ -1,4 +1,4 @@
-import { UserI } from '../../utils/interfaces';
+import { UserI } from "utils/interfaces";
 
 export enum ActionTypesAuth {
   REGISTER_SUCCESS = 'REGISTER_SUCCESS',

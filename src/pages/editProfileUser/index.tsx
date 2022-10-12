@@ -21,7 +21,7 @@ import { Link, Navigate } from 'react-router-dom';
 import { GenderE, RoleE, StoreI } from '../../utils/interfaces';
 import { dateFormat, genderList, roleList } from '../../utils/const';
 import { useForm } from '../../hooks/useForm';
-import { editUser } from '../../actions/auth/auth';
+import { editUser } from '../../actions/auth';
 import { validatePassword } from '../../utils/validations';
 import { HeaderNav } from '../../components';
 

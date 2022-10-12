@@ -9,7 +9,7 @@ import './index.scss';
 import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
 import { translateMonth } from '../../../utils/utils';
 import { useDispatch, useSelector } from 'react-redux';
-import { getListEvaluationsCourse } from '../../../actions/course/course';
+import { getListEvaluationsCourse } from '../../../actions/course';
 import { useParams } from 'react-router-dom';
 import { EvaluationsI, StoreI } from '../../../utils/interfaces';
 

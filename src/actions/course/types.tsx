@@ -5,8 +5,7 @@ import {
   ForumI,
   ItemChatI,
   LibraryI,
-  UserI,
-} from '../../utils/interfaces';
+} from 'utils/interfaces';
 
 export enum ActionTypesCourse {
   CREATE_COURSE_SUCCESS = 'CREATE_COURSE_SUCCESS',

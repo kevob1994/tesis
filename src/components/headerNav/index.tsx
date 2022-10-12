@@ -1,11 +1,11 @@
-import React from 'react';
-import { Image, Layout, Menu } from 'antd';
-import logo from './../../assets/imgs/icon-light-background-primary.svg';
+import React, { FunctionComponent } from 'react';
+import { Image, Layout } from 'antd';
+import logo from 'assets/imgs/icon-light-background-primary.svg';
 import './index.scss';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../actions/auth/auth';
-import { StoreI } from '../../utils/interfaces';
+import { logout } from 'actions/auth';
+import { StoreI } from 'utils/interfaces';
 
 const { Header } = Layout;
 
@@ -13,7 +13,9 @@ interface IHeaderNav {
   showLinkCourses?: boolean;
 }
 
-const HeaderNav = ({ showLinkCourses = false }) => {
+const HeaderNav: FunctionComponent<IHeaderNav> = ({
+  showLinkCourses = false,
+}) => {
   const dispatch = useDispatch();
   const { courses } = useSelector((state: StoreI) => state.courses);
   const { id } = useParams();
@@ -29,7 +31,7 @@ const HeaderNav = ({ showLinkCourses = false }) => {
         <p className='name-app'>Edujoint</p>
         {course ? (
           <p className='name-course'>
-            {course.full_name} -  {' '}
+            {course.full_name} -{' '}
             <span>
               {course.user_name} {course.user_lastname}
             </span>

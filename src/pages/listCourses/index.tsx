@@ -8,7 +8,7 @@ import {
   deleteCourse,
   getCourses,
   joinCourse,
-} from '../../actions/course/course';
+} from '../../actions/course';
 import { listItemsI, RoleE, StoreI } from '../../utils/interfaces';
 import { useForm } from '../../hooks/useForm';
 

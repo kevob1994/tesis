@@ -26,7 +26,7 @@ import {
   createLibraryTheme,
   deleteLibraryTheme,
   getLibraryTheme,
-} from '../../../actions/course/course';
+} from '../../../actions/course';
 import { ModalStatus } from '../../../components';
 import { clientAxios, headerAuthToken } from '../../../config/axios';
 import { TypeFiles } from '../../../utils/const';

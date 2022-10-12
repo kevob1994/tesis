@@ -22,7 +22,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { dateFormat, genderList, roleList } from '../../utils/const';
 import { Link, Navigate } from 'react-router-dom';
 import { GenderE, RoleE, StoreI } from '../../utils/interfaces';
-import { register } from '../../actions/auth/auth';
+import { register } from '../../actions/auth';
 import { Loader } from '../../components';
 
 const Register = () => {

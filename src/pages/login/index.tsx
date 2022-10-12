@@ -4,7 +4,7 @@ import { Link, Navigate } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm';
 import { validatePassword } from '../../utils/validations';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../../actions/auth/auth';
+import { login } from '../../actions/auth';
 
 import './index.scss';
 import { StoreI } from '../../utils/interfaces';

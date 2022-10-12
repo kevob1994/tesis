@@ -13,7 +13,7 @@ export { default as LiveClassesPage } from './home/liveClasses';
 export { default as LibraryPage } from './home/library';
 export { default as TasksPage } from './home/tasks';
 export { default as NotesPages } from './home/notes';
-export { default as CreateCoursePage } from './createCourse';
+export { default as CreateCoursePage } from './CreateCourse';
 export { default as ForumInfoPage } from './home/forumInfo';
 export { default as EditProfileUser } from './editProfileUser';
 export { default as ProfileUser } from './profileUser';

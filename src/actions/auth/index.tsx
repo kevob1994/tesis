@@ -1,10 +1,6 @@
+import { clientAxios, headerAuthToken } from 'config/axios';
 import { Dispatch } from 'redux';
-import {
-  UserEditFormI,
-  UserI,
-  UserRegisterFormI,
-} from '../../utils/interfaces';
-import { clientAxios, headerAuthToken } from '../../config/axios';
+import { UserEditFormI, UserI, UserRegisterFormI } from 'utils/interfaces';
 import { ActionTypesAuth } from './types';
 
 export interface AxiosAuth {

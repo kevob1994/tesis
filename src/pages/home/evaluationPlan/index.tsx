@@ -3,7 +3,7 @@ import { Table, Tag, Space } from 'antd';
 import { ITableEvaluations, StoreI } from '../../../utils/interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getListEvaluationsCourse } from '../../../actions/course/course';
+import { getListEvaluationsCourse } from '../../../actions/course';
 import { ColumnProps } from 'antd/lib/table';
 
 const columns: ColumnProps<ITableEvaluations>[] = [

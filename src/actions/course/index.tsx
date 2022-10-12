@@ -1,6 +1,4 @@
-import { useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
-
 import { clientAxios, headerAuthToken } from '../../config/axios';
 import {
   AssignmentI,
