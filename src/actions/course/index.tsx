@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { clientAxios, headerAuthToken } from '../../config/axios';
+import { clientAxios, headerAuthToken } from 'config/axios';
 import {
   AssignmentI,
   CommentI,
@@ -11,9 +11,9 @@ import {
   ForumParamsI,
   LibraryI,
   LibraryThemeParamsI,
-} from '../../utils/interfaces';
-import { ActionTypesAlert } from '../alert/types';
+} from 'utils/interfaces';
 import { ActionTypesCourse } from './types';
+import { ActionTypesAlert } from 'actions/alert/types';
 
 export const createCourse =
   (params: CourseParamsI) => async (dispatch: Dispatch) => {

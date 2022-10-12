@@ -6,6 +6,7 @@ import store from './store';
 import { loadUser } from './actions/auth';
 import 'antd/dist/antd.css';
 import './styles/index.scss';
+import { ToastContainer } from 'react-toastify';
 
 const App = () => {
   useEffect(() => {
@@ -17,6 +18,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <BrowserRouter>
+        <ToastContainer />
         <RoutesPath />
       </BrowserRouter>
     </Provider>

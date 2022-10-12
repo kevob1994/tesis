@@ -1,15 +1,13 @@
-import { Row, Col, Form } from 'antd';
+import { Row, Col, Form, Button } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import './index.scss';
-import { useForm } from '../../../../hooks/useForm';
-import { CourseFormI } from '../../../../utils/interfaces';
-import { Button } from 'antd';
-import { Link } from 'react-router-dom';
+import { CourseFormI } from 'utils/interfaces';
 import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
   CloseOutlined,
 } from '@ant-design/icons';
+import { FunctionComponent } from 'react';
 
 interface IStepCourseProgramProps {
   formCourse: CourseFormI;
@@ -18,14 +16,13 @@ interface IStepCourseProgramProps {
   openModalCancel: () => void;
 }
 
-const StepCourseProgram = ({
+const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
   formCourse,
   nextStep,
   prevStep,
   openModalCancel,
-}: IStepCourseProgramProps) => {
+}) => {
   const { program, onChange } = formCourse;
-  // const HandleLogin = () => dispatch(login(email, password));
 
   const onFinish = (values: any) => nextStep();
   return (
@@ -47,7 +44,7 @@ const StepCourseProgram = ({
               <Form.Item
                 name='program'
                 rules={[{ required: true, message: 'Campo requerido' }]}
-								initialValue={program}
+                initialValue={program}
               >
                 <TextArea
                   size='large'
@@ -55,9 +52,7 @@ const StepCourseProgram = ({
                   placeholder='Descripción de los temas que tendrá el curso'
                   value={program}
                   style={{ height: 300 }}
-                  onChange={({ target }) =>
-                    onChange(target.value, 'program')
-                  }
+                  onChange={({ target }) => onChange(target.value, 'program')}
                 />
               </Form.Item>
             </Col>

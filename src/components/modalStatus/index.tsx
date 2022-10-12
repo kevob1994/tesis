@@ -1,9 +1,9 @@
-import { useModalStatus } from '../../hooks/useModalStatus';
-import { useEffect } from 'react';
+import { useModalStatus } from 'hooks/useModalStatus';
+import { FunctionComponent, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { StoreI } from '../../utils/interfaces';
+import { StoreI } from 'utils/interfaces';
 
-const ModalStatus = () => {
+const ModalStatus: FunctionComponent = () => {
   const { openModalStatus, contextHolder } = useModalStatus();
   const { show, type, title, textBody } = useSelector(
     (state: StoreI) => state.alert

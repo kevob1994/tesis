@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from 'react';
 import {
   Row,
   Col,
@@ -12,15 +12,15 @@ import {
 } from 'antd';
 import moment from 'moment';
 import TextArea from 'antd/lib/input/TextArea';
-import './index.scss';
 import {
   ArrowRightOutlined,
   CloseOutlined,
   UploadOutlined,
 } from '@ant-design/icons';
-import { categoryClass, dateFormat } from '../../../../utils/const';
-import { CourseFormI } from '../../../../utils/interfaces';
-import { Link, useParams } from 'react-router-dom';
+import { categoryClass, dateFormat } from 'utils/const';
+import { CourseFormI } from 'utils/interfaces';
+import { useParams } from 'react-router-dom';
+import './index.scss';
 
 interface IStepInfoCourseProps {
   formCourse: CourseFormI;
@@ -30,7 +30,7 @@ interface IStepInfoCourseProps {
   setFileList: Dispatch<SetStateAction<any[]>>;
 }
 
-const StepInfoCourse = ({
+const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
   formCourse,
   nextStep,
   openModalCancel,

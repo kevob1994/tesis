@@ -1,19 +1,19 @@
+import { FunctionComponent } from 'react';
 import { Image, Layout, Menu, Row } from 'antd';
 import {
   UserOutlined,
   LaptopOutlined,
   NotificationOutlined,
 } from '@ant-design/icons';
-import './index.scss';
 import { Link, useParams } from 'react-router-dom';
-import { StoreI } from '../../utils/interfaces';
+import { StoreI } from 'utils/interfaces';
 import { useSelector } from 'react-redux';
 import './index.scss';
 
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 
-const SlideNav = () => {
+const SlideNav: FunctionComponent = () => {
   const { user } = useSelector((state: StoreI) => state.auth);
   const { id } = useParams();
   console.log(id);
@@ -22,7 +22,6 @@ const SlideNav = () => {
       <Menu
         mode='inline'
         defaultSelectedKeys={['1']}
-        // defaultOpenKeys={['sub1']}
         style={{ height: '100%', borderRight: 0 }}
       >
         <SubMenu key='sub1' icon={<UserOutlined />} title='Contenido'>

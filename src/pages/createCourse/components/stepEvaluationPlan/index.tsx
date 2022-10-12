@@ -1,3 +1,4 @@
+import React, { Dispatch, FunctionComponent, SetStateAction, useState } from 'react';
 import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
@@ -16,11 +17,10 @@ import {
 } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import moment from 'moment';
-import React, { Dispatch, SetStateAction, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { dateFormat, dateFormatTime } from '../../../../utils/const';
-import { ITableEvaluations } from '../../../../utils/interfaces';
+import { dateFormatTime } from 'utils/const';
+import { ITableEvaluations } from 'utils/interfaces';
 import './index.scss';
+
 interface IStepEvaluationPlanProps {
   prevStep: () => void;
   nextStep: () => void;
@@ -29,13 +29,13 @@ interface IStepEvaluationPlanProps {
   openModalCancel: () => void;
 }
 
-const StepEvaluationPlan = ({
+const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
   prevStep,
   nextStep,
   openModalCancel,
   listEvaluations,
   setListEvaluations,
-}: IStepEvaluationPlanProps) => {
+}) => {
   const [form] = Form.useForm();
   const [emptyForm, setEmptyForm] = useState(false);
 

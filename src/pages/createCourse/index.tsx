@@ -1,6 +1,6 @@
-import { Button, message, Modal, Row, Steps } from 'antd';
-import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Modal, Steps } from 'antd';
+import { FunctionComponent, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   StepCourseProgram,
   StepEndConfirm,
@@ -16,18 +16,16 @@ import {
 } from '@ant-design/icons';
 import './index.scss';
 import moment from 'moment';
-import { dateFormat } from '../../utils/const';
-import { useForm } from '../../hooks/useForm';
+import { dateFormat } from 'utils/const';
+import { useForm } from 'hooks/useForm';
 import {
-  CourseFormI,
-  CourseI,
   ITableEvaluations,
   StoreI,
-} from '../../utils/interfaces';
+} from 'utils/interfaces';
 import { useDispatch, useSelector } from 'react-redux';
-import { getListEvaluationsCourse } from '../../actions/course';
-import { ModalStatus } from '../../components';
-import { StatusModalE } from '../../hooks/useModalStatus';
+import { getListEvaluationsCourse } from 'actions/course';
+import { ModalStatus } from 'components';
+import { StatusModalE } from 'hooks/useModalStatus';
 
 const { Step } = Steps;
 
@@ -39,7 +37,7 @@ const initEvaluation: ITableEvaluations = {
   value: '',
 };
 
-const CreateCoursePage = () => {
+const CreateCoursePage: FunctionComponent = () => {
   const [current, setCurrent] = useState(0);
   const [fileList, setFileList] = useState<any[]>([]);
   const [visibleModal, setVisibleModal] = useState(false);
@@ -55,7 +53,7 @@ const CreateCoursePage = () => {
   const { courses, evaluations } = useSelector(
     (state: StoreI) => state.courses
   );
-  const { show, type, title, textBody } = useSelector(
+  const { show, type } = useSelector(
     (state: StoreI) => state.alert
   );
 

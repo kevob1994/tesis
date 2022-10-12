@@ -1,11 +1,12 @@
 import { Modal, Spin } from 'antd';
+import { FunctionComponent } from 'react';
 import './index.scss';
 
 interface ILoaderProps {
   visible: boolean;
 }
 
-const Loader = ({ visible }: ILoaderProps) => {
+const Loader: FunctionComponent<ILoaderProps> = ({ visible }) => {
   return (
     <Modal
       visible={visible}

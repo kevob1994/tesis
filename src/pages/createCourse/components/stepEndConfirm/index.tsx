@@ -1,23 +1,21 @@
+import { FunctionComponent, useEffect, useState } from 'react';
 import {
   ArrowLeftOutlined,
-  ArrowRightOutlined,
   CloseOutlined,
   SaveOutlined,
 } from '@ant-design/icons';
 import { Button, Col, Image, Row, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { createCourse, editCourse } from '../../../../actions/course';
+import { createCourse, editCourse } from 'actions/course';
 import {
   categoryClass,
   dateFormat,
   dateFormatTime,
-} from '../../../../utils/const';
-import { StoreI } from '../../../../utils/interfaces';
-import { CourseFormI, ITableEvaluations } from '../../../../utils/interfaces';
+} from 'utils/const';
+import { CourseFormI, ITableEvaluations, StoreI } from 'utils/interfaces';
 import './index.scss';
 
 interface IStepEndConfirmProps {
@@ -28,13 +26,13 @@ interface IStepEndConfirmProps {
   fileList: any[];
 }
 
-const StepEndConfirm = ({
+const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
   prevStep,
   openModalCancel,
   formCourse,
   listEvaluations,
   fileList,
-}: IStepEndConfirmProps) => {
+}) => {
   const [imageUrl2, setImageUrl2] = useState<any>();
   const auth = useSelector((state: StoreI) => state.auth);
   const dispatch = useDispatch();
@@ -74,8 +72,7 @@ const StepEndConfirm = ({
       ...course,
       date: moment(course.date).format('YYYY-MM-DD HH:MM:00'),
     }));
-		console.log('evaluations')
-		console.log(evaluations)
+
     if (auth.user?.id) {
       if (id) {
         dispatch(

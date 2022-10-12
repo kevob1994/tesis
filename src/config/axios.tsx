@@ -10,8 +10,8 @@ const clientAxios = axios.create({
 
 const headerAuthToken = () => {
   return {
-		Authorization: 'Bearer ' + localStorage.token
-	}
+    Authorization: 'Bearer ' + localStorage.token,
+  };
 };
 
 export { clientAxios, headerAuthToken };
