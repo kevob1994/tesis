@@ -63,7 +63,7 @@ const EditProfileUser = () => {
     if (user) setImageUrl2(user.photo);
   }, []);
 
-  const HandleRegister = () => {
+  const HandleEditProfile = () => {
     if (user)
       dispatch(
         editUser(
@@ -83,7 +83,7 @@ const EditProfileUser = () => {
   };
 
   const onFinish = () => {
-    HandleRegister();
+    HandleEditProfile();
   };
 
   const selectDate = (date: moment.Moment | null, field: 'birthday') => {

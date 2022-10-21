@@ -6,6 +6,7 @@ import store from './store';
 import { loadUser } from './actions/auth';
 import 'antd/dist/antd.css';
 import './styles/index.scss';
+import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 
 const App = () => {

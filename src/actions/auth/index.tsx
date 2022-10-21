@@ -1,4 +1,5 @@
 import { clientAxios, headerAuthToken } from 'config/axios';
+import { toast } from 'react-toastify';
 import { Dispatch } from 'redux';
 import { UserEditFormI, UserI, UserRegisterFormI } from 'utils/interfaces';
 import { ActionTypesAuth } from './types';
@@ -20,15 +21,20 @@ export const register =
     });
     try {
       const res = await clientAxios.post<AxiosAuth>('register', params);
-      dispatch({
-        type: ActionTypesAuth.REGISTER_SUCCESS,
-        payload: res.data,
-      });
+      if (res.status === 201) {
+        toast.success('El registro fue exitoso');
+        dispatch({
+          type: ActionTypesAuth.REGISTER_SUCCESS,
+          payload: res.data,
+        });
+      } else {
+        toast.error('A ocurrido un error!');
+      }
     } catch (error: any) {
-      console.log(error.response);
       dispatch({
         type: ActionTypesAuth.REQUEST_AUTH_FAIL,
       });
+      toast.error('A ocurrido un error!');
     }
   };
 

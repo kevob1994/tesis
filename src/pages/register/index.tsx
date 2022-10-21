@@ -266,6 +266,12 @@ const Register = () => {
                   label='Fecha de nacimiento'
                   name='birthday'
                   initialValue={birthday}
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Campo requerido',
+                    },
+                  ]}
                 >
                   <DatePicker
                     size='large'
@@ -273,7 +279,17 @@ const Register = () => {
                     defaultValue={birthday}
                     value={birthday}
                     format={dateFormat}
-                    onChange={(date) => selectDate(date, 'birthday')}
+                    onChange={(date) => {
+                      if (date) selectDate(date, 'birthday');
+                    }}
+                    disabledDate={(current) => {
+                      let customDate = moment()
+                        .add(1, 'day')
+                        .format('YYYY-MM-DD');
+                      return (
+                        current && current > moment(customDate, 'YYYY-MM-DD')
+                      );
+                    }}
                   />
                 </Form.Item>
               </Col>
