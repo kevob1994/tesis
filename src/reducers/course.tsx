@@ -14,6 +14,8 @@ const initialState: CourseReducerI = {
   loadingComments: false,
   library: [],
   assignments: [],
+  noteStudents: [],
+	notes: []
 };
 
 const courseReducer = (state = initialState, action: TActionCourse) => {
@@ -166,6 +168,22 @@ const courseReducer = (state = initialState, action: TActionCourse) => {
         loading: false,
         loadingComments: false,
       };
+    case ActionTypesCourse.GET_NOTES_ALL_STUDENTS:
+      return {
+        ...state,
+        noteStudents: action.payload,
+        loadingAction: false,
+        loading: false,
+        loadingComments: false,
+      };
+			case ActionTypesCourse.GET_NOTES_BY_STUDENT:
+				return {
+					...state,
+					notes: action.payload,
+					loadingAction: false,
+					loading: false,
+					loadingComments: false,
+				};
     default:
       return state;
   }

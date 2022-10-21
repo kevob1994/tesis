@@ -5,6 +5,8 @@ import {
   ForumI,
   ItemChatI,
   LibraryI,
+  NoteI,
+  NotesStudentI,
 } from 'utils/interfaces';
 
 export enum ActionTypesCourse {
@@ -33,6 +35,8 @@ export enum ActionTypesCourse {
   GET_ASSIGNMENTS = 'GET_ASSIGNMENTS',
   LIST_EVALUATIONS_BY_STUDENT_SUCCESS = 'LIST_EVALUATIONS_BY_STUDENT_SUCCESS',
   UPLOAD_EVALUATION_FILE = 'UPLOAD_EVALUATION_FILE',
+  GET_NOTES_ALL_STUDENTS = 'GET_NOTES_ALL_STUDENTS',
+  GET_NOTES_BY_STUDENT = 'GET_NOTES_BY_STUDENT',
 }
 
 interface IActionCourseCreate {
@@ -143,6 +147,17 @@ interface IUploadEvaluationFile {
   type: ActionTypesCourse.UPLOAD_EVALUATION_FILE;
   payload: any;
 }
+
+interface IGetNotesAllStudents {
+  type: ActionTypesCourse.GET_NOTES_ALL_STUDENTS;
+  payload: NotesStudentI[];
+}
+
+interface IGetNotesByStudent {
+  type: ActionTypesCourse.GET_NOTES_BY_STUDENT;
+  payload: NoteI[];
+}
+
 export type TActionCourse =
   | IActionCourseCreate
   | IActionCourseGet
@@ -167,4 +182,6 @@ export type TActionCourse =
   | IActionRequestFail
   | IActionGetAssignments
   | IActionCourseEvaluationsByStudent
-  | IUploadEvaluationFile;
+  | IUploadEvaluationFile
+  | IGetNotesAllStudents
+  | IGetNotesByStudent;

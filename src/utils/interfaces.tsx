@@ -118,8 +118,27 @@ export interface CourseReducerI {
   library: LibraryI[];
   assignments: AssignmentI[];
   evaluationsByStudent: EvaluationStudentI[];
+  noteStudents: NotesStudentI[];
+  notes: NoteI[];
 }
 
+export interface NoteI {
+  evaluation_id: number;
+  evaluation_name: string;
+  grade: number;
+}
+
+export interface NotesStudentI {
+  evaluation_id: number;
+  evaluation_name: string;
+  grade: {
+    grade: number;
+    grade_id: number;
+    user_id: number;
+    user_lastname: string;
+    user_name: string;
+  }[];
+}
 export interface EvaluationStudentI {
   evaluation_id: number;
   evaluation_name: string;

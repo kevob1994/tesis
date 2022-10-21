@@ -11,6 +11,7 @@ import {
   ForumParamsI,
   LibraryI,
   LibraryThemeParamsI,
+	NoteI,
 } from 'utils/interfaces';
 import { ActionTypesCourse } from './types';
 import { ActionTypesAlert } from 'actions/alert/types';
@@ -634,6 +635,92 @@ export const updateEvaluationFile =
           textBody: 'La tarea se ha actualizado de forma correcta',
         },
       });
+    } catch (error: any) {
+      console.log('error', error.response);
+      //   // const err = error.response.data.error;
+      dispatch({
+        type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+      });
+    }
+  };
+
+export const getNotesAllStudents =
+  (id: string) => async (dispatch: Dispatch) => {
+    dispatch({
+      type: ActionTypesCourse.LOADING_ACTION,
+    });
+    try {
+      const res = await clientAxios.get<any[]>(`grade/course/${id}/grades`, {
+        headers: headerAuthToken(),
+      });
+      // console.log(res);
+
+      dispatch({
+        type: ActionTypesCourse.GET_NOTES_ALL_STUDENTS,
+        payload: res.data,
+      });
+    } catch (error: any) {
+      console.log('error', error.response);
+      //   // const err = error.response.data.error;
+      dispatch({
+        type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+      });
+    }
+  };
+
+export const editNotesByStudent =
+  (course_id: string, params: string) => async (dispatch: Dispatch) => {
+    // dispatch({
+    //   type: ActionTypesCourse.LOADING_ACTION,
+    // });
+    try {
+      const res = await clientAxios.put<any[]>(
+        `grades?grades=${params}&course_id=${course_id}`,
+        null,
+        {
+          headers: headerAuthToken(),
+        }
+      );
+      console.log(res);
+      if (res.status === 200) {
+        const res = await clientAxios.get<any[]>(`grade/course/${course_id}/grades`, {
+          headers: headerAuthToken(),
+        });
+        // console.log(res);
+
+        dispatch({
+          type: ActionTypesCourse.GET_NOTES_ALL_STUDENTS,
+          payload: res.data,
+        });
+      }
+
+      // dispatch({
+      //   type: ActionTypesCourse.GET_NOTES_STUDENTS,
+      //   payload: res.data,
+      // });
+    } catch (error: any) {
+      console.log('error', error.response);
+      //   // const err = error.response.data.error;
+      dispatch({
+        type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+      });
+    }
+  };
+
+	export const getNotesByStudent =
+  (id: string) => async (dispatch: Dispatch) => {
+    dispatch({
+      type: ActionTypesCourse.LOADING_ACTION,
+    });
+    try {
+      const res = await clientAxios.get<NoteI[]>(`grade/course/${id}`, {
+        headers: headerAuthToken(),
+      });
+      console.log(res);
+			dispatch({
+				type: ActionTypesCourse.GET_NOTES_BY_STUDENT,
+				payload: res.data,
+			});
     } catch (error: any) {
       console.log('error', error.response);
       //   // const err = error.response.data.error;
