@@ -1,23 +1,23 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { Button, Col, Image, Row, Tooltip } from 'antd';
 import './index.scss';
 import { useNavigate } from 'react-router-dom';
-import { listItemsI, StoreI } from '../../utils/interfaces';
-import { useSelector } from 'react-redux';
+import { listItemsI } from '../../utils/interfaces';
 import {
   DeleteOutlined,
   EditOutlined,
   ShareAltOutlined,
 } from '@ant-design/icons';
+import { MenuItem } from './components/MenuItem';
 
 interface ListElementsI {
   listItems: listItemsI[];
   url: string;
   span?: number;
   shareElement?: (code: string) => void;
-  textDelete?: string;
   deleteItem?: (id: listItemsI) => void;
   editItem?: (id: number) => void;
+  textDelete?: string;
   textEmpty: string;
 }
 
@@ -32,6 +32,7 @@ const ListElements: FunctionComponent<ListElementsI> = ({
   textEmpty,
 }) => {
   let navigate = useNavigate();
+  const [isHover, setIsHover] = useState(-1);
 
   const goItem = (id: string) => {
     navigate(url.replace('id', id), { replace: true });
@@ -44,15 +45,18 @@ const ListElements: FunctionComponent<ListElementsI> = ({
   return (
     <Row gutter={40}>
       {listItems.length > 0 ? (
-        listItems.map((item) => (
+        listItems.map((item, index) => (
           <Col span={span} key={item.id}>
-            <div
-              className='content-list'
-              onClick={(e) => {
-                e.stopPropagation();
-                goItem(item.id.toString());
-              }}
-            >
+            <div className={`content-list ${index === isHover && 'is-hover'}`}>
+              <div
+                onMouseEnter={() => setIsHover(index)}
+                onMouseLeave={() => setIsHover(-1)}
+                className='open-item'
+                onClick={(e) => {
+                  e.stopPropagation();
+                  goItem(item.id.toString());
+                }}
+              ></div>
               <div className='item-list'>
                 <Row>
                   <Image
@@ -69,49 +73,13 @@ const ListElements: FunctionComponent<ListElementsI> = ({
                         <p>{item.description}</p>
                       </div>
                       <div>
-                        {shareElement && (
-                          <Tooltip placement='bottom' title='Compartir código'>
-                            <Button
-                              type='primary'
-                              shape='circle'
-                              icon={<ShareAltOutlined />}
-                              size='large'
-                              onClick={(e) => {
-                                if (item.code) handlerShare(item.code);
-                                e.stopPropagation();
-                              }}
-                            />
-                          </Tooltip>
-                        )}
-
-                        {editItem && (
-                          <Tooltip placement='bottom' title='Editar'>
-                            <Button
-                              type='primary'
-                              shape='circle'
-                              icon={<EditOutlined />}
-                              onClick={(e) => {
-                                editItem(item.id);
-                                e.stopPropagation();
-                              }}
-                              size='large'
-                            />
-                          </Tooltip>
-                        )}
-                        {deleteItem && (
-                          <Tooltip placement='bottom' title={textDelete}>
-                            <Button
-                              className='delete-btn'
-                              shape='circle'
-                              onClick={(e) => {
-                                deleteItem(item);
-                                e.stopPropagation();
-                              }}
-                              icon={<DeleteOutlined />}
-                              size='large'
-                            />
-                          </Tooltip>
-                        )}
+                        <MenuItem
+                          shareElement={shareElement}
+                          item={item}
+                          deleteItem={deleteItem}
+                          editItem={editItem}
+                          handlerShare={handlerShare}
+                        />
                       </div>
                     </div>
 

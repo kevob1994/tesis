@@ -4,11 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { HeaderNav, ListElements, ModalStatus } from '../../components';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  deleteCourse,
-  getCourses,
-  joinCourse,
-} from '../../actions/course';
+import { deleteCourse, getCourses, joinCourse } from '../../actions/course';
 import { listItemsI, RoleE, StoreI } from '../../utils/interfaces';
 import { useForm } from '../../hooks/useForm';
 
@@ -116,6 +112,7 @@ const ListCourses = () => {
           role === RoleE.TEACHER ? 'Código del curso' : 'Unirse a un curso'
         }
         afterClose={handleCancel}
+				onCancel={resetValues}
         footer={null}
         centered
         forceRender
@@ -166,15 +163,10 @@ const ListCourses = () => {
       </Modal>
 
       <div className='content-list-courses'>
-        <h1>Cursos</h1>
         {!loadingCourse ? (
           <Row align='middle' gutter={50}>
             <Col span={20}>
-              <Search
-                size='large'
-                placeholder='input search text'
-                onSearch={onSearch}
-              />
+              <h1>Cursos</h1>
             </Col>
             <Col span={4}>
               {role === RoleE.TEACHER ? (

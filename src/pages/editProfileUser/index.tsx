@@ -17,16 +17,17 @@ import moment from 'moment';
 import TextArea from 'antd/lib/input/TextArea';
 import './index.scss';
 import { UploadOutlined } from '@ant-design/icons';
-import { Link, Navigate } from 'react-router-dom';
-import { GenderE, RoleE, StoreI } from '../../utils/interfaces';
-import { dateFormat, genderList, roleList } from '../../utils/const';
+import { useNavigate } from 'react-router-dom';
+import { GenderE, StoreI } from '../../utils/interfaces';
+import { dateFormat, genderList } from '../../utils/const';
 import { useForm } from '../../hooks/useForm';
 import { editUser } from '../../actions/auth';
 import { validatePassword } from '../../utils/validations';
 import { HeaderNav } from '../../components';
 
 const EditProfileUser = () => {
-  const { user } = useSelector((store: StoreI) => store.auth);
+  const { user, isLoadingAction } = useSelector((store: StoreI) => store.auth);
+  const navigate = useNavigate();
   const {
     name,
     lastname,
@@ -298,17 +299,21 @@ const EditProfileUser = () => {
               </Col>
             </Row>
             <Row justify='space-between'>
-              <Link to='/login'>
-                <Button size='large' type='primary' ghost>
-                  Volver
-                </Button>
-              </Link>
+              <Button
+                size='large'
+                type='primary'
+                ghost
+                onClick={() => navigate(-1)}
+              >
+                Volver
+              </Button>
               <Form.Item>
                 <Button
                   type='primary'
                   htmlType='submit'
                   size='large'
                   className='btn-login'
+                  loading={isLoadingAction}
                 >
                   Guardar
                 </Button>

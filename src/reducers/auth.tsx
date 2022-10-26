@@ -5,13 +5,14 @@ const initialState: AuthReducerI = {
   token: localStorage.getItem('token'),
   isAuthenticate: localStorage.getItem('token') ? true : null,
   loading: localStorage.getItem('token') ? true : false,
+  isLoadingAction: false,
   user: null,
 };
 
 const authReducer = (state = initialState, action: TActionAuth) => {
   switch (action.type) {
     case ActionTypesAuth.USER_LOADED:
-			console.log(action.payload)
+      console.log(action.payload);
       return {
         ...state,
         user: action.payload,
@@ -23,12 +24,19 @@ const authReducer = (state = initialState, action: TActionAuth) => {
     case ActionTypesAuth.LOGIN_SUCCESS:
       const { token, user } = action.payload;
       localStorage.setItem('token', token);
-      console.log(user);
       return {
         ...state,
         user,
         isAuthenticate: true,
         loading: false,
+      };
+
+    case ActionTypesAuth.EDIT_SUCCESS:
+      return {
+        ...state,
+        user: { ...state.user, ...action.payload.user },
+        loading: false,
+        isLoadingAction: false,
       };
 
     case ActionTypesAuth.REQUEST_AUTH_FAIL:
@@ -54,6 +62,11 @@ const authReducer = (state = initialState, action: TActionAuth) => {
       return {
         ...state,
         loading: true,
+      };
+    case ActionTypesAuth.LOADING_ACTION:
+      return {
+        ...state,
+        isLoadingAction: true,
       };
     default:
       return state;

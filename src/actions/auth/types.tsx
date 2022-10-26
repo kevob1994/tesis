@@ -1,4 +1,4 @@
-import { UserI } from "utils/interfaces";
+import { UserEditI, UserI } from 'utils/interfaces';
 
 export enum ActionTypesAuth {
   REGISTER_SUCCESS = 'REGISTER_SUCCESS',
@@ -9,6 +9,7 @@ export enum ActionTypesAuth {
   REQUEST_AUTH_FAIL = 'REQUEST_AUTH_FAIL',
   EDIT_SUCCESS = 'EDIT_SUCCESS',
   REQUEST_EDIT_AUTH_FAIL = 'REQUEST_EDIT_AUTH_FAIL',
+  LOADING_ACTION = 'LOADING_ACTION',
 }
 interface IPayloadAuth {
   token: string;
@@ -31,7 +32,7 @@ interface IActionAuthLoginSuccess {
 
 interface IActionAuthEditSuccess {
   type: ActionTypesAuth.EDIT_SUCCESS;
-  payload: any;
+  payload: UserEditI;
 }
 
 interface IActionAuthRequestAuthFail {
@@ -40,6 +41,10 @@ interface IActionAuthRequestAuthFail {
 
 interface IActionAuthLoading {
   type: ActionTypesAuth.LOADING;
+}
+
+interface IActionAuthLoadingAction {
+  type: ActionTypesAuth.LOADING_ACTION;
 }
 
 interface IActionLogout {
@@ -53,4 +58,5 @@ export type TActionAuth =
   | IActionAuthRequestAuthFail
   | IActionAuthLoading
   | IActionLogout
-  | IActionAuthEditSuccess;
+  | IActionAuthEditSuccess
+  | IActionAuthLoadingAction;

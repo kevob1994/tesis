@@ -26,11 +26,25 @@ export interface UserI {
   email_verified_at: null | string;
 }
 
+export interface UserEditI {
+  user: {
+    biography: string;
+    birthday: Date;
+    email: string;
+    gender: GenderE;
+    lastname: string;
+    name: string;
+    phone: string;
+    photo: null | string;
+  };
+}
+
 export interface AuthReducerI {
   token: string | null;
   isAuthenticate: boolean | null;
   loading: boolean;
   user: null | UserI;
+  isLoadingAction: boolean;
 }
 
 export interface StoreI {

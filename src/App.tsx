@@ -19,7 +19,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <ToastContainer />
+        <ToastContainer theme='colored' />
         <RoutesPath />
       </BrowserRouter>
     </Provider>

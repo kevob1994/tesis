@@ -40,6 +40,10 @@ const HeaderNav: FunctionComponent<IHeaderNav> = ({
       </div>
       <div className='options-header'>
         <Link to='/'>{showLinkCourses ? <p>Materias</p> : null}</Link>
+        <Link to='/edit-profile'>
+          {' '}
+          <p>Perfil</p>
+        </Link>
         <p onClick={onHandlerLogout} className='btn-logout'>
           Cerrar sesion
         </p>
