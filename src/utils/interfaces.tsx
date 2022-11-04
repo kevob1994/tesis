@@ -134,6 +134,7 @@ export interface CourseReducerI {
   evaluationsByStudent: EvaluationStudentI[];
   noteStudents: NotesStudentI[];
   notes: NoteI[];
+  program: string;
 }
 
 export interface NoteI {

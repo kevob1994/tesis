@@ -10,6 +10,7 @@ export enum ActionTypesAuth {
   EDIT_SUCCESS = 'EDIT_SUCCESS',
   REQUEST_EDIT_AUTH_FAIL = 'REQUEST_EDIT_AUTH_FAIL',
   LOADING_ACTION = 'LOADING_ACTION',
+  END_LOADING = 'END_LOADING',
 }
 interface IPayloadAuth {
   token: string;
@@ -51,6 +52,10 @@ interface IActionLogout {
   type: ActionTypesAuth.LOGOUT;
 }
 
+interface IActionEndLoading {
+  type: ActionTypesAuth.END_LOADING;
+}
+
 export type TActionAuth =
   | IActionAuthUserLoaded
   | IActionAuthRegisterSuccess
@@ -59,4 +64,5 @@ export type TActionAuth =
   | IActionAuthLoading
   | IActionLogout
   | IActionAuthEditSuccess
-  | IActionAuthLoadingAction;
+  | IActionAuthLoadingAction
+	| IActionEndLoading;

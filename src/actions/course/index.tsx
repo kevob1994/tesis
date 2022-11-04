@@ -11,7 +11,7 @@ import {
   ForumParamsI,
   LibraryI,
   LibraryThemeParamsI,
-	NoteI,
+  NoteI,
 } from 'utils/interfaces';
 import { ActionTypesCourse } from './types';
 import { ActionTypesAlert } from 'actions/alert/types';
@@ -175,9 +175,6 @@ export const getListEvaluationsCourse =
   (id: string) => async (dispatch: Dispatch) => {
     dispatch({
       type: ActionTypesCourse.LOADING_COURSES,
-    });
-    dispatch({
-      type: ActionTypesCourse.LOADING_ACTION,
     });
     try {
       const res = await clientAxios.get<EvaluationsI[]>(
@@ -683,9 +680,12 @@ export const editNotesByStudent =
       );
       console.log(res);
       if (res.status === 200) {
-        const res = await clientAxios.get<any[]>(`grade/course/${course_id}/grades`, {
-          headers: headerAuthToken(),
-        });
+        const res = await clientAxios.get<any[]>(
+          `grade/course/${course_id}/grades`,
+          {
+            headers: headerAuthToken(),
+          }
+        );
         // console.log(res);
 
         dispatch({
@@ -707,25 +707,51 @@ export const editNotesByStudent =
     }
   };
 
-	export const getNotesByStudent =
-  (id: string) => async (dispatch: Dispatch) => {
-    dispatch({
-      type: ActionTypesCourse.LOADING_ACTION,
+export const getNotesByStudent = (id: string) => async (dispatch: Dispatch) => {
+  dispatch({
+    type: ActionTypesCourse.LOADING_ACTION,
+  });
+  try {
+    const res = await clientAxios.get<NoteI[]>(`grade/course/${id}`, {
+      headers: headerAuthToken(),
     });
-    try {
-      const res = await clientAxios.get<NoteI[]>(`grade/course/${id}`, {
+    console.log(res);
+    dispatch({
+      type: ActionTypesCourse.GET_NOTES_BY_STUDENT,
+      payload: res.data,
+    });
+  } catch (error: any) {
+    console.log('error', error.response);
+    //   // const err = error.response.data.error;
+    dispatch({
+      type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+    });
+  }
+};
+
+export const getProgram = (id: string) => async (dispatch: Dispatch) => {
+  dispatch({
+    type: ActionTypesCourse.LOADING_COURSES,
+  });
+  try {
+    const res = await clientAxios.get<{ id: number; program: string }[]>(
+      `course/${id}/program`,
+      {
         headers: headerAuthToken(),
-      });
-      console.log(res);
-			dispatch({
-				type: ActionTypesCourse.GET_NOTES_BY_STUDENT,
-				payload: res.data,
-			});
-    } catch (error: any) {
-      console.log('error', error.response);
-      //   // const err = error.response.data.error;
+      }
+    );
+
+    if (res.status === 200) {
       dispatch({
-        type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+        type: ActionTypesCourse.GET_PROGRAM,
+        payload: res.data[0].program,
       });
     }
-  };
+  } catch (error: any) {
+    console.log('error', error.response);
+    //   // const err = error.response.data.error;
+    dispatch({
+      type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+    });
+  }
+};

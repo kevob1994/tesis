@@ -16,18 +16,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import TextArea from 'antd/lib/input/TextArea';
 import './index.scss';
-import { UploadOutlined } from '@ant-design/icons';
+import { SaveFilled, UploadOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { GenderE, StoreI } from '../../utils/interfaces';
 import { dateFormat, genderList } from '../../utils/const';
 import { useForm } from '../../hooks/useForm';
-import { editUser } from '../../actions/auth';
+import { changePassword, editUser } from '../../actions/auth';
 import { validatePassword } from '../../utils/validations';
 import { HeaderNav } from '../../components';
 
 const EditProfileUser = () => {
   const { user, isLoadingAction } = useSelector((store: StoreI) => store.auth);
   const navigate = useNavigate();
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const {
     name,
     lastname,
@@ -55,6 +56,16 @@ const EditProfileUser = () => {
     biography: user?.biography || '',
     photo: user?.photo || '',
   });
+
+  const {
+    new_password,
+    confirmation_new_password,
+    onChange: onChangePasswords,
+  } = useForm({
+    new_password: '',
+    confirmation_new_password: '',
+  });
+
   const [fileList, setFileList] = useState<any[]>([]);
   const [imageUrl2, setImageUrl2] = useState<any>();
   const dispatch = useDispatch();
@@ -83,8 +94,16 @@ const EditProfileUser = () => {
       );
   };
 
+  const HandleEditPassword = (new_password: string) => {
+    dispatch(changePassword(new_password));
+  };
+
   const onFinish = () => {
     HandleEditProfile();
+  };
+
+  const onFinishPassword = () => {
+    HandleEditPassword(new_password);
   };
 
   const selectDate = (date: moment.Moment | null, field: 'birthday') => {
@@ -94,6 +113,10 @@ const EditProfileUser = () => {
   useEffect(() => {
     if (fileList.length > 0) setImageUrl2(URL.createObjectURL(fileList[0]));
   }, [fileList]);
+
+  useEffect(() => {
+    if (!isLoadingAction) setOpenModal(false);
+  }, [isLoadingAction]);
 
   const props = {
     onRemove: (file: any) => {
@@ -124,6 +147,101 @@ const EditProfileUser = () => {
   return (
     <>
       <HeaderNav />
+      <Modal
+        title={`Cambiar contraseña`}
+        visible={openModal}
+        footer={null}
+        centered
+        destroyOnClose
+        forceRender
+        onCancel={() => {
+          setOpenModal(false);
+        }}
+        width={400}
+      >
+        <div>
+          <Form
+            name='basic'
+            layout='vertical'
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 24 }}
+            initialValues={{ remember: true }}
+            onFinish={onFinishPassword}
+            autoComplete='off'
+            requiredMark={false}
+          >
+            <Row gutter={50}>
+              <Col span={24}>
+                <Form.Item
+                  label='Nueva contraseña'
+                  name='new_password'
+                  rules={[
+                    { required: true, message: 'Campo requerido' },
+                    {
+                      validator: validatePassword,
+                    },
+                  ]}
+                  hasFeedback
+                >
+                  <Input.Password
+                    size='large'
+                    autoComplete='new_password'
+                    value={new_password}
+                    onChange={({ target }) =>
+                      onChangePasswords(target.value, 'new_password')
+                    }
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={24}>
+                <Form.Item
+                  label='Confirmar contraseña nueva'
+                  name='confirmation_new_password'
+                  dependencies={['confirmation_new_password']}
+                  hasFeedback
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Campo requerido',
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue('new_password') === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(
+                          new Error('Las contraseñas no coinciden')
+                        );
+                      },
+                    }),
+                  ]}
+                >
+                  <Input.Password
+                    size='large'
+                    autoComplete='confirmation_new_password'
+                    value={confirmation_new_password}
+                    onChange={({ target }) =>
+                      onChangePasswords(
+                        target.value,
+                        'confirmation_new_password'
+                      )
+                    }
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Button
+              type='primary'
+              htmlType='submit'
+              loading={isLoadingAction}
+              icon={<SaveFilled />}
+              block
+            >
+              Guardar
+            </Button>
+          </Form>
+        </div>
+      </Modal>
       <div className='content-register'>
         <div className='content-register-row '>
           <h1>Perfil</h1>
@@ -295,6 +413,14 @@ const EditProfileUser = () => {
                       />
                     </Form.Item>
                   </Col>
+                  <Button
+                    type='link'
+                    style={{ marginLeft: 10 }}
+                    size='large'
+                    onClick={() => setOpenModal(true)}
+                  >
+                    Cambiar contraseña
+                  </Button>
                 </Row>
               </Col>
             </Row>
@@ -314,6 +440,7 @@ const EditProfileUser = () => {
                   size='large'
                   className='btn-login'
                   loading={isLoadingAction}
+                  icon={<SaveFilled />}
                 >
                   Guardar
                 </Button>

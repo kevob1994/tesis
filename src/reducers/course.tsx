@@ -15,7 +15,8 @@ const initialState: CourseReducerI = {
   library: [],
   assignments: [],
   noteStudents: [],
-	notes: []
+  notes: [],
+  program: '',
 };
 
 const courseReducer = (state = initialState, action: TActionCourse) => {
@@ -29,23 +30,27 @@ const courseReducer = (state = initialState, action: TActionCourse) => {
         ...state,
         courses: action.payload,
         loading: false,
+        loadingAction: false,
       };
     case ActionTypesCourse.DELETE_COURSE_SUCCESS:
       return {
         ...state,
         courses: state.courses.filter((course) => course.id !== action.payload),
         loading: false,
+        loadingAction: false,
       };
     case ActionTypesCourse.USERS_COURSE_SUCCESS:
       return {
         ...state,
         listChat: action.payload,
         loading: false,
+        loadingAction: false,
       };
     case ActionTypesCourse.LIST_EVALUATIONS_SUCCESS:
       return {
         ...state,
-        loading: true,
+        loading: false,
+        loadingAction: false,
         evaluations: action.payload,
       };
     case ActionTypesCourse.LIST_EVALUATIONS_BY_STUDENT_SUCCESS:
@@ -138,6 +143,13 @@ const courseReducer = (state = initialState, action: TActionCourse) => {
         loading: false,
         loadingComments: false,
       };
+    case ActionTypesCourse.GET_PROGRAM:
+      return {
+        ...state,
+        program: action.payload,
+        loadingAction: false,
+        loading: false,
+      };
     case ActionTypesCourse.LOADING_COURSES:
       return {
         ...state,
@@ -176,14 +188,14 @@ const courseReducer = (state = initialState, action: TActionCourse) => {
         loading: false,
         loadingComments: false,
       };
-			case ActionTypesCourse.GET_NOTES_BY_STUDENT:
-				return {
-					...state,
-					notes: action.payload,
-					loadingAction: false,
-					loading: false,
-					loadingComments: false,
-				};
+    case ActionTypesCourse.GET_NOTES_BY_STUDENT:
+      return {
+        ...state,
+        notes: action.payload,
+        loadingAction: false,
+        loading: false,
+        loadingComments: false,
+      };
     default:
       return state;
   }

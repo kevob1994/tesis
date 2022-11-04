@@ -68,6 +68,12 @@ const authReducer = (state = initialState, action: TActionAuth) => {
         ...state,
         isLoadingAction: true,
       };
+    case ActionTypesAuth.END_LOADING:
+      return {
+        ...state,
+        loading: false,
+        isLoadingAction: false,
+      };
     default:
       return state;
   }

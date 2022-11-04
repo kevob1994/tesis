@@ -1,4 +1,10 @@
-import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  FunctionComponent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import {
   Row,
   Col,
@@ -21,6 +27,7 @@ import { categoryClass, dateFormat } from 'utils/const';
 import { CourseFormI } from 'utils/interfaces';
 import { useParams } from 'react-router-dom';
 import './index.scss';
+import { toast } from 'react-toastify';
 
 interface IStepInfoCourseProps {
   formCourse: CourseFormI;
@@ -61,6 +68,11 @@ const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
   }, []);
 
   const onFinish = (values: any) => {
+    if (moment(date_begin).isAfter(date_finish)) {
+      return toast.error(
+        'La fecha de inicio no puede ser mayor a la fecha de finalización'
+      );
+    }
     nextStep();
   };
 
@@ -182,6 +194,12 @@ const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
                   format={dateFormat}
                   defaultValue={date_begin}
                   onChange={(date) => selectDate(date, 'date_begin')}
+                  disabledDate={(current) => {
+                    let customDate = moment().format('YYYY-MM-DD');
+                    return (
+                      current && current < moment(customDate, 'YYYY-MM-DD')
+                    );
+                  }}
                 />
               </Form.Item>
             </Col>
@@ -200,6 +218,12 @@ const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
                   format={dateFormat}
                   defaultValue={date_finish}
                   onChange={(date) => selectDate(date, 'date_finish')}
+                  disabledDate={(current) => {
+                    let customDate = moment(date_begin).format('YYYY-MM-DD');
+                    return (
+                      current && current < moment(customDate, 'YYYY-MM-DD')
+                    );
+                  }}
                 />
               </Form.Item>
             </Col>

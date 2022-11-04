@@ -1,28 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Table,
-  Tag,
-  Switch,
-  Tooltip,
-  Button,
-  Row,
-  Col,
-  UploadProps,
-  message,
-  Upload,
-} from 'antd';
+import { Table, Tag, Switch, Tooltip, Button, Row, Col, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { ColumnProps } from 'antd/lib/table';
-import {
-  DownloadOutlined,
-  EyeOutlined,
-  UploadOutlined,
-} from '@ant-design/icons';
+import { DownloadOutlined, EyeOutlined } from '@ant-design/icons';
 import {
   AssignmentI,
   EvaluationsI,
-  EvaluationStudentI,
   ITableEvaluations,
   StoreI,
 } from '../../../../utils/interfaces';
@@ -30,57 +14,22 @@ import {
   getAssignments,
   getListEvaluationsCourse,
 } from '../../../../actions/course';
-import { TypeFiles } from '../../../../utils/const';
 import { clientAxios, headerAuthToken } from '../../../../config/axios';
 import './index.scss';
 
 export const TableTeacher = () => {
   const [listEvaluations, setListEvaluations] = useState<EvaluationsI[]>([]);
-  const [fileList, setFileList] = useState<any[]>([]);
-  const [showAssignments, setShowAssignments] = useState<boolean>(false);
   const [assignmentSelect, setAssignmentSelect] = useState<
     ITableEvaluations | undefined
   >(undefined);
   const { id } = useParams();
-  const { evaluations, assignments, loadingAction } = useSelector(
+  const { evaluations, assignments, loadingAction, loading } = useSelector(
     (state: StoreI) => state.courses
   );
   const dispatch = useDispatch();
   const loadEvaluations = (id: string) =>
     dispatch(getListEvaluationsCourse(id));
   const loadAssignments = (id: number) => dispatch(getAssignments(id));
-
-  const props: UploadProps = {
-    onRemove: (file: any) => {
-      const index = fileList.indexOf(file);
-      const newFileList = fileList.slice();
-      newFileList.splice(index, 1);
-      setFileList(newFileList);
-    },
-    beforeUpload: (file: any) => {
-      const type = file.name
-        .substr(file.name.lastIndexOf('.') + 1 - file.name.length)
-        .toLowerCase();
-
-      const isValidFormat =
-        type === TypeFiles.TYPE_PDF ||
-        type === TypeFiles.TYPE_WORD ||
-        type === TypeFiles.TYPE_EXCEL ||
-        type === TypeFiles.TYPE_IMG_PNG ||
-        type === TypeFiles.TYPE_IMG_JPEG ||
-        type === TypeFiles.TYPE_IMG_JPG;
-      if (isValidFormat) {
-        setFileList([file]);
-      } else {
-        message.error(
-          `${file.name} debe tener formato pdf, word, excel, png, jpg o pjeg`
-        );
-      }
-
-      return false;
-    },
-    fileList,
-  };
 
   useEffect(() => {
     if (id) loadEvaluations(id);
@@ -89,11 +38,6 @@ export const TableTeacher = () => {
   useEffect(() => {
     if (evaluations) setListEvaluations(evaluations);
   }, [evaluations]);
-
-  useEffect(() => {
-    if (assignments) console.log('assignments', assignments);
-    setShowAssignments(true);
-  }, [assignments]);
 
   const onChangeCheck = (checked: boolean, index: number) => {
     console.log(`switch to ${checked}`);
@@ -127,16 +71,12 @@ export const TableTeacher = () => {
     student_name: string
   ) => {
     getFileToDownload(evaluation_id, student_id).then((response) => {
-      console.log('response');
-      console.log(response);
       const type = response.headers['content-type'];
       const blob = new Blob([response.data], { type: type });
       const link = document.createElement('a');
       link.setAttribute(
         'download',
-        `${assignmentSelect!.name.toLocaleLowerCase()}-${
-          student_name.toLocaleLowerCase()
-        }`
+        `${assignmentSelect!.name.toLocaleLowerCase()}-${student_name.toLocaleLowerCase()}`
       );
       link.href = window.URL.createObjectURL(blob);
       // link.download = 'file.xlsx';
@@ -199,7 +139,7 @@ export const TableTeacher = () => {
 
   const columnsAssignments: ColumnProps<AssignmentI>[] = [
     {
-      title: 'Estudiante',
+      title: 'Estudiantes',
       dataIndex: 'name',
       key: 'name',
       render: (text, record, index) => {
@@ -207,7 +147,7 @@ export const TableTeacher = () => {
       },
     },
     {
-      title: 'Entrega de evaluación',
+      title: assignmentSelect?.name,
       dataIndex: 'name',
       key: 'name',
       render: (text, record, index) => {
@@ -237,40 +177,53 @@ export const TableTeacher = () => {
 
   return (
     <div>
-      <Row>
-        <Col span={12} style={{ padding: '0px 10px' }}>
-          <div>
-            <Table
-              pagination={false}
-              columns={columnsTeacher}
-              dataSource={listEvaluations.map((evaluation) => ({
-                ...evaluation,
-                key: evaluation.course_id,
-              }))}
-            />
-          </div>
-        </Col>
-        <Col span={12} style={{ padding: '0px 10px' }}>
-          <div>
-            {!showAssignments ? (
-              <p style={{ textAlign: 'center' }}>
-                Debe seleccionar una evaluacion para ver las entregas
-              </p>
+      {loading ? (
+        <div className='content-spiner'>
+          <Spin />
+        </div>
+      ) : (
+        <Row>
+          <Col span={12} style={{ padding: '0px 10px' }}>
+            <div>
+              <Table
+                pagination={false}
+                columns={columnsTeacher}
+                dataSource={listEvaluations.map((evaluation) => ({
+                  ...evaluation,
+                  key: evaluation.course_id,
+                }))}
+              />
+            </div>
+          </Col>
+
+          <Col span={12} style={{ padding: '0px 10px' }}>
+            {loadingAction ? (
+              <div className='content-spiner'>
+                <Spin />
+              </div>
             ) : (
-              <>
-                <Table
-                  pagination={false}
-                  columns={columnsAssignments}
-                  dataSource={assignments.map((assignment, index) => ({
-                    ...assignment,
-                    key: index,
-                  }))}
-                />
-              </>
+              <div>
+                {!assignmentSelect ? (
+                  <p style={{ textAlign: 'center' }}>
+                    Debe seleccionar una evaluacion para ver las entregas
+                  </p>
+                ) : (
+                  <>
+                    <Table
+                      pagination={false}
+                      columns={columnsAssignments}
+                      dataSource={assignments.map((assignment, index) => ({
+                        ...assignment,
+                        key: index,
+                      }))}
+                    />
+                  </>
+                )}
+              </div>
             )}
-          </div>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      )}
     </div>
   );
 };

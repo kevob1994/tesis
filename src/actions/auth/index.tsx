@@ -1,7 +1,12 @@
 import { clientAxios, headerAuthToken } from 'config/axios';
 import { toast } from 'react-toastify';
 import { Dispatch } from 'redux';
-import { UserEditFormI, UserEditI, UserI, UserRegisterFormI } from 'utils/interfaces';
+import {
+  UserEditFormI,
+  UserEditI,
+  UserI,
+  UserRegisterFormI,
+} from 'utils/interfaces';
 import { ActionTypesAuth } from './types';
 
 export interface AxiosAuth {
@@ -106,6 +111,40 @@ export const editUser =
         dispatch({
           type: ActionTypesAuth.EDIT_SUCCESS,
           payload: res.data,
+        });
+      } else {
+        alertError();
+      }
+    } catch (error: any) {
+      alertError();
+      dispatch({
+        type: ActionTypesAuth.REQUEST_EDIT_AUTH_FAIL,
+      });
+    }
+  };
+
+export const changePassword =
+  (password: string) => async (dispatch: Dispatch) => {
+    console.log(password);
+    try {
+      dispatch({
+        type: ActionTypesAuth.LOADING_ACTION,
+      });
+      const res = await clientAxios.put<UserEditI>(
+        `users/editpass?password=${password}`,
+        null,
+        {
+          headers: headerAuthToken(),
+        }
+      );
+
+      console.log(res);
+      if (res.status === 200) {
+        console.log(res);
+        toast.success('Se cambio la contraseña de forma exitosa');
+
+        dispatch({
+          type: ActionTypesAuth.END_LOADING,
         });
       } else {
         alertError();

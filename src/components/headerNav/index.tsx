@@ -39,7 +39,9 @@ const HeaderNav: FunctionComponent<IHeaderNav> = ({
         ) : null}
       </div>
       <div className='options-header'>
-        <Link to='/'>{showLinkCourses ? <p>Materias</p> : null}</Link>
+        <Link to='/'>
+          <p>Materias</p>{' '}
+        </Link>
         <Link to='/edit-profile'>
           {' '}
           <p>Perfil</p>
