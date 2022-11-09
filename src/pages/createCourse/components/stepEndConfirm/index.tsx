@@ -149,7 +149,7 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
           <Col span={18} flex={1}>
             <div style={{ marginBottom: 40 }}>
               <h4>Programa de la materia</h4>
-              <p className='text-program'>{formCourse.program}</p>
+							<div dangerouslySetInnerHTML={{ __html: formCourse.program }}></div>
             </div>
             <div style={{ marginBottom: 40 }}>
               <h4>Plan de Evaluación</h4>

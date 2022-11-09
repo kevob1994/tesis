@@ -1,4 +1,9 @@
-import React, { Dispatch, FunctionComponent, SetStateAction, useState } from 'react';
+import React, {
+  Dispatch,
+  FunctionComponent,
+  SetStateAction,
+  useState,
+} from 'react';
 import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
@@ -20,6 +25,7 @@ import moment from 'moment';
 import { dateFormatTime } from 'utils/const';
 import { ITableEvaluations } from 'utils/interfaces';
 import './index.scss';
+import { toast } from 'react-toastify';
 
 interface IStepEvaluationPlanProps {
   prevStep: () => void;
@@ -156,14 +162,17 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
   ];
 
   const submitNext = () => {
-    if (validateEvaluationPlanEmpty()) return setEmptyForm(true);
+    if (validateEvaluationPlanEmpty())
+      return toast.error('Todos los campos son requeridos');
+
+    if (listEvaluations.length === 0)
+      return toast.error('Requiere de al menos una evaluación');
+
     setEmptyForm(false);
     nextStep();
   };
 
   const validateEvaluationPlanEmpty = () => {
-    console.log('listEvaluations');
-    console.log(listEvaluations);
     const list = listEvaluations
       .map(({ date, description, name, value }: ITableEvaluations) => ({
         date,
@@ -193,6 +202,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
         ) : null}
         <Form form={form} component={false}>
           <Table
+						locale={{ emptyText: 'Sin evaluaciones' }}
             dataSource={listEvaluations}
             columns={columns}
             pagination={false}

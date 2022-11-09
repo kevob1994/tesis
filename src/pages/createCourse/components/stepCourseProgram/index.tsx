@@ -1,5 +1,4 @@
 import { Row, Col, Form, Button } from 'antd';
-import TextArea from 'antd/lib/input/TextArea';
 import './index.scss';
 import { CourseFormI } from 'utils/interfaces';
 import {
@@ -7,7 +6,17 @@ import {
   ArrowRightOutlined,
   CloseOutlined,
 } from '@ant-design/icons';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useState } from 'react';
+import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import {
+  ContentState,
+  convertFromHTML,
+  convertToRaw,
+  EditorState,
+} from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import { toast } from 'react-toastify';
 
 interface IStepCourseProgramProps {
   formCourse: CourseFormI;
@@ -16,15 +25,50 @@ interface IStepCourseProgramProps {
   openModalCancel: () => void;
 }
 
+const initEditorState = (value: string | undefined): EditorState => {
+  if (value) {
+    const blocksFromHTML = convertFromHTML(value);
+    const content = ContentState.createFromBlockArray(
+      blocksFromHTML.contentBlocks,
+      blocksFromHTML.entityMap
+    );
+    return EditorState.createWithContent(content);
+  }
+  return EditorState.createEmpty();
+};
+
 const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
   formCourse,
   nextStep,
   prevStep,
   openModalCancel,
 }) => {
-  const { program, onChange } = formCourse;
+  const { onChange } = formCourse;
+  const [editorValue, setEditorValue] = useState(
+    initEditorState(formCourse.program)
+  );
 
-  const onFinish = (values: any) => nextStep();
+  const onEditorStateChange = (editorStateValue: EditorState) => {
+    const newValue = draftToHtml(
+      convertToRaw(editorStateValue.getCurrentContent())
+    );
+
+    if (editorStateValue.getCurrentContent().getPlainText().trim() === '') {
+      onChange('', 'program');
+    } else {
+      onChange(newValue, 'program');
+    }
+
+    setEditorValue(editorStateValue);
+  };
+
+  const onFinish = (values: any) => {
+		if(editorValue.getCurrentContent().getPlainText().trim() === ''){
+			return toast.error(
+        'La programa de la materia es un campo requerido'
+      );
+		}
+		nextStep()};
   return (
     <div className='content'>
       <div className='content-course-form-row '>
@@ -41,20 +85,75 @@ const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
         >
           <Row gutter={50}>
             <Col span={24}>
-              <Form.Item
-                name='program'
-                rules={[{ required: true, message: 'Campo requerido' }]}
-                initialValue={program}
-              >
-                <TextArea
-                  size='large'
-                  autoComplete='program'
-                  placeholder='Descripción de los temas que tendrá el curso'
-                  value={program}
-                  style={{ height: 300 }}
-                  onChange={({ target }) => onChange(target.value, 'program')}
-                />
-              </Form.Item>
+              <Editor
+                placeholder={'Detalle el contenido de la materia'}
+                editorState={editorValue}
+                onEditorStateChange={onEditorStateChange}
+                toolbar={{
+									options: ['inline', 'blockType', 'fontSize', 'list', 'history', 'colorPicker', 'emoji'],
+                  inline: {
+                    inDropdown: true,
+                    options: ['bold', 'italic', 'underline'],
+                  },
+                  list: { inDropdown: true },
+                  textAlign: { inDropdown: true },
+                  link: { inDropdown: true },
+                  history: { inDropdown: true },
+                  colorPicker: {
+                    colors: [
+                      '#ff7875',
+                      '#f5222d',
+                      '#a8071a',
+                      '#ff9c6e',
+                      '#fa541c',
+                      '#ad2102',
+                      '#ffc069',
+                      '#fa8c16',
+                      '#ad4e00',
+                      '#ffd666',
+                      '#faad14',
+                      '#ad6800',
+                      '#fff566',
+                      '#fadb14',
+                      '#ad8b00',
+                      '#d3f261',
+                      '#a0d911',
+                      '#5b8c00',
+                      '#95de64',
+                      '#52c41a',
+                      '#237804',
+                      '#5cdbd3',
+                      '#13c2c2',
+                      '#006d75',
+                      '#69c0ff',
+                      '#1890ff',
+                      '#0050b3',
+                      '#85a5ff',
+                      '#2f54eb',
+                      '#10239e',
+                      '#b37feb',
+                      '#722ed1',
+                      '#391085',
+                      '#ff85c0',
+                      '#eb2f96',
+                      '#9e1068',
+                      '#ffffff',
+                      '#fafafa',
+                      '#f5f5f5',
+                      '#f0f0f0',
+                      '#d9d9d9',
+                      '#bfbfbf',
+                      '#8c8c8c',
+                      '#595959',
+                      '#434343',
+                      '#262626',
+                      '#1f1f1f',
+                      '#141414',
+                      '#000000'
+                    ],
+                  },
+                }}
+              />
             </Col>
           </Row>
 
