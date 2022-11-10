@@ -7,10 +7,16 @@ import { HeaderNav, SlideNav } from '../../components';
 const HomePage = () => {
   return (
     <Layout className='content-home'>
-      <HeaderNav showLinkCourses={true}/>
+      <HeaderNav showLinkCourses={true} />
       <Layout>
         <SlideNav />
-        <div style={{ padding: '30px 20px 30px 30px', width: '100%' }}>
+        <div
+          style={{
+            padding: '30px 20px 30px 30px',
+            width: '100%',
+            overflowY: 'scroll',
+          }}
+        >
           <div className='content-nav'>
             <Outlet />
           </div>

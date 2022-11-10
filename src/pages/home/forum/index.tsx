@@ -11,13 +11,11 @@ import {
   Spin,
   Upload,
 } from 'antd';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import { ListElements, ModalStatus } from '../../../components';
-import { useForm } from '../../../hooks/useForm';
+import { ListElements } from '../../../components';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  ForumI,
   ForumParamsI,
   listItemsI,
   StoreI,
@@ -28,10 +26,10 @@ import TextArea from 'antd/lib/input/TextArea';
 import {
   createForum,
   deleteForum,
-  deleteLibraryTheme,
   editForum,
   getForums,
 } from '../../../actions/course';
+import LoaderSpin from 'components/LoaderSpin';
 const { Search } = Input;
 
 const ForumRoomPage = () => {
@@ -174,7 +172,6 @@ const ForumRoomPage = () => {
 
   return (
     <>
-      <ModalStatus />
       <Modal
         title='Eliminar tema del foro'
         visible={openModalDelete}
@@ -299,9 +296,7 @@ const ForumRoomPage = () => {
             </Col>
           </Row>
         ) : (
-          <div className='content-spiner'>
-            <Spin />
-          </div>
+					<LoaderSpin />
         )}
       </div>
     </>

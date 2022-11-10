@@ -1,16 +1,13 @@
 import { Button, Col, Form, Input, Modal, Row, Spin } from 'antd';
 import './index.scss';
 import { Link, useNavigate } from 'react-router-dom';
-import { HeaderNav, ListElements, ModalStatus } from '../../components';
+import { HeaderNav, ListElements } from '../../components';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteCourse, getCourses, joinCourse } from '../../actions/course';
 import { listItemsI, RoleE, StoreI } from '../../utils/interfaces';
 import { useForm } from '../../hooks/useForm';
-
-const { Search } = Input;
-
-const onSearch = (value: any) => console.log(value);
+import LoaderSpin from 'components/LoaderSpin';
 
 const ListCourses = () => {
   const [form] = Form.useForm();
@@ -90,7 +87,6 @@ const ListCourses = () => {
   return (
     <>
       <HeaderNav />
-      <ModalStatus />
       <Modal
         title='Eliminar curso'
         visible={openModalDelete}
@@ -208,9 +204,7 @@ const ListCourses = () => {
             </Col>
           </Row>
         ) : (
-          <div className='content-spiner'>
-            <Spin />
-          </div>
+					<LoaderSpin />
         )}
       </div>
     </>

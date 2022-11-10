@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getListEvaluationsCourse } from '../../../actions/course';
 import { useParams } from 'react-router-dom';
 import { EvaluationsI, StoreI } from '../../../utils/interfaces';
+import LoaderSpin from 'components/LoaderSpin';
 
 export interface ICalendarData {
   date: string;
@@ -50,7 +51,9 @@ const CalendarPage = () => {
   const loadEvaluations = (id: string) =>
     dispatch(getListEvaluationsCourse(id));
   const { id } = useParams();
-  const { evaluations } = useSelector((state: StoreI) => state.courses);
+  const { evaluations, loading } = useSelector(
+    (state: StoreI) => state.courses
+  );
 
   useEffect(() => {
     if (id) loadEvaluations(id);
@@ -64,23 +67,33 @@ const CalendarPage = () => {
           moment().add(monthOffset, 'month').format('M')
       )
     );
-  }, [evaluations]);
+  }, [evaluations, monthOffset]);
 
   return (
-    <FlexView column className='calendarContainer'>
-      <Header
-        monthOffset={monthOffset}
-        increaseMonth={(qty: number) => setMonthOffset(monthOffset + qty)}
-      />
-      <Days />
-      <Dates
-        monthOffset={monthOffset}
-        increaseMonth={(qty: number) => setMonthOffset(monthOffset + qty)}
-        startEnd={[moment(new Date()), moment(new Date()).add(30)]}
-        classroomWeeks={test}
-        evaluationsByMonth={evaluationsByMonth}
-      />
-    </FlexView>
+    <>
+		<h1>Calendario</h1>
+      {loading ? (
+        <LoaderSpin />
+      ) : (
+        <FlexView column className='calendarContainer'>
+          <>
+            {' '}
+            <Header
+              monthOffset={monthOffset}
+              increaseMonth={(qty: number) => setMonthOffset(monthOffset + qty)}
+            />
+            <Days />
+            <Dates
+              monthOffset={monthOffset}
+              increaseMonth={(qty: number) => setMonthOffset(monthOffset + qty)}
+              startEnd={[moment(new Date()), moment(new Date()).add(30)]}
+              classroomWeeks={test}
+              evaluationsByMonth={evaluationsByMonth}
+            />
+          </>
+        </FlexView>
+      )}
+    </>
   );
 };
 

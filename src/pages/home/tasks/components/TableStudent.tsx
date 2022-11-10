@@ -32,6 +32,7 @@ import {
 import { TypeFiles } from '../../../../utils/const';
 import { clientAxios, headerAuthToken } from '../../../../config/axios';
 import './index.scss';
+import LoaderSpin from 'components/LoaderSpin';
 
 export const TableStudent = () => {
   const [listEvaluations, setListEvaluations] = useState<EvaluationStudentI[]>(
@@ -291,9 +292,7 @@ export const TableStudent = () => {
           </Col>
         </Row>
       ) : (
-        <div className='spinner'>
-          <Spin size='large' />
-        </div>
+        <LoaderSpin />
       )}
     </div>
   );

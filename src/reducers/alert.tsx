@@ -1,10 +1,7 @@
 import { ActionTypesAlert, TActionAlert } from './../actions/alert/types';
-import { AlertReducerI } from '../utils/interfaces';
-import { StatusModalE } from '../hooks/useModalStatus';
+import { AlertReducerI, StatusModalE } from '../utils/interfaces';
 
 const initialState: AlertReducerI = {
-  title: '',
-  textBody: '',
   show: false,
   type: null,
 };
@@ -15,8 +12,6 @@ const alertReducer = (state = initialState, action: TActionAlert) => {
       console.log(action.payload);
       return {
         ...state,
-        title: action.payload.title,
-        textBody: action.payload.textBody,
         show: true,
         type: StatusModalE.SUCCESS,
       };
@@ -24,13 +19,11 @@ const alertReducer = (state = initialState, action: TActionAlert) => {
       console.log(action.payload);
       return {
         ...state,
-        title: action.payload.title,
-        textBody: action.payload.textBody,
         show: true,
         type: StatusModalE.ERROR,
       };
     case ActionTypesAlert.CLOSE_ALERT:
-      return { ...state, title: '', textBody: '', show: false, type: null };
+      return { ...state, show: false, type: null };
     default:
       return state;
   }

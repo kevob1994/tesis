@@ -1,5 +1,3 @@
-import { StatusModalE } from '../hooks/useModalStatus';
-
 export enum GenderE {
   FEMININE = 'F',
   MALE = 'M',
@@ -8,6 +6,14 @@ export enum GenderE {
 export enum RoleE {
   STUDENT = '0',
   TEACHER = '1',
+}
+
+export enum StatusModalE {
+  INFO = 'info',
+  SUCCESS = 'success',
+  ERROR = 'error',
+  WARNING = 'warning',
+  CONFIRM = 'confirm',
 }
 
 export interface UserI {
@@ -240,8 +246,6 @@ export interface listFilesI {
 }
 
 export interface AlertReducerI {
-  title: string;
-  textBody: string;
   show: boolean;
   type: StatusModalE | null;
 }

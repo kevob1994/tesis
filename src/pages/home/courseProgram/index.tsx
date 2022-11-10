@@ -1,5 +1,6 @@
 import { getProgram } from 'actions/course';
 import { Spin } from 'antd';
+import LoaderSpin from 'components/LoaderSpin';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -21,11 +22,9 @@ const CourseProgramPage = () => {
     <div>
       <h1>Programa de la materia</h1>
       {loading ? (
-        <div className='content-spiner'>
-          <Spin />
-        </div>
+        <LoaderSpin />
       ) : (
-        <p>{program}</p>
+        <div dangerouslySetInnerHTML={{ __html: program }}></div>
       )}
     </div>
   );

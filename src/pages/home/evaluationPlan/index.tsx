@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { Table, Tag, Space } from 'antd';
+import { Table } from 'antd';
 import { ITableEvaluations, StoreI } from '../../../utils/interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getListEvaluationsCourse } from '../../../actions/course';
 import { ColumnProps } from 'antd/lib/table';
+import LoaderSpin from 'components/LoaderSpin';
 
 const columns: ColumnProps<ITableEvaluations>[] = [
   {
@@ -43,7 +44,7 @@ const EvaluationPlanPage = () => {
   const loadEvaluations = (id: string) =>
     dispatch(getListEvaluationsCourse(id));
   const { id } = useParams();
-  const { evaluations } = useSelector(
+  const { evaluations, loading } = useSelector(
     (state: StoreI) => state.courses
   );
 
@@ -54,14 +55,20 @@ const EvaluationPlanPage = () => {
   return (
     <div>
       <h1>Plan de evaluación</h1>
-      <Table
-        pagination={false}
-        columns={columns}
-        dataSource={evaluations.map((evaluation) => ({
-          ...evaluation,
-          key: evaluation.course_id,
-        }))}
-      />
+      {loading ? (
+        <LoaderSpin />
+      ) : (
+        <>
+          <Table
+            pagination={false}
+            columns={columns}
+            dataSource={evaluations.map((evaluation) => ({
+              ...evaluation,
+              key: evaluation.course_id,
+            }))}
+          />
+        </>
+      )}
     </div>
   );
 };

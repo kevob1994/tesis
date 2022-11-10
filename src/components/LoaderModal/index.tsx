@@ -2,11 +2,11 @@ import { Modal, Spin } from 'antd';
 import { FunctionComponent } from 'react';
 import './index.scss';
 
-interface ILoaderProps {
+interface ILoaderModalProps {
   visible: boolean;
 }
 
-const Loader: FunctionComponent<ILoaderProps> = ({ visible }) => {
+const LoaderModal: FunctionComponent<ILoaderModalProps> = ({ visible }) => {
   return (
     <Modal
       visible={visible}
@@ -25,4 +25,4 @@ const Loader: FunctionComponent<ILoaderProps> = ({ visible }) => {
   );
 };
 
-export default Loader;
+export default LoaderModal;

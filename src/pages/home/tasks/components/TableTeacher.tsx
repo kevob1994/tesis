@@ -16,6 +16,7 @@ import {
 } from '../../../../actions/course';
 import { clientAxios, headerAuthToken } from '../../../../config/axios';
 import './index.scss';
+import LoaderSpin from 'components/LoaderSpin';
 
 export const TableTeacher = () => {
   const [listEvaluations, setListEvaluations] = useState<EvaluationsI[]>([]);
@@ -178,9 +179,7 @@ export const TableTeacher = () => {
   return (
     <div>
       {loading ? (
-        <div className='content-spiner'>
-          <Spin />
-        </div>
+        <LoaderSpin />
       ) : (
         <Row>
           <Col span={12} style={{ padding: '0px 10px' }}>
@@ -198,9 +197,7 @@ export const TableTeacher = () => {
 
           <Col span={12} style={{ padding: '0px 10px' }}>
             {loadingAction ? (
-              <div className='content-spiner'>
-                <Spin />
-              </div>
+              <LoaderSpin />
             ) : (
               <div>
                 {!assignmentSelect ? (

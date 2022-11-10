@@ -1,6 +1,6 @@
+import LoaderModal from 'components/LoaderModal';
 import { useSelector } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
-import { Loader } from '../components';
 import {
   LoginPage,
   RegisterPage,
@@ -100,7 +100,7 @@ export const RoutesPath = () => {
           />
         </Routes>
       ) : (
-        <Loader visible={true} />
+        <LoaderModal visible={true} />
       )}
     </>
   );

@@ -15,6 +15,7 @@ import {
 } from 'utils/interfaces';
 import { ActionTypesCourse } from './types';
 import { ActionTypesAlert } from 'actions/alert/types';
+import { toast } from 'react-toastify';
 
 export const createCourse =
   (params: CourseParamsI) => async (dispatch: Dispatch) => {
@@ -113,16 +114,12 @@ export const editCourse =
       const res = await clientAxios.put<CourseI[]>(`course/${id}`, params, {
         headers: headerAuthToken(),
       });
-      // debugger;
-      console.log('res');
-      console.log(res);
-      dispatch({
-        type: ActionTypesAlert.SUCCESS_ALERT,
-        payload: {
-          title: 'Edición de curso',
-          textBody: 'El curso ha sido editado de forma exitosa',
-        },
-      });
+      if (res.status === 200 || res.status === 201) {
+        dispatch({
+          type: ActionTypesAlert.SUCCESS_ALERT,
+        });
+        toast.success('El curso ha sido editado de forma exitosa');
+      }
     } catch (error: any) {
       console.log('error', error.response);
       //   // const err = error.response.data.error;

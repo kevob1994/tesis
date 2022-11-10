@@ -1,10 +1,5 @@
 import {
-  FileExcelOutlined,
-  FileImageOutlined,
-  FilePdfOutlined,
-  FileWordOutlined,
   InboxOutlined,
-  UploadOutlined,
 } from '@ant-design/icons';
 import {
   Button,
@@ -19,6 +14,7 @@ import {
   Spin,
 } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
+import LoaderSpin from 'components/LoaderSpin';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -27,7 +23,6 @@ import {
   deleteLibraryTheme,
   getLibraryTheme,
 } from '../../../actions/course';
-import { ModalStatus } from '../../../components';
 import { clientAxios, headerAuthToken } from '../../../config/axios';
 import { TypeFiles } from '../../../utils/const';
 import {
@@ -44,7 +39,6 @@ const { Dragger } = Upload;
 
 const LibraryPage = () => {
   const [show, setShow] = useState(false);
-  const [photo, setPhoto] = useState('');
   const { id } = useParams();
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState<any[]>([]);
@@ -185,7 +179,6 @@ const LibraryPage = () => {
 
   return (
     <>
-      <ModalStatus />
       <Modal
         title='Eliminar material de apoyo'
         visible={openModalDelete}
@@ -312,9 +305,7 @@ const LibraryPage = () => {
             </Col>
           </Row>
         ) : (
-          <div className='content-spiner'>
-            <Spin />
-          </div>
+					<LoaderSpin />
         )}
       </div>
     </>

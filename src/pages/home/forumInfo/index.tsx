@@ -1,5 +1,6 @@
 import { SendOutlined, LeftOutlined } from '@ant-design/icons';
 import { Button, Col, Image, Input, Row, Spin } from 'antd';
+import LoaderSpin from 'components/LoaderSpin';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -60,9 +61,7 @@ const ForumInfoPage = () => {
   return (
     <div className='forum-container'>
       {loading ? (
-        <div className='content-spiner'>
-          <Spin />
-        </div>
+        <LoaderSpin />
       ) : (
         <>
           <Link to={pathname.substring(0, pathname.length - 2)}>
@@ -134,9 +133,7 @@ const ForumInfoPage = () => {
                 }}
               >
                 {loadingComments ? (
-                  <div className='content-spiner'>
-                    <Spin />
-                  </div>
+                  <LoaderSpin />
                 ) : (
                   <>
                     {comments.length <= 0 ? (

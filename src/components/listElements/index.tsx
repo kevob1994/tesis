@@ -53,7 +53,6 @@ const ListElements: FunctionComponent<ListElementsI> = ({
                 onMouseLeave={() => setIsHover(-1)}
                 className='open-item'
                 onClick={(e) => {
-                  e.stopPropagation();
                   goItem(item.id.toString());
                 }}
               ></div>

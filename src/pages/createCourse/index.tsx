@@ -20,12 +20,11 @@ import { dateFormat } from 'utils/const';
 import { useForm } from 'hooks/useForm';
 import {
   ITableEvaluations,
+  StatusModalE,
   StoreI,
 } from 'utils/interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import { getListEvaluationsCourse } from 'actions/course';
-import { ModalStatus } from 'components';
-import { StatusModalE } from 'hooks/useModalStatus';
 
 const { Step } = Steps;
 
@@ -201,7 +200,6 @@ const CreateCoursePage: FunctionComponent = () => {
 
   return (
     <>
-      <ModalStatus />
       <Modal
         title='Creación de curso'
         visible={visibleModal}
