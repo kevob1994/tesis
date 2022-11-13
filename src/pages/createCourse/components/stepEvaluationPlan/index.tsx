@@ -74,7 +74,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
   const dateChange = (
     key: string,
     index: number,
-    value?: string | undefined
+    value?: moment.Moment | undefined
   ) => {
     const newData: any = [...listEvaluations];
     newData[index][key] = value ? value : new Date();
@@ -123,7 +123,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
             value={moment(text, dateFormatTime)}
             format={dateFormatTime}
             onChange={(e) => {
-              dateChange('date', index, e?.format());
+              if (e !== null) dateChange('date', index, e);
             }}
             onPanelChange={() => {}}
           />
@@ -202,7 +202,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
         ) : null}
         <Form form={form} component={false}>
           <Table
-						locale={{ emptyText: 'Sin evaluaciones' }}
+            locale={{ emptyText: 'Sin evaluaciones' }}
             dataSource={listEvaluations}
             columns={columns}
             pagination={false}
