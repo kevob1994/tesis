@@ -186,7 +186,7 @@ const ListCourses = () => {
             <Col span={24}>
               <ListElements
                 listItems={transformListCourse()}
-                deleteItem={openModalRemoveCourse}
+                deleteItem={auth.user?.role === RoleE.TEACHER ? openModalRemoveCourse : undefined}
                 editItem={
                   auth.user?.role === RoleE.TEACHER ? handlerEdit : undefined
                 }
