@@ -11,12 +11,12 @@ import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import {
   ContentState,
-  convertFromHTML,
   convertToRaw,
   EditorState,
 } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { toast } from 'react-toastify';
+import htmlToDraft from 'html-to-draftjs';
 
 interface IStepCourseProgramProps {
   formCourse: CourseFormI;
@@ -27,14 +27,13 @@ interface IStepCourseProgramProps {
 
 const initEditorState = (value: string | undefined): EditorState => {
   if (value) {
-    const blocksFromHTML = convertFromHTML(value);
-    const content = ContentState.createFromBlockArray(
-      blocksFromHTML.contentBlocks,
-      blocksFromHTML.entityMap
-    );
-    return EditorState.createWithContent(content);
+    const blocksFromHtml = htmlToDraft(value);
+    const { contentBlocks, entityMap } = blocksFromHtml;
+    const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+    return EditorState.createWithContent(contentState);
+  } else {
+    return EditorState.createEmpty();
   }
-  return EditorState.createEmpty();
 };
 
 const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({

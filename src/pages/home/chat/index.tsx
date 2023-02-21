@@ -131,7 +131,6 @@ const ChatPage = () => {
           headers: headerAuthToken(),
         }
       );
-      console.log(response);
       setListMessage([...response.data.data]);
     } catch (error) {
       console.log(error);

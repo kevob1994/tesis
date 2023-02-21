@@ -41,8 +41,6 @@ export const TableTeacher = () => {
   }, [evaluations]);
 
   const onChangeCheck = (checked: boolean, index: number) => {
-    console.log(`switch to ${checked}`);
-
     setListEvaluations(
       listEvaluations.map((item, i) => {
         if (index === i) {

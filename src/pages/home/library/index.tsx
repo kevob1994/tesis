@@ -65,8 +65,6 @@ const LibraryPage = () => {
 
   const loadData = (id: string) => dispatch(getLibraryTheme(id));
 
-  const onSearch = (value: any) => console.log(value);
-
   useEffect(() => {
     if (id) {
       loadData(id);
@@ -155,8 +153,6 @@ const LibraryPage = () => {
   const downloadFile = (id_file: number, name_file: string) => {
     if (id)
       getFileToDownload(id_file, id).then((response) => {
-				console.log('response')
-				console.log(response)
         const type = response.headers['content-type'];
         const blob = new Blob([response.data], { type: type });
         const link = document.createElement('a');

@@ -53,7 +53,6 @@ const ProfileUser = () => {
       const res = await clientAxios.get<UserInfoI[]>(`user/${id}`, {
         headers: headerAuthToken(),
       });
-      console.log(res.data);
       setUser(res.data[0]);
       imageUrl2(res.data[0].photo);
     } catch (error) {

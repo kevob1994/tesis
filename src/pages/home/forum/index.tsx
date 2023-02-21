@@ -121,8 +121,6 @@ const ForumRoomPage = () => {
         });
   };
 
-  const onSearch = (value: any) => console.log(value);
-
   const props = {
     onRemove: (file: any) => {
       if (!file) return;

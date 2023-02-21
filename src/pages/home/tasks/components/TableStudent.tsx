@@ -150,7 +150,6 @@ export const TableStudent = () => {
   }, [evaluationsByStudent]);
 
   useEffect(() => {
-    if (assignments) console.log('assignments', assignments);
     setShowAssignments(true);
   }, [assignments]);
 
@@ -166,8 +165,6 @@ export const TableStudent = () => {
 
   const downloadFile = (evaluation: EvaluationStudentI, student_id: string) => {
     getFileToDownload(evaluation.evaluation_id, student_id).then((response) => {
-      console.log('response');
-      console.log(response);
       const type = response.headers['content-type'];
       const blob = new Blob([response.data], { type: type });
       const link = document.createElement('a');

@@ -12,7 +12,6 @@ const initialState: AuthReducerI = {
 const authReducer = (state = initialState, action: TActionAuth) => {
   switch (action.type) {
     case ActionTypesAuth.USER_LOADED:
-      console.log(action.payload);
       return {
         ...state,
         user: action.payload,

@@ -184,7 +184,6 @@ const Dates = (props: ICalendarProps) => {
           const { evaluationsByMonth } = props;
           if (evaluationsByMonth) {
             const evaluationInDay = evaluationsByMonth.filter((evaluation) => {
-              console.log(moment(evaluation.date).format('D'));
               return +moment(evaluation.date).format('D') === day;
             });
             if (evaluationInDay.length == 0) return null;

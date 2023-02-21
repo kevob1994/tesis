@@ -92,7 +92,6 @@ const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
       setFileList(newFileList);
     },
     beforeUpload: (file: any) => {
-      console.log('file');
       var reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = function () {

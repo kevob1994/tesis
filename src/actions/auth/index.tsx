@@ -106,7 +106,6 @@ export const editUser =
       });
 
       if (res.status === 201) {
-        console.log(res);
         toast.success('Se guardaron los cambios de forma exitosa');
         dispatch({
           type: ActionTypesAuth.EDIT_SUCCESS,
@@ -125,7 +124,6 @@ export const editUser =
 
 export const changePassword =
   (password: string) => async (dispatch: Dispatch) => {
-    console.log(password);
     try {
       dispatch({
         type: ActionTypesAuth.LOADING_ACTION,
@@ -138,9 +136,7 @@ export const changePassword =
         }
       );
 
-      console.log(res);
       if (res.status === 200) {
-        console.log(res);
         toast.success('Se cambio la contraseña de forma exitosa');
 
         dispatch({

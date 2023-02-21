@@ -290,7 +290,6 @@ export const createForum =
   };
 
 export const getForums = (id: string) => async (dispatch: Dispatch) => {
-  console.log('getForums');
   dispatch({
     type: ActionTypesCourse.LOADING_COURSES,
   });
@@ -298,7 +297,6 @@ export const getForums = (id: string) => async (dispatch: Dispatch) => {
     const res = await clientAxios.get<ForumI[]>(`course/${id}/forums`, {
       headers: headerAuthToken(),
     });
-    console.log(res.data);
 
     dispatch({
       type: ActionTypesCourse.GET_FORUM_SUCCESS,
@@ -397,7 +395,6 @@ export const getCommentsForum =
   };
 
 export const getForumInfo = (id: number) => async (dispatch: Dispatch) => {
-  console.log('getForumInfo');
   dispatch({
     type: ActionTypesCourse.LOADING_COURSES,
   });
@@ -406,7 +403,6 @@ export const getForumInfo = (id: number) => async (dispatch: Dispatch) => {
       headers: headerAuthToken(),
     });
     const forum = res.data.foro[0];
-    console.log(forum);
     dispatch({
       type: ActionTypesCourse.GET_INFO_FORUM,
       payload: {
@@ -647,15 +643,12 @@ export const getNotesAllStudents =
       const res = await clientAxios.get<any[]>(`grade/course/${id}/grades`, {
         headers: headerAuthToken(),
       });
-      // console.log(res);
-
       dispatch({
         type: ActionTypesCourse.GET_NOTES_ALL_STUDENTS,
         payload: res.data,
       });
     } catch (error: any) {
       console.log('error', error.response);
-      //   // const err = error.response.data.error;
       dispatch({
         type: ActionTypesCourse.REQUEST_COURSE_FAIL,
       });
@@ -675,7 +668,6 @@ export const editNotesByStudent =
           headers: headerAuthToken(),
         }
       );
-      console.log(res);
       if (res.status === 200) {
         const res = await clientAxios.get<any[]>(
           `grade/course/${course_id}/grades`,
@@ -683,7 +675,6 @@ export const editNotesByStudent =
             headers: headerAuthToken(),
           }
         );
-        // console.log(res);
 
         dispatch({
           type: ActionTypesCourse.GET_NOTES_ALL_STUDENTS,
@@ -712,14 +703,12 @@ export const getNotesByStudent = (id: string) => async (dispatch: Dispatch) => {
     const res = await clientAxios.get<NoteI[]>(`grade/course/${id}`, {
       headers: headerAuthToken(),
     });
-    console.log(res);
     dispatch({
       type: ActionTypesCourse.GET_NOTES_BY_STUDENT,
       payload: res.data,
     });
   } catch (error: any) {
     console.log('error', error.response);
-    //   // const err = error.response.data.error;
     dispatch({
       type: ActionTypesCourse.REQUEST_COURSE_FAIL,
     });

@@ -71,7 +71,6 @@ const EditProfileUser = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(user);
     if (user) setImageUrl2(user.photo);
   }, []);
 
@@ -127,7 +126,6 @@ const EditProfileUser = () => {
       setFileList(newFileList);
     },
     beforeUpload: (file: any) => {
-      console.log('file');
       var reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = function () {

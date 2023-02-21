@@ -1,5 +1,4 @@
 import { getProgram } from 'actions/course';
-import { Spin } from 'antd';
 import LoaderSpin from 'components/LoaderSpin';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

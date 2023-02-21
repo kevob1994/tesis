@@ -30,8 +30,6 @@ const SlideNav: FunctionComponent = () => {
   const [subKey, setSubKey] = useState<string[]>([]);
   const location = useLocation();
 
-  console.log(location);
-
   useEffect(() => {
     if (location && openKeys.length === 0 && subKey.length === 0) {
       switch (true) {
@@ -158,13 +156,13 @@ const SlideNav: FunctionComponent = () => {
           >
             <Link to={`/home/${id}/forum`}>Foro</Link>
           </Menu.Item>
-          <Menu.Item
+          {/* <Menu.Item
             key='6'
             icon={<VideoCameraOutlined />}
             onClick={() => handlerSubKey('6')}
           >
             <Link to={`/home/${id}/live-classes`}>Clase en vivo</Link>
-          </Menu.Item>
+          </Menu.Item> */}
         </SubMenu>
         <SubMenu
           key='sub3'

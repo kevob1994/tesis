@@ -114,10 +114,6 @@ export const NotesTeacher: React.FC = () => {
     return [];
   };
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
-  };
-
   return (
     <>
       <Modal
@@ -179,13 +175,9 @@ export const NotesTeacher: React.FC = () => {
             icon={<SaveFilled />}
             block
             onClick={() => {
-              console.log(studenSelected);
               let params = [];
 
               for (var i = 0; i < studenSelected.notes_grades.length; i++) {
-                // setOpenModal(false);
-                // setStudenSelected(undefined);
-
                 const obj = {
                   id: studenSelected.notes_grades[i].id_grade,
                   grade:
@@ -196,7 +188,6 @@ export const NotesTeacher: React.FC = () => {
 
                 params.push(obj);
               }
-              console.log(JSON.stringify(params));
               if (id) editNotes(id, JSON.stringify(params));
               setOpenModal(false);
             }}

@@ -9,14 +9,12 @@ const initialState: AlertReducerI = {
 const alertReducer = (state = initialState, action: TActionAlert) => {
   switch (action.type) {
     case ActionTypesAlert.SUCCESS_ALERT:
-      console.log(action.payload);
       return {
         ...state,
         show: true,
         type: StatusModalE.SUCCESS,
       };
     case ActionTypesAlert.ERROR_ALERT:
-      console.log(action.payload);
       return {
         ...state,
         show: true,
