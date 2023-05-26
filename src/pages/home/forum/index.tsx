@@ -15,11 +15,7 @@ import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { ListElements } from '../../../components';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  ForumParamsI,
-  listItemsI,
-  StoreI,
-} from '../../../utils/interfaces';
+import { ForumParamsI, listItemsI, StoreI } from '../../../utils/interfaces';
 import { UploadOutlined } from '@ant-design/icons';
 import './index.scss';
 import TextArea from 'antd/lib/input/TextArea';
@@ -259,14 +255,9 @@ const ForumRoomPage = () => {
       </Modal>
       <div className='content-module'>
         <div>
-          <h1>Foro</h1>
           <Row align='middle' gutter={50}>
             <Col span={20}>
-              <Search
-                size='large'
-                placeholder='input search text'
-                onSearch={onSearch}
-              />
+              <h1>Foro</h1>
             </Col>
             <Col span={4}>
               <Button
@@ -294,7 +285,7 @@ const ForumRoomPage = () => {
             </Col>
           </Row>
         ) : (
-					<LoaderSpin />
+          <LoaderSpin />
         )}
       </div>
     </>

@@ -2,6 +2,7 @@ import React, {
   Dispatch,
   FunctionComponent,
   SetStateAction,
+  useEffect,
   useState,
 } from 'react';
 import {
@@ -22,8 +23,8 @@ import {
 } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import moment from 'moment';
-import { dateFormatTime } from 'utils/const';
-import { ITableEvaluations } from 'utils/interfaces';
+import { dateFormat, dateFormatTime } from 'utils/const';
+import { CourseFormI, ITableEvaluations } from 'utils/interfaces';
 import './index.scss';
 import { toast } from 'react-toastify';
 
@@ -33,6 +34,7 @@ interface IStepEvaluationPlanProps {
   listEvaluations: ITableEvaluations[];
   setListEvaluations: Dispatch<SetStateAction<ITableEvaluations[]>>;
   openModalCancel: () => void;
+  formCourse: CourseFormI;
 }
 
 const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
@@ -41,9 +43,12 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
   openModalCancel,
   listEvaluations,
   setListEvaluations,
+  formCourse,
 }) => {
   const [form] = Form.useForm();
   const [emptyForm, setEmptyForm] = useState(false);
+
+  const { date_begin, date_finish } = formCourse;
 
   const addEvaluation = () => {
     setListEvaluations([
@@ -51,7 +56,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
       {
         name: '',
         description: '',
-        date: new Date(),
+        date: date_begin.toDate(),
         value: '',
       },
     ]);
@@ -91,6 +96,19 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
     setListEvaluations(newData);
   };
 
+  useEffect(() => {
+    if (listEvaluations.length === 0)
+      setListEvaluations([
+        ...listEvaluations,
+        {
+          name: '',
+          description: '',
+          date: date_begin.toDate(),
+          value: '',
+        },
+      ]);
+  }, []);
+
   const columns: ColumnProps<ITableEvaluations>[] = [
     {
       title: 'Evaluación',
@@ -126,6 +144,15 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
               if (e !== null) dateChange('date', index, e);
             }}
             onPanelChange={() => {}}
+            disabledDate={(current) => {
+              let starDate = moment(date_begin).format('YYYY-MM-DD');
+              let endDate = moment(date_finish).format('YYYY-MM-DD');
+              return (
+                current &&
+                (current > moment(endDate, 'YYYY-MM-DD') ||
+                  current < moment(starDate, 'YYYY-MM-DD'))
+              );
+            }}
           />
         );
       },
@@ -165,8 +192,13 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
     if (validateEvaluationPlanEmpty())
       return toast.error('Todos los campos son requeridos');
 
+    if (validateDate())
+      return toast.error(
+        'Todas las fechas deben estar entre la fecha de inicio y fecha fin del curso'
+      );
+
     if (listEvaluations.length === 0)
-      return toast.error('Requiere de al menos una evaluación');
+      return toast.error('Requiere al menos una evaluación');
 
     setEmptyForm(false);
     nextStep();
@@ -182,9 +214,21 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
       }))
       .filter((evaluation) =>
         Object.values(evaluation).some(
-          (x) => x === null || x.toString().trim() === '' || x === 0
+          (x) =>
+            x === null ||
+            x?.toString().trim() === '' ||
+            x === 0 ||
+            x === undefined
         )
       );
+
+    return list.length > 0;
+  };
+
+  const validateDate = () => {
+    const list = listEvaluations.filter((evaluation) => {
+      moment(evaluation.date).isBetween(date_begin, date_finish);
+    });
 
     return list.length > 0;
   };
@@ -197,6 +241,11 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
             Agregar Evaluación
           </Button>
         </Row>
+        <p style={{ fontWeight: 'bold', color: 'gray'}}>Fecha inicio: {date_begin.format(dateFormat)}</p>
+        <div style={{ marginTop: 10, fontWeight: 'bold', color: 'gray' }}>
+          <p>Fecha fin: {date_finish.format(dateFormat)}</p>
+        </div>
+
         {emptyForm ? (
           <Alert description='Todos los campos son requeridos' type='error' />
         ) : null}

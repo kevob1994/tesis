@@ -319,7 +319,7 @@ const EditProfileUser = () => {
                       rules={[
                         {
                           type: 'email',
-                          message: 'El correo es invalido',
+                          message: 'El correo es inválido',
                         },
                         { required: true, message: 'Campo requerido' },
                       ]}

@@ -9,8 +9,6 @@ import {
   Upload,
   Image,
   Select,
-  Modal,
-  Spin,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { validatePassword } from '../../utils/validations';
@@ -23,7 +21,6 @@ import { dateFormat, genderList, roleList } from '../../utils/const';
 import { Link, Navigate } from 'react-router-dom';
 import { GenderE, RoleE, StoreI } from '../../utils/interfaces';
 import { register } from '../../actions/auth';
-import { Loader } from '../../components';
 
 const Register = () => {
   const {
@@ -144,6 +141,7 @@ const Register = () => {
                     value={name}
                     defaultValue={name}
                     onChange={({ target }) => onChange(target.value, 'name')}
+										placeholder='Nombre'
                   />
                 </Form.Item>
               </Col>
@@ -162,18 +160,19 @@ const Register = () => {
                     onChange={({ target }) =>
                       onChange(target.value, 'lastname')
                     }
+										placeholder='Apellido'
                   />
                 </Form.Item>
               </Col>
 
               <Col span={12}>
                 <Form.Item
-                  label='Correo'
+                  label='Email'
                   name='email'
                   rules={[
                     {
                       type: 'email',
-                      message: 'El correo es invalido',
+                      message: 'El email es inválido, no tiene el formato correcto',
                     },
                     { required: true, message: 'Campo requerido' },
                   ]}
@@ -184,6 +183,7 @@ const Register = () => {
                     value={email}
                     defaultValue={email}
                     onChange={({ target }) => onChange(target.value, 'email')}
+										placeholder='ejemplo@correo.com'
                   />
                 </Form.Item>
               </Col>
@@ -199,6 +199,7 @@ const Register = () => {
                     size='large'
                     value={phone}
                     onChange={({ target }) => onChange(target.value, 'phone')}
+										placeholder='041411223344'
                   />
                 </Form.Item>
               </Col>
@@ -222,6 +223,7 @@ const Register = () => {
                     onChange={({ target }) =>
                       onChange(target.value, 'password')
                     }
+										placeholder='contraseña'
                   />
                 </Form.Item>
               </Col>
@@ -256,6 +258,7 @@ const Register = () => {
                     onChange={({ target }) =>
                       onChange(target.value, 'password_confirmation')
                     }
+										placeholder='confirmación de contraseña'
                   />
                 </Form.Item>
               </Col>
@@ -350,6 +353,7 @@ const Register = () => {
                     onChange={({ target }) =>
                       onChange(target.value, 'biography')
                     }
+										placeholder='Breve biografía'
                   />
                 </Form.Item>
               </Col>
@@ -374,7 +378,12 @@ const Register = () => {
             </div>
             <Row justify='space-between'>
               <Link to='/login'>
-                <Button size='large' type='primary' ghost>
+                <Button
+                  size='large'
+                  type='primary'
+                  ghost
+                  disabled={auth.isLoadingAction}
+                >
                   Volver
                 </Button>
               </Link>
@@ -384,6 +393,7 @@ const Register = () => {
                   htmlType='submit'
                   size='large'
                   className='btn-login'
+                  loading={auth.isLoadingAction}
                 >
                   Registrarse
                 </Button>

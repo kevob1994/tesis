@@ -22,7 +22,7 @@ export interface UserLoginFormI {
 export const register =
   (params: UserRegisterFormI) => async (dispatch: Dispatch) => {
     dispatch({
-      type: ActionTypesAuth.LOADING,
+      type: ActionTypesAuth.LOADING_ACTION,
     });
     try {
       const res = await clientAxios.post<AxiosAuth>('register', params);
@@ -36,11 +36,14 @@ export const register =
         alertError();
       }
     } catch (error: any) {
-      alertError();
       dispatch({
         type: ActionTypesAuth.REQUEST_AUTH_FAIL,
       });
-      alertError();
+      if (error?.response?.data?.message === "802") {
+        alertError('Ya existe un usuario con el mail');
+      } else {
+        alertError();
+      }
     }
   };
 
@@ -58,10 +61,10 @@ export const login = (params: UserLoginFormI) => async (dispatch: Dispatch) => {
         payload: res.data,
       });
     } else {
-      alertError('Verifique sus datos e intente nuevamente');
+      alertError('Correo o contraseña inválido, verifique sus datos e intente nuevamente');
     }
   } catch (error: any) {
-    alertError('Verifique sus datos e intente nuevamente');
+    alertError('Correo o contraseña inválido, verifique sus datos e intente nuevamente');
     dispatch({
       type: ActionTypesAuth.REQUEST_AUTH_FAIL,
     });

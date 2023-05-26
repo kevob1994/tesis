@@ -17,6 +17,7 @@ const authReducer = (state = initialState, action: TActionAuth) => {
         user: action.payload,
         isAuthenticate: true,
         loading: false,
+        isLoadingAction: false,
       };
 
     case ActionTypesAuth.REGISTER_SUCCESS:
@@ -28,6 +29,7 @@ const authReducer = (state = initialState, action: TActionAuth) => {
         user,
         isAuthenticate: true,
         loading: false,
+        isLoadingAction: false,
       };
 
     case ActionTypesAuth.EDIT_SUCCESS:
@@ -46,6 +48,7 @@ const authReducer = (state = initialState, action: TActionAuth) => {
         token: null,
         isAuthenticate: false,
         loading: false,
+        isLoadingAction: false,
       };
 
     case ActionTypesAuth.LOGOUT:

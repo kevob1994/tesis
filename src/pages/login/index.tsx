@@ -8,7 +8,6 @@ import { login } from '../../actions/auth';
 
 import './index.scss';
 import { StoreI } from '../../utils/interfaces';
-import { Loader } from '../../components';
 
 const LoginPage = () => {
   const { email, password, onChange } = useForm({
@@ -49,7 +48,7 @@ const LoginPage = () => {
                 rules={[
                   {
                     type: 'email',
-                    message: 'El correo es invalido',
+                    message: 'El correo es inválido',
                   },
                   { required: true, message: 'Ingrese su correo' },
                 ]}
@@ -66,7 +65,7 @@ const LoginPage = () => {
                 label='Contraseña'
                 name='password'
                 rules={[
-                  { required: true, message: 'Please input your password!' },
+                  { required: true, message: 'Ingrese su contraseña' },
                   // {
                   //   validator: validatePassword,
                   // },
@@ -98,11 +97,11 @@ const LoginPage = () => {
                   </Button>
                 </Link>
 
-                <Link to='/register'>
+                {/* <Link to='/register'>
                   <Button size='large' type='link' block>
                     Recuperar contraseña
                   </Button>
-                </Link>
+                </Link> */}
               </Row>
             </Form>
           </Col>

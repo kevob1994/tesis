@@ -254,7 +254,7 @@ export const createForum =
       type: ActionTypesCourse.LOADING_ACTION,
     });
     try {
-      const response = await clientAxios.post<{ foro: ForumI }>(
+      await clientAxios.post<{ foro: ForumI }>(
         'forum',
         params,
         {

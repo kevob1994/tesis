@@ -1,6 +1,4 @@
-import {
-  InboxOutlined,
-} from '@ant-design/icons';
+import { InboxOutlined } from '@ant-design/icons';
 import {
   Button,
   Col,
@@ -156,7 +154,7 @@ const LibraryPage = () => {
         const type = response.headers['content-type'];
         const blob = new Blob([response.data], { type: type });
         const link = document.createElement('a');
-				link.setAttribute('download', name_file);
+        link.setAttribute('download', name_file);
         link.href = window.URL.createObjectURL(blob);
         // link.download = 'file.xlsx';
         link.click();
@@ -169,7 +167,7 @@ const LibraryPage = () => {
       title: item.title,
       description: item.description,
       type: item.extension,
-			user_id: item.user_id
+      user_id: item.user_id,
     }));
   };
 
@@ -265,14 +263,9 @@ const LibraryPage = () => {
       </Modal>
       <div className='content-module'>
         <div>
-          <h1>Biblioteca</h1>
           <Row align='middle' gutter={50}>
             <Col span={20}>
-              <Search
-                size='large'
-                placeholder='input search text'
-                onSearch={onSearch}
-              />
+              <h1>Biblioteca</h1>
             </Col>
             <Col span={4}>
               <Button
@@ -301,7 +294,7 @@ const LibraryPage = () => {
             </Col>
           </Row>
         ) : (
-					<LoaderSpin />
+          <LoaderSpin />
         )}
       </div>
     </>

@@ -18,31 +18,20 @@ import './index.scss';
 import moment from 'moment';
 import { dateFormat } from 'utils/const';
 import { useForm } from 'hooks/useForm';
-import {
-  ITableEvaluations,
-  StatusModalE,
-  StoreI,
-} from 'utils/interfaces';
+import { ITableEvaluations, StatusModalE, StoreI } from 'utils/interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import { getListEvaluationsCourse } from 'actions/course';
 
 const { Step } = Steps;
 
-const initEvaluation: ITableEvaluations = {
-  id: null,
-  name: '',
-  description: '',
-  date: new Date(),
-  value: '',
-};
 
 const CreateCoursePage: FunctionComponent = () => {
   const [current, setCurrent] = useState(0);
   const [fileList, setFileList] = useState<any[]>([]);
   const [visibleModal, setVisibleModal] = useState(false);
-  const [listEvaluations, setListEvaluations] = useState<ITableEvaluations[]>([
-    initEvaluation,
-  ]);
+  const [listEvaluations, setListEvaluations] = useState<ITableEvaluations[]>(
+    []
+  );
 
   const dispatch = useDispatch();
   const loadEvaluations = (id: string) =>
@@ -52,9 +41,7 @@ const CreateCoursePage: FunctionComponent = () => {
   const { courses, evaluations } = useSelector(
     (state: StoreI) => state.courses
   );
-  const { show, type } = useSelector(
-    (state: StoreI) => state.alert
-  );
+  const { show, type } = useSelector((state: StoreI) => state.alert);
 
   const courseInfo = (id: number) => {
     const course = courses.find((course) => course.id === Number(id));
@@ -98,7 +85,7 @@ const CreateCoursePage: FunctionComponent = () => {
     photo: courseInfo(Number(id))?.photo,
   });
 
-	useEffect(() => {
+  useEffect(() => {
     if (id) loadEvaluations(id);
   }, []);
 
@@ -117,14 +104,14 @@ const CreateCoursePage: FunctionComponent = () => {
 
   useEffect(() => {
     if (type === StatusModalE.SUCCESS && show) {
-      setListEvaluations([initEvaluation]);
+      setListEvaluations([]);
       navigate('/', { replace: true });
     }
   }, [show, type]);
 
   useEffect(() => {
     if (type === StatusModalE.SUCCESS && show) {
-      setListEvaluations([initEvaluation]);
+      setListEvaluations([]);
       navigate('/', { replace: true });
     }
   }, [show, type]);
@@ -180,6 +167,7 @@ const CreateCoursePage: FunctionComponent = () => {
             listEvaluations={listEvaluations}
             setListEvaluations={setListEvaluations}
             openModalCancel={openModalCancel}
+            formCourse={formCourse}
           />
         );
       case 3:

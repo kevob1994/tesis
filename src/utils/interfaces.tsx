@@ -113,7 +113,7 @@ export interface ITableEvaluations {
   id?: number | null;
   name: string;
   description: string;
-  date: Date;
+  date?: Date;
   value: number | string;
 }
 

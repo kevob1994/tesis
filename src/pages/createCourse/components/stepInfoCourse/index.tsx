@@ -108,6 +108,12 @@ const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
     showUploadList: false,
   };
 
+  useEffect(() => {
+    if (date_finish.isBefore(date_begin)) {
+      if (date_begin) onChange(date_begin, 'date_finish');
+    }
+  }, [date_begin]);
+
   return (
     <div className='content'>
       <div className='content-course-form-row '>
@@ -121,6 +127,7 @@ const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
           onFinish={onFinish}
           autoComplete='off'
           requiredMark={false}
+					key={`date_finish-${date_finish.toDate()}}`}
         >
           <Row gutter={50}>
             <Col span={12} flex={1}>
@@ -133,7 +140,6 @@ const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
                 <Input
                   size='large'
                   value={full_name}
-                  defaultValue={full_name}
                   onChange={({ target }) => onChange(target.value, 'full_name')}
                 />
               </Form.Item>
@@ -149,7 +155,6 @@ const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
                 <Input
                   size='large'
                   value={short_name}
-                  defaultValue={short_name}
                   onChange={({ target }) =>
                     onChange(target.value, 'short_name')
                   }
@@ -167,7 +172,6 @@ const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
                 <Select
                   size='large'
                   value={category}
-                  defaultValue={category}
                   onChange={(value) => onChange(value, 'category')}
                 >
                   {categoryClass.map((category) => (
@@ -191,8 +195,15 @@ const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
                   placeholder='Seleccione una fecha'
                   value={date_begin}
                   format={dateFormat}
-                  defaultValue={date_begin}
-                  onChange={(date) => selectDate(date, 'date_begin')}
+                  onChange={(date) => {
+                    selectDate(date, 'date_begin');
+                    console.log('date_finish.isBefore(date)');
+                    console.log(date_finish.isBefore(date));
+                    console.log(date);
+                    // if (date_finish.isBefore(date)) {
+                    //   if (date) onChange(date, 'date_finish');
+                    // }
+                  }}
                   disabledDate={(current) => {
                     let customDate = moment().format('YYYY-MM-DD');
                     return (
@@ -215,7 +226,6 @@ const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
                   placeholder='Seleccione una fecha'
                   value={date_finish}
                   format={dateFormat}
-                  defaultValue={date_finish}
                   onChange={(date) => selectDate(date, 'date_finish')}
                   disabledDate={(current) => {
                     let customDate = moment(date_begin).format('YYYY-MM-DD');
@@ -238,7 +248,6 @@ const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
                   size='large'
                   autoComplete='description'
                   value={description}
-                  defaultValue={description}
                   onChange={({ target }) =>
                     onChange(target.value, 'description')
                   }

@@ -40,7 +40,7 @@ export const categoryClass = [
   { id: MEDICINE, category: 'Medicina' },
   { id: OTHER, category: 'Otro' },
   { id: CHEMISTRY, category: 'Química' },
-  { id: TECHNOLOGY, category: 'Química' },
+  { id: TECHNOLOGY, category: 'Tecnología' },
 ];
 
 export const TypeFiles = {
