@@ -8,6 +8,7 @@ import { deleteCourse, getCourses, joinCourse } from '../../actions/course';
 import { listItemsI, RoleE, StoreI } from '../../utils/interfaces';
 import { useForm } from '../../hooks/useForm';
 import LoaderSpin from 'components/LoaderSpin';
+import { closeModal } from 'actions/alert';
 
 const ListCourses = () => {
   const [form] = Form.useForm();
@@ -32,6 +33,7 @@ const ListCourses = () => {
 
   useEffect(() => {
     loadCourses();
+		closeModal()
   }, []);
 
   const showModal = (code: string) => {
