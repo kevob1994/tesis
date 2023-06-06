@@ -81,7 +81,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
     index: number,
     value?: moment.Moment | undefined
   ) => {
-    const newData: any = [...listEvaluations];
+    const newData: any = listEvaluations;
     newData[index][key] = value ? value : new Date();
     setListEvaluations(newData);
   };
@@ -227,9 +227,11 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
 
   const validateDate = () => {
     const list = listEvaluations.filter((evaluation) => {
-      moment(evaluation.date).isBetween(date_begin, date_finish);
+      return !(
+        moment(evaluation.date).isBetween(date_begin, date_finish) ||
+        moment(evaluation.date).isSame(date_begin, 'date')
+      );
     });
-
     return list.length > 0;
   };
   return (
@@ -241,7 +243,9 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
             Agregar Evaluación
           </Button>
         </Row>
-        <p style={{ fontWeight: 'bold', color: 'gray'}}>Fecha inicio: {date_begin.format(dateFormat)}</p>
+        <p style={{ fontWeight: 'bold', color: 'gray' }}>
+          Fecha inicio: {date_begin.format(dateFormat)}
+        </p>
         <div style={{ marginTop: 10, fontWeight: 'bold', color: 'gray' }}>
           <p>Fecha fin: {date_finish.format(dateFormat)}</p>
         </div>

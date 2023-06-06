@@ -24,7 +24,6 @@ import { getListEvaluationsCourse } from 'actions/course';
 
 const { Step } = Steps;
 
-
 const CreateCoursePage: FunctionComponent = () => {
   const [current, setCurrent] = useState(0);
   const [fileList, setFileList] = useState<any[]>([]);
@@ -90,7 +89,7 @@ const CreateCoursePage: FunctionComponent = () => {
   }, []);
 
   useEffect(() => {
-    if (evaluations.length > 0)
+    if (evaluations.length > 0 && id) {
       setListEvaluations(
         evaluations.map((evaluations) => ({
           id: evaluations.id,
@@ -100,6 +99,16 @@ const CreateCoursePage: FunctionComponent = () => {
           value: evaluations.value,
         }))
       );
+    } else {
+      setListEvaluations([
+        {
+          name: '',
+          description: '',
+          date: date_begin.toDate(),
+          value: '',
+        },
+      ]);
+    }
   }, [evaluations]);
 
   useEffect(() => {

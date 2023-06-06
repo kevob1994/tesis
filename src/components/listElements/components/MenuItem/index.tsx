@@ -25,11 +25,11 @@ export const MenuItem: FunctionComponent<MenuItemPropsI> = ({
   editItem,
   handlerShare,
 }) => {
-
   const menu = (
     <Menu>
       {shareElement && (
         <Menu.Item
+          key='share'
           icon={<ShareAltOutlined />}
           onClick={(e) => {
             if (item.code) handlerShare(item.code);
@@ -40,6 +40,7 @@ export const MenuItem: FunctionComponent<MenuItemPropsI> = ({
       )}
       {editItem && (
         <Menu.Item
+          key='edit'
           icon={<EditOutlined />}
           onClick={(e) => {
             editItem(item.id);
@@ -50,6 +51,7 @@ export const MenuItem: FunctionComponent<MenuItemPropsI> = ({
       )}
       {deleteItem && (
         <Menu.Item
+          key='delete'
           icon={<DeleteOutlined />}
           onClick={(e) => {
             deleteItem(item);

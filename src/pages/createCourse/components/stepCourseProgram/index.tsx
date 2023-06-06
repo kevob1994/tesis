@@ -89,7 +89,7 @@ const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
                 editorState={editorValue}
                 onEditorStateChange={onEditorStateChange}
                 toolbar={{
-									options: ['inline', 'blockType', 'fontSize', 'list', 'history', 'colorPicker', 'emoji'],
+									options: ['inline', 'blockType', 'fontSize', 'list', 'history', 'colorPicker'],
                   inline: {
                     inDropdown: true,
                     options: ['bold', 'italic', 'underline'],

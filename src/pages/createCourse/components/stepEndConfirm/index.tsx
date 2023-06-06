@@ -42,6 +42,14 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
     if (fileList.length > 0) setImageUrl2(URL.createObjectURL(fileList[0]));
   }, [fileList]);
 
+	
+  useEffect(() => {
+    if (id) {
+      setImageUrl2(formCourse.photo);
+    }
+  }, []);
+
+
   const columns: ColumnProps<ITableEvaluations>[] = [
     {
       title: 'Evaluación',
@@ -104,7 +112,7 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
   return (
     <div className='content'>
       <div className='steps-action' style={{ marginTop: 20 }}>
-        <h1>Verificación de la información</h1>
+        <h1>Verificación de información</h1>
 
         <Row gutter={50}>
           <Col span={6} flex={1}>
