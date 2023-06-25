@@ -10,7 +10,6 @@ import {
   Image,
   Select,
   Modal,
-  Spin,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
@@ -26,6 +25,7 @@ import { validatePassword } from '../../utils/validations';
 import { HeaderNav } from '../../components';
 
 const EditProfileUser = () => {
+  const [form] = Form.useForm();
   const { user, isLoadingAction } = useSelector((store: StoreI) => store.auth);
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -74,6 +74,14 @@ const EditProfileUser = () => {
     if (user) setImageUrl2(user.photo);
   }, []);
 
+  useEffect(() => {
+    if (!openModal) {
+      onChangePasswords('', 'new_password');
+      onChangePasswords('', 'confirmation_new_password');
+      form.resetFields();
+    }
+  }, [openModal]);
+
   const HandleEditProfile = () => {
     if (user)
       dispatch(
@@ -95,6 +103,7 @@ const EditProfileUser = () => {
 
   const HandleEditPassword = (new_password: string) => {
     dispatch(changePassword(new_password));
+    form.resetFields();
   };
 
   const onFinish = () => {
@@ -167,6 +176,7 @@ const EditProfileUser = () => {
             onFinish={onFinishPassword}
             autoComplete='off'
             requiredMark={false}
+            form={form}
           >
             <Row gutter={50}>
               <Col span={24}>
@@ -286,7 +296,6 @@ const EditProfileUser = () => {
                       <Input
                         size='large'
                         value={name}
-                        defaultValue={name}
                         onChange={({ target }) =>
                           onChange(target.value, 'name')
                         }
@@ -304,7 +313,6 @@ const EditProfileUser = () => {
                       <Input
                         size='large'
                         value={lastname}
-                        defaultValue={lastname}
                         onChange={({ target }) =>
                           onChange(target.value, 'lastname')
                         }
@@ -328,7 +336,6 @@ const EditProfileUser = () => {
                       <Input
                         size='large'
                         value={email}
-                        defaultValue={email}
                         onChange={({ target }) =>
                           onChange(target.value, 'email')
                         }
@@ -362,7 +369,6 @@ const EditProfileUser = () => {
                       <DatePicker
                         size='large'
                         placeholder='Seleccione una fecha'
-                        defaultValue={birthday}
                         value={birthday}
                         format={dateFormat}
                         onChange={(date) => selectDate(date, 'birthday')}
@@ -383,7 +389,6 @@ const EditProfileUser = () => {
                         onChange={(value) => {
                           onChange(value, 'gender');
                         }}
-                        defaultValue={gender}
                       >
                         {genderList.map((gender) => (
                           <Select.Option key={gender.id}>

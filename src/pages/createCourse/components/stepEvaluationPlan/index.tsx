@@ -149,7 +149,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
               let endDate = moment(date_finish).format('YYYY-MM-DD');
               return (
                 current &&
-                (current > moment(endDate, 'YYYY-MM-DD') ||
+                (current > moment(endDate, 'YYYY-MM-DD').add(1, 'day') ||
                   current < moment(starDate, 'YYYY-MM-DD'))
               );
             }}

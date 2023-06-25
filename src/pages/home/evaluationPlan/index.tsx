@@ -62,9 +62,9 @@ const EvaluationPlanPage = () => {
           <Table
             pagination={false}
             columns={columns}
-            dataSource={evaluations.map((evaluation) => ({
+            dataSource={evaluations.map((evaluation,) => ({
               ...evaluation,
-              key: evaluation.course_id,
+              key: evaluation.id,
             }))}
           />
         </>

@@ -21,6 +21,7 @@ import { useForm } from 'hooks/useForm';
 import { ITableEvaluations, StatusModalE, StoreI } from 'utils/interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import { getListEvaluationsCourse } from 'actions/course';
+import { closeModal } from 'actions/alert';
 
 const { Step } = Steps;
 
@@ -35,6 +36,9 @@ const CreateCoursePage: FunctionComponent = () => {
   const dispatch = useDispatch();
   const loadEvaluations = (id: string) =>
     dispatch(getListEvaluationsCourse(id));
+
+  const closeAlert = () => dispatch(closeModal());
+
   const { id } = useParams();
   let navigate = useNavigate();
   const { courses, evaluations } = useSelector(
@@ -78,7 +82,10 @@ const CreateCoursePage: FunctionComponent = () => {
     short_name: courseInfo(Number(id))?.short_name,
     category: courseInfo(Number(id))?.category,
     date_begin: moment(courseInfo(Number(id))?.date_begin, dateFormat),
-    date_finish: moment(courseInfo(Number(id))?.date_finish, dateFormat),
+    date_finish: moment(courseInfo(Number(id))?.date_finish, dateFormat).add(
+      1,
+      'day'
+    ),
     description: courseInfo(Number(id))?.description,
     program: courseInfo(Number(id))?.program,
     photo: courseInfo(Number(id))?.photo,
@@ -113,15 +120,8 @@ const CreateCoursePage: FunctionComponent = () => {
 
   useEffect(() => {
     if (type === StatusModalE.SUCCESS && show) {
-      setListEvaluations([]);
       navigate('/', { replace: true });
-    }
-  }, [show, type]);
-
-  useEffect(() => {
-    if (type === StatusModalE.SUCCESS && show) {
-      setListEvaluations([]);
-      navigate('/', { replace: true });
+			closeAlert()
     }
   }, [show, type]);
 
