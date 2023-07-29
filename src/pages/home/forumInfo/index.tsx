@@ -138,7 +138,16 @@ const ForumInfoPage = () => {
                   <>
                     {comments.length <= 0 ? (
                       <>
-                        <p>No tiene comentarios</p>
+                        <p
+                          style={{
+                            textAlign: 'center',
+                            padding: 20,
+                            fontWeight: 'bold',
+                            fontSize: '1.5rem',
+                          }}
+                        >
+                          No tiene comentarios
+                        </p>
                       </>
                     ) : (
                       comments.map((comment) => <Comment comment={comment} />)
@@ -151,6 +160,7 @@ const ForumInfoPage = () => {
                     size='large'
                     autoComplete='message'
                     value={comment}
+                    placeholder='Nuevo comentario'
                     onChange={(e) => {
                       setComment(e.target.value);
                     }}
@@ -161,6 +171,7 @@ const ForumInfoPage = () => {
                     size='large'
                     onClick={handlerComment}
                     loading={loadingAction}
+                    disabled={comment === '' && !comment}
                   >
                     Comentar
                   </Button>

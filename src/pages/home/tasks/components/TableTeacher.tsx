@@ -112,6 +112,8 @@ export const TableTeacher = () => {
       dataIndex: 'actions',
       key: 'actions',
       render: (text, record, index) => {
+        console.log('record');
+        console.log(record);
         return (
           <>
             <div>
@@ -183,11 +185,16 @@ export const TableTeacher = () => {
           <Col span={12} style={{ padding: '0px 10px' }}>
             <div>
               <Table
+                rowSelection={{
+                  selectedRowKeys: assignmentSelect
+                    ? [assignmentSelect?.id || 0]
+                    : [],
+                }}
                 pagination={false}
                 columns={columnsTeacher}
                 dataSource={listEvaluations.map((evaluation) => ({
                   ...evaluation,
-                  key: evaluation.course_id,
+                  key: evaluation.id,
                 }))}
               />
             </div>

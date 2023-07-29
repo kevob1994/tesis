@@ -93,7 +93,7 @@ export const TableStudent = () => {
         saveFile(obj);
       } else {
         message.error(
-          `${file.name} debe tener formato pdf, word, excel, png, jpg o pjeg`
+          `${file.name} debe tener formato pdf, word, excel, png, jpg`
         );
       }
 
@@ -132,7 +132,7 @@ export const TableStudent = () => {
         updateFile(obj);
       } else {
         message.error(
-          `${file.name} debe tener formato pdf, word, excel, png, jpg o pjeg`
+          `${file.name} debe tener formato pdf, word, excel, png, jpg`
         );
       }
 
@@ -221,7 +221,7 @@ export const TableStudent = () => {
                     >
                       <Tooltip
                         placement='bottom'
-                        title='Modificar archivo archivo (entrega)'
+                        title='Modificar archivo (entrega)'
                       >
                         <Button
                           type='primary'

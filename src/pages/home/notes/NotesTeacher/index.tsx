@@ -68,7 +68,7 @@ export const NotesTeacher: React.FC = () => {
             {' '}
             <Tooltip
               placement='bottom'
-              title='Modificar archivo archivo (entrega)'
+              title='Modificar nota del estudiante'
             >
               <Button
                 type='primary'

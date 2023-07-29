@@ -146,7 +146,7 @@ const ForumRoomPage = () => {
       description: forum.description,
       image: forum.photo,
       user: {
-        name: `testing`,
+        name: forum.user_name,
         photo: null,
       },
     }));
@@ -220,7 +220,7 @@ const ForumRoomPage = () => {
           <Row gutter={50}>
             <Col span={24} flex={1}>
               <Form.Item
-                label='Nombre del tema a tratar'
+                label='Nombre del tema'
                 name='name'
                 rules={[{ required: true, message: 'Campo requerido' }]}
               >
@@ -229,7 +229,7 @@ const ForumRoomPage = () => {
             </Col>
             <Col span={24}>
               <Form.Item
-                label='Decripción'
+                label='Descripción'
                 name='description'
                 rules={[{ required: true, message: 'Campo requerido' }]}
               >
@@ -280,7 +280,7 @@ const ForumRoomPage = () => {
                 deleteItem={openModalRemoveCourse}
                 url={`${location.pathname}/id`}
                 editItem={handlerEdit}
-                textEmpty='No existen temas de debates creados'
+                textEmpty='No existe ningún tema de conversación creado actualmente'
               />
             </Col>
           </Row>

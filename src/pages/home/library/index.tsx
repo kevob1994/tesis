@@ -26,6 +26,7 @@ import { TypeFiles } from '../../../utils/const';
 import {
   LibraryThemeParamsI,
   listFilesI,
+  RoleE,
   StoreI,
 } from '../../../utils/interfaces';
 import { getImageFile } from '../../../utils/utils';
@@ -43,11 +44,15 @@ const LibraryPage = () => {
   const [imageUrl2, setImageUrl2] = useState<any>();
   const [FileEdit, setFileEdit] = useState<any>(null);
   const [openModalDelete, setOpenModalDelete] = useState(false);
+  const { user } = useSelector((state: StoreI) => state.auth);
   const [librarySelect, setLibraryelect] = useState<listFilesI | null>(null);
 
   const { library, loadingAction, forum, loading } = useSelector(
     (store: StoreI) => store.courses
   );
+
+  console.log('user');
+  console.log(user);
 
   const [error, setError] = useState(false);
 
@@ -68,6 +73,10 @@ const LibraryPage = () => {
       loadData(id);
     }
   }, []);
+
+  useEffect(() => {
+    if (!show) setFileList([]);
+  }, [show]);
 
   const openModalCreate = () => {
     setShow(true);
@@ -120,7 +129,7 @@ const LibraryPage = () => {
         setFileList([file]);
       } else {
         message.error(
-          `${file.name} debe tener formato pdf, word, excel, png, jpg o pjeg`
+          `${file.name} debe tener formato pdf, word, excel, png, jpg`
         );
       }
 
@@ -221,14 +230,15 @@ const LibraryPage = () => {
                 Haga clic o arrastre el archivo a esta área para cargarlo
               </p>
               <p className='ant-upload-hint'>
-                Solo permite la carga de archivos PDF, Word y Excel
+                Solo permite la carga de archivos PDF, Word y Excel o archivos
+                de imagen PNG y JPG
               </p>
             </Dragger>
           </div>
           <Row gutter={50}>
             <Col span={24} flex={1}>
               <Form.Item
-                label='Título del tema a tratar'
+                label='Título del archivo'
                 name='name'
                 rules={[{ required: true, message: 'Campo requerido' }]}
               >
@@ -237,7 +247,7 @@ const LibraryPage = () => {
             </Col>
             <Col span={24}>
               <Form.Item
-                label='Decripción'
+                label='Descripción'
                 name='description'
                 rules={[{ required: true, message: 'Campo requerido' }]}
               >
@@ -268,14 +278,16 @@ const LibraryPage = () => {
               <h1>Biblioteca</h1>
             </Col>
             <Col span={4}>
-              <Button
-                size='large'
-                type='primary'
-                block
-                onClick={openModalCreate}
-              >
-                Crear
-              </Button>
+              {user?.role === RoleE.TEACHER  && (
+                <Button
+                  size='large'
+                  type='primary'
+                  block
+                  onClick={openModalCreate}
+                >
+                  Crear
+                </Button>
+              )}
               {/* <Button size='large' type='primary' block onClick={downloadFile}>
                 download
               </Button> */}
