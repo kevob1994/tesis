@@ -51,11 +51,11 @@ export const TableStudent = () => {
   const loadEvaluations = (id: string) =>
     dispatch(getListEvaluationsCourseByStudent(id));
 
-  const saveFile = (params: EvaluationFileParamsI) =>
-    dispatch(uploadEvaluationFile(params));
+  const saveFile = (params: EvaluationFileParamsI, id_course: string) =>
+    dispatch(uploadEvaluationFile(params, id_course));
 
-  const updateFile = (params: EvaluationFileParamsI) =>
-    dispatch(updateEvaluationFile(params));
+  const updateFile = (params: EvaluationFileParamsI, id_course: string) =>
+    dispatch(updateEvaluationFile(params, id_course));
 
   useEffect(() => {
     if (!loadingAction) {
@@ -90,7 +90,7 @@ export const TableStudent = () => {
           id_evaluation: selectEvaluation!.evaluation_id.toString(),
         };
 
-        saveFile(obj);
+        if(id) saveFile(obj, id);
       } else {
         message.error(
           `${file.name} debe tener formato pdf, word, excel, png, jpg`
@@ -129,7 +129,7 @@ export const TableStudent = () => {
           id_evaluation: selectEvaluation!.file_id!.toString(),
         };
 
-        updateFile(obj);
+        if(id) updateFile(obj, id);
       } else {
         message.error(
           `${file.name} debe tener formato pdf, word, excel, png, jpg`
@@ -213,7 +213,8 @@ export const TableStudent = () => {
             <div>
               {record.upload ? (
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Upload {...propsUpdate} showUploadList={false}>
+                  <Upload {...propsUpdate} showUploadList={false} 
+						disabled={record.evaluation_available === 0}>
                     <div
                       onClick={() => {
                         setSelectEvaluation(record);
@@ -242,12 +243,13 @@ export const TableStudent = () => {
                         shape='circle'
                         icon={<DownloadOutlined />}
                         size='large'
+						disabled={record.evaluation_available === 0}
                       />
                     </Tooltip>
                   </div>
                 </div>
               ) : (
-                <Upload {...props} showUploadList={false}>
+                <Upload {...props} showUploadList={false} disabled={record.evaluation_available === 0}>
                   <div
                     onClick={() => {
                       setSelectEvaluation(record);
@@ -259,6 +261,7 @@ export const TableStudent = () => {
                         shape='circle'
                         icon={<UploadOutlined />}
                         size='large'
+						disabled={record.evaluation_available === 0}
                       />
                     </Tooltip>
                   </div>

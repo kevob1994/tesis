@@ -316,7 +316,7 @@ export const editForum =
       type: ActionTypesCourse.LOADING_ACTION,
     });
     try {
-      const res = await clientAxios.put<ForumI>(`forum/${id}`, params, {
+      await clientAxios.put<ForumI>(`forum/${id}`, params, {
         headers: headerAuthToken(),
       });
       dispatch({
@@ -354,7 +354,7 @@ export const newCommentForum =
       type: ActionTypesCourse.LOADING_ACTION,
     });
     try {
-      const res = await clientAxios.post<{ comment: CommentI }>(
+      await clientAxios.post<{ comment: CommentI }>(
         `comment`,
         { forum_id, content },
         {
@@ -430,7 +430,7 @@ export const deleteForum = (id: number) => async (dispatch: Dispatch) => {
     type: ActionTypesCourse.LOADING_ACTION,
   });
   try {
-    const res = await clientAxios.delete<any>(`forum/${id}`, {
+    await clientAxios.delete<any>(`forum/${id}`, {
       headers: headerAuthToken(),
     });
     dispatch({
@@ -527,7 +527,7 @@ export const deleteLibraryTheme =
       type: ActionTypesCourse.LOADING_ACTION,
     });
     try {
-      const res = await clientAxios.delete(`files/${id}`, {
+      await clientAxios.delete(`files/${id}`, {
         headers: headerAuthToken(),
       });
       dispatch({
@@ -575,12 +575,12 @@ export const getAssignments = (id: number) => async (dispatch: Dispatch) => {
 };
 
 export const uploadEvaluationFile =
-  (params: EvaluationFileParamsI) => async (dispatch: Dispatch) => {
+  (params: EvaluationFileParamsI, id_course: string) => async (dispatch: Dispatch) => {
     const formData = new FormData();
     formData.append('file', params.file);
 
     try {
-      const res = await clientAxios.post<any>(
+      await clientAxios.post<any>(
         `evaluation/${params.id_evaluation}/upload`,
         formData,
         {
@@ -595,6 +595,16 @@ export const uploadEvaluationFile =
           textBody: 'La tarea se guardo de forma correcta',
         },
       });
+	  const res = await clientAxios.get<any[]>(
+        `course/${id_course}/assignmentsStudent`,
+        {
+          headers: headerAuthToken(),
+        }
+      );
+      dispatch({
+        type: ActionTypesCourse.LIST_EVALUATIONS_BY_STUDENT_SUCCESS,
+        payload: res.data[0],
+      });
     } catch (error: any) {
       console.log('error', error.response);
       //   // const err = error.response.data.error;
@@ -605,12 +615,12 @@ export const uploadEvaluationFile =
   };
 
 export const updateEvaluationFile =
-  (params: EvaluationFileParamsI) => async (dispatch: Dispatch) => {
+  (params: EvaluationFileParamsI, id_course: string) => async (dispatch: Dispatch) => {
     const formData = new FormData();
     formData.append('file', params.file);
 
     try {
-      const res = await clientAxios.post<any>(
+      await clientAxios.post<any>(
         `assignment/${params.id_evaluation}`,
         formData,
         {
@@ -624,6 +634,17 @@ export const updateEvaluationFile =
           title: 'Entrega de tarea',
           textBody: 'La tarea se ha actualizado de forma correcta',
         },
+      });
+
+	  const res = await clientAxios.get<any[]>(
+        `course/${id_course}/assignmentsStudent`,
+        {
+          headers: headerAuthToken(),
+        }
+      );
+      dispatch({
+        type: ActionTypesCourse.LIST_EVALUATIONS_BY_STUDENT_SUCCESS,
+        payload: res.data[0],
       });
     } catch (error: any) {
       console.log('error', error.response);
@@ -741,3 +762,28 @@ export const getProgram = (id: string) => async (dispatch: Dispatch) => {
     });
   }
 };
+
+
+
+export const updateEvaluation = (id: number) => async (dispatch: Dispatch) => {
+	try {
+	  const res = await clientAxios.post<any[]>(`evaluation/aval/${id}`, {}, {
+		headers: headerAuthToken(),
+	  });
+	console.log(res)
+	} catch (error: any) {
+	  console.log('error', error.response);
+	  //   // const err = error.response.data.error;
+	  dispatch({
+		type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+	  });
+	  dispatch({
+		type: ActionTypesAlert.ERROR_ALERT,
+		payload: {
+		  title: 'Edicion de tarea',
+		  textBody:
+			'Ocurrio un error! Intente nuevamente cambiar el estado de la evaluación',
+		},
+	  });
+	}
+  };

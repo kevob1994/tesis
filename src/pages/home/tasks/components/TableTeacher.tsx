@@ -13,6 +13,8 @@ import {
 import {
   getAssignments,
   getListEvaluationsCourse,
+  getNotesByStudent,
+  updateEvaluation,
 } from '../../../../actions/course';
 import { clientAxios, headerAuthToken } from '../../../../config/axios';
 import './index.scss';
@@ -31,6 +33,7 @@ export const TableTeacher = () => {
   const loadEvaluations = (id: string) =>
     dispatch(getListEvaluationsCourse(id));
   const loadAssignments = (id: number) => dispatch(getAssignments(id));
+  const updateTask = (id_task: number) => dispatch(updateEvaluation(id_task));
 
   useEffect(() => {
     if (id) loadEvaluations(id);
@@ -41,6 +44,7 @@ export const TableTeacher = () => {
   }, [evaluations]);
 
   const onChangeCheck = (checked: boolean, index: number) => {
+	updateTask(listEvaluations[index].id)
     setListEvaluations(
       listEvaluations.map((item, i) => {
         if (index === i) {
@@ -112,8 +116,6 @@ export const TableTeacher = () => {
       dataIndex: 'actions',
       key: 'actions',
       render: (text, record, index) => {
-        console.log('record');
-        console.log(record);
         return (
           <>
             <div>

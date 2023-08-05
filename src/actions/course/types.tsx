@@ -38,6 +38,7 @@ export enum ActionTypesCourse {
   GET_NOTES_ALL_STUDENTS = 'GET_NOTES_ALL_STUDENTS',
   GET_NOTES_BY_STUDENT = 'GET_NOTES_BY_STUDENT',
   GET_PROGRAM = 'GET_PROGRAM',
+  EDIT_EVALUATION = 'EDIT_EVALUATION',
 }
 
 interface IActionCourseCreate {
@@ -163,6 +164,12 @@ interface IGetProgramByCourse {
   type: ActionTypesCourse.GET_PROGRAM;
   payload: string;
 }
+
+interface IUpdateEvaluationById {
+  type: ActionTypesCourse.EDIT_EVALUATION;
+  payload: any;
+}
+
 export type TActionCourse =
   | IActionCourseCreate
   | IActionCourseGet
@@ -190,4 +197,5 @@ export type TActionCourse =
   | IUploadEvaluationFile
   | IGetNotesAllStudents
   | IGetNotesByStudent
-  | IGetProgramByCourse;
+  | IGetProgramByCourse
+  | IUpdateEvaluationById;

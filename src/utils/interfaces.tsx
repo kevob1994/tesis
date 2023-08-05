@@ -165,6 +165,7 @@ export interface EvaluationStudentI {
   evaluation_name: string;
   upload: boolean;
   file_id?: number;
+  evaluation_available: number;
 }
 
 export interface ItemChatI {
