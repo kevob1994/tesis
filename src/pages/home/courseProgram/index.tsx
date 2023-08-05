@@ -19,7 +19,7 @@ const CourseProgramPage = () => {
 
   return (
     <div>
-      <h1>Programa del curso</h1>
+      <h1>Programa de la materia</h1>
       {loading ? (
         <LoaderSpin />
       ) : (
