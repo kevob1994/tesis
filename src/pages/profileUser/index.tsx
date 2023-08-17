@@ -1,30 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Row,
-  Col,
-  Form,
-  Input,
-  Button,
-  DatePicker,
-  Upload,
-  Image,
-  Select,
-  Modal,
-  Spin,
-} from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
-import TextArea from 'antd/lib/input/TextArea';
-import './index.scss';
-import { UploadOutlined } from '@ant-design/icons';
-import { Link, Navigate, useParams } from 'react-router-dom';
-import { GenderE, RoleE, StoreI } from '../../utils/interfaces';
-import { dateFormat, genderList, roleList } from '../../utils/const';
-import { useForm } from '../../hooks/useForm';
-import { editUser } from '../../actions/auth';
-import { validatePassword } from '../../utils/validations';
-import { HeaderNav } from '../../components';
-import { clientAxios, headerAuthToken } from '../../config/axios';
+import React, { useEffect, useState } from "react";
+import { Row, Col, Image } from "antd";
+import "./index.scss";
+import { useParams } from "react-router-dom";
+import { HeaderNav } from "../../components";
+import { clientAxios, headerAuthToken } from "../../config/axios";
 
 interface UserInfoI {
   biography: string;
@@ -38,7 +17,6 @@ interface UserInfoI {
 }
 
 const ProfileUser = () => {
-  const [fileList, setFileList] = useState<any[]>([]);
   const [imageUrl2, setImageUrl2] = useState<any>();
   const [user, setUser] = useState<UserInfoI>();
 
@@ -54,7 +32,7 @@ const ProfileUser = () => {
         headers: headerAuthToken(),
       });
       setUser(res.data[0]);
-      imageUrl2(res.data[0].photo);
+      setImageUrl2(res.data[0].photo);
     } catch (error) {
       console.log(error);
     }
@@ -63,7 +41,7 @@ const ProfileUser = () => {
   return (
     <>
       <HeaderNav />
-      <div style={{ height: 'calc(100vh - 80px)', background: '#fafafb' }}>
+      <div style={{ height: "calc(100vh - 80px)", background: "#fafafb" }}>
         <div className='content-register'>
           {user ? (
             <div className='content-register-row '>
@@ -75,7 +53,7 @@ const ProfileUser = () => {
                     <div className='upload-image'>
                       <Image
                         preview={false}
-                        src={imageUrl2 ? imageUrl2 : 'error'}
+                        src={imageUrl2 ? imageUrl2 : "error"}
                         alt='avatar'
                         width={200}
                         height={200}
