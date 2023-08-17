@@ -40,7 +40,7 @@ const HeaderNav: FunctionComponent<IHeaderNav> = ({
       </div>
       <div className='options-header'>
         <Link to='/'>
-          <p>Materias</p>{' '}
+          <p>Cursos</p>{' '}
         </Link>
         <Link to='/edit-profile'>
           {' '}

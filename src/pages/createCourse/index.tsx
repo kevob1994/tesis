@@ -215,7 +215,7 @@ const CreateCoursePage: FunctionComponent = () => {
           <Step key='step1' title='Información' icon={<ProfileOutlined />} />
           <Step
             key='step2'
-            title='Programa de la Materia'
+            title='Programa de la materia'
             icon={<ReadOutlined />}
           />
           <Step

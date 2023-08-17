@@ -59,7 +59,7 @@ const ChatPage = () => {
     if (!user) return;
     const pusher = new Pusher('2e799d955f3afe27994d', {
       cluster: 'us2',
-      authEndpoint: 'http://localhost:8000/api/broadcasting/auth',
+      authEndpoint: 'https://backtesis-qzjx8.ondigitalocean.app/api/broadcasting/auth',
       auth: {
         params: user.id,
         headers: headerAuthToken(),

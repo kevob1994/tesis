@@ -1,6 +1,6 @@
-import LoaderModal from 'components/LoaderModal';
-import { useSelector } from 'react-redux';
-import { Routes, Route } from 'react-router-dom';
+import LoaderModal from "components/LoaderModal";
+import { useSelector } from "react-redux";
+import { Routes, Route } from "react-router-dom";
 import {
   LoginPage,
   RegisterPage,
@@ -19,12 +19,36 @@ import {
   ForumInfoPage,
   EditProfileUser,
   ProfileUser,
-} from '../pages';
-import { StoreI } from '../utils/interfaces';
-import { ProtectedRoute } from './ProtectedRoute';
+} from "../pages";
+import { StoreI } from "../utils/interfaces";
+import { ProtectedRoute } from "./ProtectedRoute";
+import { useEffect } from "react";
+import { clientAxios } from "config/axios";
 
 export const RoutesPath = () => {
   const auth = useSelector((state: StoreI) => state.auth);
+  useEffect(() => {
+    const fetchCsrf = async () => {
+    //   try {
+    //     const response = await clientAxios.get<any[]>(
+    //       `https://backtesis-qzjx8.ondigitalocean.app/sanctum/csrf-cookie`
+    //     );
+    //      // Access cookies from the 'set-cookie' header in the response
+    // const cookiesHeader = response.headers['set-cookie'];
+		// 			console.log('cookiesHeader')
+		// 			console.log(cookiesHeader)
+    // // Split the 'set-cookie' header to extract individual cookies
+    // const cookiesArray = cookiesHeader?.map(cookie => cookie.split(';')[0]);
+
+    // // Now you have an array of cookies
+    // console.log('Cookies:', cookiesArray);
+    //   } catch (error) {
+    //     console.error("Error fetching data:", error);
+    //   }
+    };
+    fetchCsrf();
+  }, []);
+
   return (
     <>
       {!auth.loading ? (
@@ -105,3 +129,5 @@ export const RoutesPath = () => {
     </>
   );
 };
+
+

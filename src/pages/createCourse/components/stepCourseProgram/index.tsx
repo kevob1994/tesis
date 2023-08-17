@@ -85,7 +85,7 @@ const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
           <Row gutter={50}>
             <Col span={24}>
               <Editor
-                placeholder={'Detalle el contenido de la materia'}
+                placeholder={'Detalle el contenido del curso'}
                 editorState={editorValue}
                 onEditorStateChange={onEditorStateChange}
                 toolbar={{
