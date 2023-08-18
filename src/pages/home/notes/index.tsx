@@ -11,7 +11,7 @@ interface TaskListI {
   width: number;
 }
 
-const NotesPage: React.FC = () => {
+const NotesPage = () => {
   const { user } = useSelector((state: StoreI) => state.auth);
   return (
     <div>
