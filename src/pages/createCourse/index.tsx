@@ -25,7 +25,7 @@ import { closeModal } from 'actions/alert';
 
 const { Step } = Steps;
 
-const CreateCoursePage: FunctionComponent = () => {
+const CreateCoursePage = () => {
   const [current, setCurrent] = useState(0);
   const [fileList, setFileList] = useState<any[]>([]);
   const [visibleModal, setVisibleModal] = useState(false);
