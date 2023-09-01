@@ -1,27 +1,34 @@
-import { Modal, Steps } from 'antd';
-import { FunctionComponent, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Modal, Steps } from "antd";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   StepCourseProgram,
   StepEndConfirm,
   StepEvaluationPlan,
   StepInfoCourse,
-} from './components';
+} from "./components";
 
 import {
   CalendarOutlined,
   CheckCircleOutlined,
   ProfileOutlined,
   ReadOutlined,
-} from '@ant-design/icons';
-import './index.scss';
-import moment from 'moment';
-import { dateFormat } from 'utils/const';
-import { useForm } from 'hooks/useForm';
-import { ITableEvaluations, StatusModalE, StoreI } from 'utils/interfaces';
-import { useDispatch, useSelector } from 'react-redux';
-import { getListEvaluationsCourse } from 'actions/course';
-import { closeModal } from 'actions/alert';
+} from "@ant-design/icons";
+import "./index.scss";
+import moment from "moment";
+import { dateFormat } from "utils/const";
+import { useForm } from "hooks/useForm";
+import {
+  IBibliography,
+  ISpecificGoals,
+  ITableEvaluations,
+  IThematic,
+  StatusModalE,
+  StoreI,
+} from "utils/interfaces";
+import { useDispatch, useSelector } from "react-redux";
+import { getListEvaluationsCourse } from "actions/course";
+import { closeModal } from "actions/alert";
 
 const { Step } = Steps;
 
@@ -29,6 +36,9 @@ const CreateCoursePage = () => {
   const [current, setCurrent] = useState(0);
   const [fileList, setFileList] = useState<any[]>([]);
   const [visibleModal, setVisibleModal] = useState(false);
+  const [thematicList, setThematicList] = useState<IThematic[]>([]);
+  const [specificGoals, setSpecificGoals] = useState<ISpecificGoals[]>([]);
+  const [bibliographyList, setBibliography] = useState<IBibliography[]>([]);
   const [listEvaluations, setListEvaluations] = useState<ITableEvaluations[]>(
     []
   );
@@ -56,14 +66,18 @@ const CreateCoursePage = () => {
       };
     }
     return {
-      full_name: '',
-      short_name: '',
-      category: '',
+      full_name: "",
+      short_name: "",
+      category: "",
       date_begin: new Date(),
       date_finish: new Date(),
-      description: '',
-      program: '',
-      photo: '',
+      description: "",
+      program: "",
+      photo: "",
+      fundament: "",
+			main_goal: "",
+			competence: "",
+			activity: ""
     };
   };
 
@@ -76,6 +90,10 @@ const CreateCoursePage = () => {
     description,
     photo,
     program,
+		fundament,
+		main_goal,
+		competence,
+		activity,
     onChange,
   } = useForm({
     full_name: courseInfo(Number(id))?.full_name,
@@ -84,11 +102,15 @@ const CreateCoursePage = () => {
     date_begin: moment(courseInfo(Number(id))?.date_begin, dateFormat),
     date_finish: moment(courseInfo(Number(id))?.date_finish, dateFormat).add(
       1,
-      'day'
+      "day"
     ),
     description: courseInfo(Number(id))?.description,
     program: courseInfo(Number(id))?.program,
     photo: courseInfo(Number(id))?.photo,
+    fundament: courseInfo(Number(id))?.fundament,
+		main_goal: courseInfo(Number(id))?.main_goal,
+		competence: courseInfo(Number(id))?.competence,
+		activity: courseInfo(Number(id))?.activity
   });
 
   useEffect(() => {
@@ -109,10 +131,10 @@ const CreateCoursePage = () => {
     } else {
       setListEvaluations([
         {
-          name: '',
-          description: '',
+          name: "",
+          description: "",
           date: date_begin.toDate(),
-          value: '',
+          value: "",
         },
       ]);
     }
@@ -120,8 +142,8 @@ const CreateCoursePage = () => {
 
   useEffect(() => {
     if (type === StatusModalE.SUCCESS && show) {
-      navigate('/', { replace: true });
-			closeAlert()
+      navigate("/", { replace: true });
+      closeAlert();
     }
   }, [show, type]);
 
@@ -142,6 +164,10 @@ const CreateCoursePage = () => {
     description,
     photo,
     program,
+		fundament,
+		main_goal,
+		competence,
+		activity,
     onChange,
   };
 
@@ -166,6 +192,12 @@ const CreateCoursePage = () => {
             nextStep={next}
             prevStep={prev}
             openModalCancel={openModalCancel}
+            thematicList={thematicList}
+            setThematicList={setThematicList}
+            specificGoals={specificGoals}
+            setSpecificGoals={setSpecificGoals}
+            bibliographyList={bibliographyList}
+            setBibliography={setBibliography}
           />
         );
       case 2:
@@ -186,6 +218,9 @@ const CreateCoursePage = () => {
             openModalCancel={openModalCancel}
             formCourse={formCourse}
             listEvaluations={listEvaluations}
+						thematicList={thematicList}
+						specificGoals={specificGoals}
+						bibliographyList={bibliographyList}
             fileList={fileList}
           />
         );
@@ -201,7 +236,7 @@ const CreateCoursePage = () => {
         title='Creación de curso'
         visible={visibleModal}
         onOk={() => setVisibleModal(false)}
-        onCancel={() => navigate('/', { replace: true })}
+        onCancel={() => navigate("/", { replace: true })}
         okText='No'
         cancelText='Si'
         centered
@@ -215,7 +250,7 @@ const CreateCoursePage = () => {
           <Step key='step1' title='Información' icon={<ProfileOutlined />} />
           <Step
             key='step2'
-            title='Programa de la materia'
+            title='Contenido de la materia'
             icon={<ReadOutlined />}
           />
           <Step

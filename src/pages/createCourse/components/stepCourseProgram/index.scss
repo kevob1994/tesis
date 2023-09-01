@@ -1,4 +1,4 @@
-@import './../../../../styles/index.scss';
+@import "./../../../../styles/index.scss";
 
 .rdw-editor-wrapper {
   background: white;
@@ -6,4 +6,9 @@
   margin-bottom: 20px;
   border: 1px solid #d8d8d899;
   min-height: 50vh;
+}
+
+.custom-label {
+  font-weight: bold;
+  font-size: 1.1rem !important;
 }

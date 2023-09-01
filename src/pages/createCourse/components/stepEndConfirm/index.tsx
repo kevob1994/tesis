@@ -15,7 +15,7 @@ import {
   dateFormat,
   dateFormatTime,
 } from 'utils/const';
-import { CourseFormI, ITableEvaluations, StoreI } from 'utils/interfaces';
+import { CourseFormI, IBibliography, ISpecificGoals, ITableEvaluations, IThematic, StoreI } from 'utils/interfaces';
 import './index.scss';
 
 interface IStepEndConfirmProps {
@@ -24,6 +24,9 @@ interface IStepEndConfirmProps {
   formCourse: CourseFormI;
   listEvaluations: ITableEvaluations[];
   fileList: any[];
+  thematicList: IThematic[];
+  specificGoals: ISpecificGoals[];
+  bibliographyList: IBibliography[];
 }
 
 const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
@@ -32,6 +35,9 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
   formCourse,
   listEvaluations,
   fileList,
+  thematicList,
+  specificGoals,
+  bibliographyList,
 }) => {
   const [imageUrl2, setImageUrl2] = useState<any>();
   const auth = useSelector((state: StoreI) => state.auth);
@@ -68,7 +74,7 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
       key: 'date',
     },
     {
-      title: 'Nota',
+      title: 'Ponderación',
       dataIndex: 'value',
       key: 'value',
     },
@@ -91,6 +97,9 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
               date_finish: date_finish.format('YYYY/MM/DD'),
               evaluations: JSON.stringify(evaluations),
               user_id: auth.user.id,
+							thematic_contents: JSON.stringify(thematicList),
+							specific_goals: JSON.stringify(specificGoals),
+							bibliographies: JSON.stringify(bibliographyList)
             },
             Number(id)
           )
@@ -103,6 +112,9 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
             date_finish: date_finish.format('YYYY/MM/DD'),
             evaluations: JSON.stringify(evaluations),
             user_id: auth.user.id,
+						thematic_contents: JSON.stringify(thematicList),
+						specific_goals: JSON.stringify(specificGoals),
+						bibliographies: JSON.stringify(bibliographyList)
           })
         );
       }
@@ -156,7 +168,7 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
           </Col>
           <Col span={18} flex={1}>
             <div style={{ marginBottom: 40 }}>
-              <h4>Programa de la materia</h4>
+              <h4>Contenido de la materia</h4>
 							<div dangerouslySetInnerHTML={{ __html: formCourse.program }}></div>
             </div>
             <div style={{ marginBottom: 40 }}>

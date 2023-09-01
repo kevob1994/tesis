@@ -1,19 +1,19 @@
 export enum GenderE {
-  FEMININE = 'F',
-  MALE = 'M',
+  FEMININE = "F",
+  MALE = "M",
 }
 
 export enum RoleE {
-  STUDENT = '0',
-  TEACHER = '1',
+  STUDENT = "0",
+  TEACHER = "1",
 }
 
 export enum StatusModalE {
-  INFO = 'info',
-  SUCCESS = 'success',
-  ERROR = 'error',
-  WARNING = 'warning',
-  CONFIRM = 'confirm',
+  INFO = "info",
+  SUCCESS = "success",
+  ERROR = "error",
+  WARNING = "warning",
+  CONFIRM = "confirm",
 }
 
 export interface UserI {
@@ -96,17 +96,25 @@ export interface CourseFormI {
   description: string;
   photo: string;
   program: string;
+  fundament: string;
+  main_goal: string;
+  competence: string;
+  activity: string;
   onChange: (
     value: string | Date | number | moment.Moment,
     field:
-      | 'full_name'
-      | 'short_name'
-      | 'category'
-      | 'date_begin'
-      | 'date_finish'
-      | 'description'
-      | 'photo'
-      | 'program'
+      | "full_name"
+      | "short_name"
+      | "category"
+      | "date_begin"
+      | "date_finish"
+      | "description"
+      | "photo"
+      | "program"
+      | "fundament"
+      | "main_goal"
+      | "competence"
+      | "activity"
   ) => void;
 }
 export interface ITableEvaluations {
@@ -186,6 +194,10 @@ export interface CourseI extends CourseParamsI {
   user_name: string;
   user_photo: string;
   code: string;
+  fundament: string;
+  main_goal: string;
+  competence: string;
+  activity: string;
 }
 export interface EvaluationsI {
   id: number;
@@ -210,6 +222,13 @@ export interface CourseParamsI {
   date_finish: string;
   evaluations?: string;
   user_id: number;
+  thematic_contents?: string;
+  specific_goals?: string;
+  bibliographies?: string;
+  fundament?: string;
+  main_goal?: string;
+  competence?: string;
+  activity?: string;
 }
 
 export interface ForumParamsI {
@@ -232,10 +251,10 @@ export interface listItemsI {
 }
 
 enum TypeFileE {
-  word = 'word',
-  pdf = 'pdf',
-  excel = 'excel',
-  img = 'img',
+  word = "word",
+  pdf = "pdf",
+  excel = "excel",
+  img = "img",
 }
 
 export interface listFilesI {
@@ -308,4 +327,19 @@ export interface AssignmentI {
   users_id: number;
   users_lastname: string;
   users_name: string;
+}
+
+export interface IThematic {
+  content: string;
+}
+
+export interface ISpecificGoals {
+  goal: string;
+}
+
+export interface IBibliography {
+  author: string;
+  name: string;
+  editorial: string;
+  year: number;
 }
