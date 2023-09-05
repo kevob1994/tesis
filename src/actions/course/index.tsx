@@ -9,6 +9,8 @@ import {
   EvaluationsI,
   ForumI,
   ForumParamsI,
+  ICourseInfo,
+  ICourseResponse,
   LibraryI,
   LibraryThemeParamsI,
   NoteI,
@@ -103,6 +105,48 @@ export const joinCourse = (code: string) => async (dispatch: Dispatch) => {
     //   });
   }
 };
+
+export const getCourse =
+  (id: string) => async (dispatch: Dispatch) => {
+    // debugger;
+    dispatch({
+      type: ActionTypesCourse.LOADING_COURSES,
+    });
+    try {
+      const res = await clientAxios.get<any>(`course/${id}`,  {
+        headers: headerAuthToken(),
+      });
+
+
+			const response: ICourseResponse = res.data[0][0]
+      if (res.status === 200 || res.status === 201) {
+        dispatch({
+					type: ActionTypesCourse.GET_INFO_COURSE,
+					payload: {
+						course: response.course[0],
+						infocourse: response.infocourse[0],
+						specific_goals: response.specific_goals,
+						thematiccontents: response.thematiccontents,
+						bibliographies: response.bibliographies,
+					},
+				});
+      }
+    } catch (error: any) {
+      console.log('error', error.response);
+      //   // const err = error.response.data.error;
+      // dispatch({
+      //   type: ActionTypesCourse.REQUEST_COURSE_FAIL,
+      // });
+      // dispatch({
+      //   type: ActionTypesAlert.ERROR_ALERT,
+      //   payload: {
+      //     title: 'Creación de curso',
+      //     textBody:
+      //       'Ocurrio un error! Verifique la información e intente nuevamente',
+      //   },
+      // });
+    }
+  };
 
 export const editCourse =
   (params: CourseParamsI, id: number) => async (dispatch: Dispatch) => {

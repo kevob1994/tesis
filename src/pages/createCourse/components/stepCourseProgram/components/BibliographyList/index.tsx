@@ -1,4 +1,10 @@
-import React, { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import React, {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { CloseCircleTwoTone } from "@ant-design/icons";
 import { Alert, Button, Form, Input, Row, Table } from "antd";
 import { ColumnProps } from "antd/lib/table";
@@ -36,7 +42,22 @@ export const BibliographyList: FC<IThematicListProps> = ({
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const newData: any = [...bibliographyList];
       newData[index][key] = e.target.value;
+
       setBibliography(newData);
+    };
+
+  const onInputYearChange =
+    (key: string, index: number) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value: inputValue } = e.target;
+      const reg = /^-?\d*(\.\d*)?$/;
+
+      const newData: any = [...bibliographyList];
+      newData[index][key] = e.target.value;
+
+      if (reg.test(inputValue) || inputValue === "" || inputValue === "-") {
+        setBibliography(newData);
+      }
     };
 
   // useEffect(() => {
@@ -82,7 +103,11 @@ export const BibliographyList: FC<IThematicListProps> = ({
       dataIndex: "year",
       key: "year",
       render: (text, record, index) => (
-        <Input value={text} onChange={onInputChange("year", index)} />
+        <Input
+          value={text}
+          onChange={onInputYearChange("year", index)}
+          maxLength={4}
+        />
       ),
       width: "20%",
     },

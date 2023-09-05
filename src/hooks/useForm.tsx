@@ -14,9 +14,17 @@ export const useForm = <T extends Object>(form: T) => {
     });
   };
 
+	const updateForm = (data: T) => {
+		setSate({
+      ...state,
+      ...data
+    })
+	}
+
   return {
     ...state,
     form: state,
     onChange,
+		updateForm
   };
 };

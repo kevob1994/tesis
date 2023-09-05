@@ -1,5 +1,5 @@
-import { ActionTypesCourse, TActionCourse } from '../actions/course/types';
-import { CourseReducerI } from '../utils/interfaces';
+import { ActionTypesCourse, TActionCourse } from "../actions/course/types";
+import { CourseReducerI } from "../utils/interfaces";
 
 const initialState: CourseReducerI = {
   courses: [],
@@ -16,7 +16,8 @@ const initialState: CourseReducerI = {
   assignments: [],
   noteStudents: [],
   notes: [],
-  program: '',
+  program: "",
+  infoCourse: undefined,
 };
 
 const courseReducer = (state = initialState, action: TActionCourse) => {
@@ -195,6 +196,14 @@ const courseReducer = (state = initialState, action: TActionCourse) => {
         loadingAction: false,
         loading: false,
         loadingComments: false,
+      };
+
+    case ActionTypesCourse.GET_INFO_COURSE:
+      return {
+        ...state,
+        loading: false,
+        loadingAction: false,
+        infoCourse: action.payload,
       };
     default:
       return state;

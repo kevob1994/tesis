@@ -1,22 +1,25 @@
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent, useEffect, useState } from "react";
 import {
   ArrowLeftOutlined,
   CloseOutlined,
   SaveOutlined,
-} from '@ant-design/icons';
-import { Button, Col, Image, Row, Table } from 'antd';
-import { ColumnProps } from 'antd/lib/table';
-import moment from 'moment';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { createCourse, editCourse } from 'actions/course';
+} from "@ant-design/icons";
+import { Button, Col, Image, List, Row, Table } from "antd";
+import { ColumnProps } from "antd/lib/table";
+import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { createCourse, editCourse } from "actions/course";
+import { categoryClass, dateFormat, dateFormatTime } from "utils/const";
 import {
-  categoryClass,
-  dateFormat,
-  dateFormatTime,
-} from 'utils/const';
-import { CourseFormI, IBibliography, ISpecificGoals, ITableEvaluations, IThematic, StoreI } from 'utils/interfaces';
-import './index.scss';
+  CourseFormI,
+  IBibliography,
+  ISpecificGoals,
+  ITableEvaluations,
+  IThematic,
+  StoreI,
+} from "utils/interfaces";
+import "./index.scss";
 
 interface IStepEndConfirmProps {
   prevStep: () => void;
@@ -48,35 +51,33 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
     if (fileList.length > 0) setImageUrl2(URL.createObjectURL(fileList[0]));
   }, [fileList]);
 
-	
   useEffect(() => {
     if (id) {
       setImageUrl2(formCourse.photo);
     }
   }, []);
 
-
   const columns: ColumnProps<ITableEvaluations>[] = [
     {
-      title: 'Evaluación',
-      dataIndex: 'name',
-      key: 'name',
+      title: "Evaluación",
+      dataIndex: "name",
+      key: "name",
     },
     {
-      title: 'Descripción',
-      dataIndex: 'description',
-      key: 'description',
+      title: "Descripción",
+      dataIndex: "description",
+      key: "description",
     },
     {
-      title: 'Fecha',
-      dataIndex: 'date',
+      title: "Fecha",
+      dataIndex: "date",
       render: (text, record, index) => moment(text).format(dateFormatTime),
-      key: 'date',
+      key: "date",
     },
     {
-      title: 'Ponderación',
-      dataIndex: 'value',
-      key: 'value',
+      title: "Ponderación",
+      dataIndex: "value",
+      key: "value",
     },
   ];
 
@@ -84,7 +85,7 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
     const { onChange, date_begin, date_finish, ...obj } = formCourse;
     const evaluations = listEvaluations.map((course) => ({
       ...course,
-      date: moment(course.date).format('YYYY-MM-DD HH:MM:00'),
+      date: moment(course.date).format("YYYY-MM-DD HH:MM:00"),
     }));
 
     if (auth.user?.id) {
@@ -93,13 +94,14 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
           editCourse(
             {
               ...obj,
-              date_begin: date_begin.format('YYYY/MM/DD'),
-              date_finish: date_finish.format('YYYY/MM/DD'),
+              date_begin: date_begin.format("YYYY/MM/DD"),
+              date_finish: date_finish.format("YYYY/MM/DD"),
               evaluations: JSON.stringify(evaluations),
               user_id: auth.user.id,
-							thematic_contents: JSON.stringify(thematicList),
-							specific_goals: JSON.stringify(specificGoals),
-							bibliographies: JSON.stringify(bibliographyList)
+              thematic_contents: JSON.stringify(thematicList),
+              specific_goals: JSON.stringify(specificGoals),
+              bibliographies: JSON.stringify(bibliographyList),
+							program: 'test'
             },
             Number(id)
           )
@@ -108,13 +110,14 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
         dispatch(
           createCourse({
             ...obj,
-            date_begin: date_begin.format('YYYY/MM/DD'),
-            date_finish: date_finish.format('YYYY/MM/DD'),
+            date_begin: date_begin.format("YYYY/MM/DD"),
+            date_finish: date_finish.format("YYYY/MM/DD"),
             evaluations: JSON.stringify(evaluations),
             user_id: auth.user.id,
-						thematic_contents: JSON.stringify(thematicList),
-						specific_goals: JSON.stringify(specificGoals),
-						bibliographies: JSON.stringify(bibliographyList)
+            thematic_contents: JSON.stringify(thematicList),
+            specific_goals: JSON.stringify(specificGoals),
+            bibliographies: JSON.stringify(bibliographyList),
+						program: 'test'
           })
         );
       }
@@ -130,7 +133,7 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
           <Col span={6} flex={1}>
             <Image
               preview={false}
-              src={imageUrl2 ? imageUrl2 : 'error'}
+              src={imageUrl2 ? imageUrl2 : "error"}
               alt='avatar'
               width={300}
               height={200}
@@ -144,7 +147,7 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
                 Nombre corto del curso: <span>{formCourse.short_name}</span>
               </p>
               <p className='text-info'>
-                Categoria:{' '}
+                Categoria:{" "}
                 <span>
                   {
                     categoryClass.find(
@@ -154,11 +157,11 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
                 </span>
               </p>
               <p className='text-info'>
-                Fecha inicio:{' '}
+                Fecha inicio:{" "}
                 <span>{formCourse.date_begin.format(dateFormat)}</span>
               </p>
               <p className='text-info'>
-                Fecha fin:{' '}
+                Fecha fin:{" "}
                 <span>{formCourse.date_finish.format(dateFormat)}</span>
               </p>
               <p className='text-info'>
@@ -168,11 +171,62 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
           </Col>
           <Col span={18} flex={1}>
             <div style={{ marginBottom: 40 }}>
-              <h4>Contenido de la materia</h4>
-							<div dangerouslySetInnerHTML={{ __html: formCourse.program }}></div>
+              <h2>Contenido de la materia</h2>
+              <div style={{ paddingLeft: 15 }}>
+                <div className='content-text'>
+                  <h3>Fundamentos</h3>
+                  <p>{formCourse.fundament}</p>
+                </div>
+
+                <div className='content-text'>
+                  {" "}
+                  <h3>Objetivos</h3>
+                  <p>{formCourse.main_goal}</p>
+                </div>
+
+                <div className='content-text'>
+                  {" "}
+                  <h3>Competencia</h3>
+                  <p>{formCourse.competence}</p>
+                </div>
+                <div className='content-text'>
+                  {" "}
+                  <h3>Tipos de actividades</h3>
+                  <p>{formCourse.activity}</p>
+                </div>
+                <div className='content-text'>
+                  {" "}
+                  <List
+                    size='small'
+                    header={<h3>Contenido temático</h3>}
+                    bordered
+                    dataSource={thematicList}
+                    renderItem={(item) => <List.Item>{item.content}</List.Item>}
+                  />
+                </div>
+                <div className='content-text'>
+                  <List
+                    size='small'
+                    header={<h3>Objetivos específicos</h3>}
+                    bordered
+                    dataSource={specificGoals}
+                    renderItem={(item) => <List.Item>{item.goal}</List.Item>}
+                  />
+                </div>
+                <div className='content-text'>
+                  <List
+                    size='small'
+                    header={<h3>Bibliografía</h3>}
+                    bordered
+                    dataSource={bibliographyList}
+                    renderItem={(item) => <List.Item>{`${item.author}. ${item.name}. ${item.editorial}. ${item.year}`}</List.Item>}
+                  />
+                </div>
+              </div>
+              {/* <div dangerouslySetInnerHTML={{ __html: formCourse.program }}></div> */}
             </div>
             <div style={{ marginBottom: 40 }}>
-              <h4>Plan de Evaluación</h4>
+              <h2>Plan de Evaluación</h2>
               <Table
                 dataSource={listEvaluations}
                 columns={columns}
@@ -184,14 +238,14 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
 
         <Row justify='space-between'>
           <Button
-            style={{ margin: '0 8px' }}
+            style={{ margin: "0 8px" }}
             icon={<CloseOutlined />}
             onClick={() => openModalCancel()}
           >
             Cancelar
           </Button>
           <Button
-            style={{ margin: '0 8px' }}
+            style={{ margin: "0 8px" }}
             onClick={() => prevStep()}
             icon={<ArrowLeftOutlined />}
           >

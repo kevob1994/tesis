@@ -3,6 +3,7 @@ import {
   CourseI,
   EvaluationsI,
   ForumI,
+  ICourseInfo,
   ItemChatI,
   LibraryI,
   NoteI,
@@ -39,6 +40,7 @@ export enum ActionTypesCourse {
   GET_NOTES_BY_STUDENT = 'GET_NOTES_BY_STUDENT',
   GET_PROGRAM = 'GET_PROGRAM',
   EDIT_EVALUATION = 'EDIT_EVALUATION',
+	GET_INFO_COURSE = 'GET_INFO_COURSE'
 }
 
 interface IActionCourseCreate {
@@ -170,6 +172,11 @@ interface IUpdateEvaluationById {
   payload: any;
 }
 
+interface IGetInfoCourse {
+  type: ActionTypesCourse.GET_INFO_COURSE;
+  payload: ICourseInfo;
+}
+
 export type TActionCourse =
   | IActionCourseCreate
   | IActionCourseGet
@@ -198,4 +205,5 @@ export type TActionCourse =
   | IGetNotesAllStudents
   | IGetNotesByStudent
   | IGetProgramByCourse
-  | IUpdateEvaluationById;
+  | IUpdateEvaluationById
+	| IGetInfoCourse;

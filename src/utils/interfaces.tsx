@@ -95,7 +95,6 @@ export interface CourseFormI {
   date_finish: moment.Moment;
   description: string;
   photo: string;
-  program: string;
   fundament: string;
   main_goal: string;
   competence: string;
@@ -110,7 +109,6 @@ export interface CourseFormI {
       | "date_finish"
       | "description"
       | "photo"
-      | "program"
       | "fundament"
       | "main_goal"
       | "competence"
@@ -149,6 +147,7 @@ export interface CourseReducerI {
   noteStudents: NotesStudentI[];
   notes: NoteI[];
   program: string;
+  infoCourse?: ICourseInfo;
 }
 
 export interface NoteI {
@@ -217,10 +216,10 @@ export interface CourseParamsI {
   category: string;
   description: string;
   photo: string;
-  program: string;
   date_begin: string;
   date_finish: string;
   evaluations?: string;
+  program?: string;
   user_id: number;
   thematic_contents?: string;
   specific_goals?: string;
@@ -330,16 +329,83 @@ export interface AssignmentI {
 }
 
 export interface IThematic {
+	id?: number;
   content: string;
 }
 
 export interface ISpecificGoals {
+	id?: number;
   goal: string;
 }
 
 export interface IBibliography {
+	id?: number;
   author: string;
   name: string;
   editorial: string;
   year: number;
+}
+
+export interface ICourseResponse {
+  course: Course[];
+  infocourse: Infocourse[];
+  specific_goals: SpecificGoal[];
+  thematiccontents: Thematiccontent[];
+  bibliographies: Bibliography[];
+}
+
+export interface ICourseInfo {
+  course: Course;
+  infocourse: Infocourse;
+  specific_goals: SpecificGoal[];
+  thematiccontents: Thematiccontent[];
+  bibliographies: Bibliography[];
+}
+
+export interface Course {
+  id: number;
+  full_name: string;
+  short_name: string;
+  category: string;
+  code: string;
+  date_begin: string;
+  date_finish: string;
+  description: string;
+  program: string;
+  user_id: number;
+  photo: any;
+  user_name: string;
+  user_lastname: string;
+  user_photo: any;
+}
+
+export interface Infocourse {
+  id: number;
+  course_id: number;
+  fundament: string;
+  main_goal: string;
+  competence: string;
+  activity: string;
+}
+
+export interface SpecificGoal {
+  id: number;
+  goal: string;
+  infocourse_id: number;
+}
+
+export interface Thematiccontent {
+  id: number;
+  content: string;
+  infocourse_id: number;
+}
+
+export interface Bibliography {
+  id: number;
+  author: string;
+  name: string;
+  editorial: string;
+  year: string;
+  available_in: any;
+  infocourse_id: number;
 }

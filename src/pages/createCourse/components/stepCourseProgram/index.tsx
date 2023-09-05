@@ -62,9 +62,9 @@ const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
   setBibliography,
 }) => {
   const { fundament, main_goal, competence, activity, onChange } = formCourse;
-  const [editorValue, setEditorValue] = useState(
-    initEditorState(formCourse.program)
-  );
+  // const [editorValue, setEditorValue] = useState(
+  //   initEditorState(formCourse.program)
+  // );
 
 
 

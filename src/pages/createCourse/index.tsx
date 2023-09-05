@@ -27,7 +27,7 @@ import {
   StoreI,
 } from "utils/interfaces";
 import { useDispatch, useSelector } from "react-redux";
-import { getListEvaluationsCourse } from "actions/course";
+import { getCourse, getListEvaluationsCourse } from "actions/course";
 import { closeModal } from "actions/alert";
 
 const { Step } = Steps;
@@ -47,39 +47,16 @@ const CreateCoursePage = () => {
   const loadEvaluations = (id: string) =>
     dispatch(getListEvaluationsCourse(id));
 
+  const getCourseData = (id: string) => dispatch(getCourse(id));
+
   const closeAlert = () => dispatch(closeModal());
 
   const { id } = useParams();
   let navigate = useNavigate();
-  const { courses, evaluations } = useSelector(
+  const { courses, evaluations, infoCourse } = useSelector(
     (state: StoreI) => state.courses
   );
   const { show, type } = useSelector((state: StoreI) => state.alert);
-
-  const courseInfo = (id: number) => {
-    const course = courses.find((course) => course.id === Number(id));
-    if (course) {
-      return {
-        ...course,
-        date_begin: new Date(course.date_begin),
-        date_finish: new Date(course.date_finish),
-      };
-    }
-    return {
-      full_name: "",
-      short_name: "",
-      category: "",
-      date_begin: new Date(),
-      date_finish: new Date(),
-      description: "",
-      program: "",
-      photo: "",
-      fundament: "",
-			main_goal: "",
-			competence: "",
-			activity: ""
-    };
-  };
 
   const {
     full_name,
@@ -89,32 +66,31 @@ const CreateCoursePage = () => {
     date_finish,
     description,
     photo,
-    program,
-		fundament,
-		main_goal,
-		competence,
-		activity,
+    fundament,
+    main_goal,
+    competence,
+    activity,
     onChange,
+    updateForm,
   } = useForm({
-    full_name: courseInfo(Number(id))?.full_name,
-    short_name: courseInfo(Number(id))?.short_name,
-    category: courseInfo(Number(id))?.category,
-    date_begin: moment(courseInfo(Number(id))?.date_begin, dateFormat),
-    date_finish: moment(courseInfo(Number(id))?.date_finish, dateFormat).add(
-      1,
-      "day"
-    ),
-    description: courseInfo(Number(id))?.description,
-    program: courseInfo(Number(id))?.program,
-    photo: courseInfo(Number(id))?.photo,
-    fundament: courseInfo(Number(id))?.fundament,
-		main_goal: courseInfo(Number(id))?.main_goal,
-		competence: courseInfo(Number(id))?.competence,
-		activity: courseInfo(Number(id))?.activity
+    full_name: "",
+    short_name: "",
+    category: "",
+    date_begin: moment(new Date(), dateFormat),
+    date_finish: moment(new Date(), dateFormat).add(1, "day"),
+    description: "",
+    photo: "",
+    fundament: "",
+    main_goal: "",
+    competence: "",
+    activity: "",
   });
 
   useEffect(() => {
-    if (id) loadEvaluations(id);
+    if (id) {
+      getCourseData(id);
+      loadEvaluations(id);
+    }
   }, []);
 
   useEffect(() => {
@@ -133,12 +109,47 @@ const CreateCoursePage = () => {
         {
           name: "",
           description: "",
-          date: date_begin.toDate(),
+          date: date_begin?.toDate(),
           value: "",
         },
       ]);
     }
   }, [evaluations]);
+
+  useEffect(() => {
+    if (infoCourse) {
+      console.log(infoCourse.course.date_begin);
+      console.log(infoCourse.course.date_finish);
+      updateForm({
+        full_name: infoCourse.course.full_name,
+        short_name: infoCourse.course.short_name,
+        category: infoCourse.course.category,
+        date_begin: moment(new Date(infoCourse.course.date_begin), dateFormat),
+        date_finish: moment(
+          new Date(infoCourse.course.date_finish),
+          dateFormat
+        ).add(1, "day"),
+        description: infoCourse.course.description,
+        photo: infoCourse.course.photo,
+        fundament: infoCourse.infocourse.fundament,
+        main_goal: infoCourse.infocourse.main_goal,
+        competence: infoCourse.infocourse.competence,
+        activity: infoCourse.infocourse.activity,
+      });
+
+      setSpecificGoals(infoCourse.specific_goals);
+      setBibliography(
+        infoCourse.bibliographies.map((bibliography) => ({
+					id: bibliography.id,
+          author: bibliography.author,
+          name: bibliography.name,
+          editorial: bibliography.editorial,
+          year: Number(bibliography.year),
+        }))
+      );
+      setThematicList(infoCourse.thematiccontents);
+    }
+  }, [infoCourse]);
 
   useEffect(() => {
     if (type === StatusModalE.SUCCESS && show) {
@@ -163,11 +174,10 @@ const CreateCoursePage = () => {
     date_finish,
     description,
     photo,
-    program,
-		fundament,
-		main_goal,
-		competence,
-		activity,
+    fundament,
+    main_goal,
+    competence,
+    activity,
     onChange,
   };
 
@@ -218,9 +228,9 @@ const CreateCoursePage = () => {
             openModalCancel={openModalCancel}
             formCourse={formCourse}
             listEvaluations={listEvaluations}
-						thematicList={thematicList}
-						specificGoals={specificGoals}
-						bibliographyList={bibliographyList}
+            thematicList={thematicList}
+            specificGoals={specificGoals}
+            bibliographyList={bibliographyList}
             fileList={fileList}
           />
         );
