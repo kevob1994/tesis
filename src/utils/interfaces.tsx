@@ -117,6 +117,8 @@ export interface CourseFormI {
 }
 export interface ITableEvaluations {
   id?: number | null;
+  type?: string;
+  file_type?: string;
   name: string;
   description: string;
   date?: Date;
@@ -208,6 +210,7 @@ export interface EvaluationsI {
   updated_at: Date;
   value: string;
   available?: boolean;
+	type?: string;
 }
 
 export interface CourseParamsI {

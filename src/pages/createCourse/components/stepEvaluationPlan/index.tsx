@@ -4,13 +4,13 @@ import React, {
   SetStateAction,
   useEffect,
   useState,
-} from 'react';
+} from "react";
 import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
   CloseCircleTwoTone,
   CloseOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 import {
   Alert,
   Button,
@@ -19,14 +19,15 @@ import {
   Input,
   InputNumber,
   Row,
+  Select,
   Table,
-} from 'antd';
-import { ColumnProps } from 'antd/lib/table';
-import moment from 'moment';
-import { dateFormat, dateFormatTime } from 'utils/const';
-import { CourseFormI, ITableEvaluations } from 'utils/interfaces';
-import './index.scss';
-import { toast } from 'react-toastify';
+} from "antd";
+import { ColumnProps } from "antd/lib/table";
+import moment from "moment";
+import { dateFormat, dateFormatTime } from "utils/const";
+import { CourseFormI, ITableEvaluations } from "utils/interfaces";
+import "./index.scss";
+import { toast } from "react-toastify";
 
 interface IStepEvaluationPlanProps {
   prevStep: () => void;
@@ -54,10 +55,11 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
     setListEvaluations([
       ...listEvaluations,
       {
-        name: '',
-        description: '',
+        name: "",
+        description: "",
+        type: "",
         date: date_begin.toDate(),
-        value: '',
+        value: "",
       },
     ]);
   };
@@ -86,13 +88,19 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
     setListEvaluations(newData);
   };
 
+  const selectChange = (key: string, index: number, value?: string) => {
+    const newData: any = listEvaluations;
+    newData[index][key] = value ? value : new Date();
+    setListEvaluations(newData);
+  };
+
   const noteChange = (
     key: string,
     index: number,
     value?: string | undefined | number
   ) => {
     const newData: any = [...listEvaluations];
-    newData[index][key] = value ? value : '';
+    newData[index][key] = value ? value : "";
     setListEvaluations(newData);
   };
 
@@ -101,37 +109,37 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
       setListEvaluations([
         ...listEvaluations,
         {
-          name: '',
-          description: '',
+          name: "",
+          description: "",
           date: date_begin.toDate(),
-          value: '',
+          value: "",
         },
       ]);
   }, []);
 
   const columns: ColumnProps<ITableEvaluations>[] = [
     {
-      title: 'Evaluación',
-      dataIndex: 'name',
-      key: 'name',
+      title: "Evaluación",
+      dataIndex: "name",
+      key: "name",
       render: (text, record, index) => (
-        <Input value={text} onChange={onInputChange('name', index)} />
+        <Input value={text} onChange={onInputChange("name", index)} />
       ),
-      width: '20%',
+      width: "20%",
     },
     {
-      title: 'Descripción',
-      dataIndex: 'description',
-      key: 'description',
+      title: "Descripción",
+      dataIndex: "description",
+      key: "description",
       render: (text, record, index) => (
-        <Input value={text} onChange={onInputChange('description', index)} />
+        <Input value={text} onChange={onInputChange("description", index)} />
       ),
-      width: '45%',
+      width: "45%",
     },
     {
-      title: 'Fecha',
-      dataIndex: 'date',
-      key: 'date',
+      title: "Fecha",
+      dataIndex: "date",
+      key: "date",
       render: (text, record, index) => {
         return (
           <DatePicker
@@ -141,42 +149,70 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
             value={moment(text, dateFormatTime)}
             format={dateFormatTime}
             onChange={(e) => {
-              if (e !== null) dateChange('date', index, e);
+              if (e !== null) dateChange("date", index, e);
             }}
             onPanelChange={() => {}}
             disabledDate={(current) => {
-              let starDate = moment(date_begin).format('YYYY-MM-DD');
-              let endDate = moment(date_finish).format('YYYY-MM-DD');
+              let starDate = moment(date_begin).format("YYYY-MM-DD");
+              let endDate = moment(date_finish).format("YYYY-MM-DD");
               return (
                 current &&
-                (current > moment(endDate, 'YYYY-MM-DD').add(1, 'day') ||
-                  current < moment(starDate, 'YYYY-MM-DD'))
+                (current > moment(endDate, "YYYY-MM-DD").add(1, "day") ||
+                  current < moment(starDate, "YYYY-MM-DD"))
               );
             }}
           />
         );
       },
+      width: "15%",
     },
     {
-      title: 'Nota',
-      dataIndex: 'value',
-      key: 'value',
+      title: "Tipo de evaluación",
+      dataIndex: "type",
+      key: "type",
+      render: (text, record, index) => (
+        <Select
+          placeholder='Tipo de evaluación'
+          style={{ width: "100%" }}
+          onChange={(e) => {
+            selectChange("type", index, e);
+            console.log(e);
+          }}
+					value={text}
+          options={[
+            {
+              value: "Teórico",
+              label: "Teórico",
+            },
+            {
+              value: "Práctico",
+              label: "Práctico",
+            },
+          ]}
+        />
+      ),
+      width: "20%",
+    },
+    {
+      title: "Nota",
+      dataIndex: "value",
+      key: "value",
       render: (text, record, index) => (
         <InputNumber
           value={text}
           defaultValue={text}
-          onChange={(value) => noteChange('value', index, value)}
+          onChange={(value) => noteChange("value", index, value)}
           type='number'
           min='0'
           step='0'
         />
       ),
-      width: '5%',
+      width: "5%",
     },
     {
-      title: 'Eliminar',
-      dataIndex: 'delete',
-      key: 'delete',
+      title: "Eliminar",
+      dataIndex: "delete",
+      key: "delete",
       render: (text, record, index) => (
         <CloseCircleTwoTone
           twoToneColor='#E2222E'
@@ -184,21 +220,21 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
           onClick={() => deleteEvaluation(index)}
         />
       ),
-      width: '1%',
+      width: "1%",
     },
   ];
 
   const submitNext = () => {
     if (validateEvaluationPlanEmpty())
-      return toast.error('Todos los campos son requeridos');
+      return toast.error("Todos los campos son requeridos");
 
     if (validateDate())
       return toast.error(
-        'Todas las fechas deben estar entre la fecha de inicio y fecha fin del curso'
+        "Todas las fechas deben estar entre la fecha de inicio y fecha fin del curso"
       );
 
     if (listEvaluations.length === 0)
-      return toast.error('Requiere al menos una evaluación');
+      return toast.error("Requiere al menos una evaluación");
 
     setEmptyForm(false);
     nextStep();
@@ -216,7 +252,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
         Object.values(evaluation).some(
           (x) =>
             x === null ||
-            x?.toString().trim() === '' ||
+            x?.toString().trim() === "" ||
             x === 0 ||
             x === undefined
         )
@@ -229,7 +265,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
     const list = listEvaluations.filter((evaluation) => {
       return !(
         moment(evaluation.date).isBetween(date_begin, date_finish) ||
-        moment(evaluation.date).isSame(date_begin, 'date')
+        moment(evaluation.date).isSame(date_begin, "date")
       );
     });
     return list.length > 0;
@@ -243,10 +279,10 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
             Agregar Evaluación
           </Button>
         </Row>
-        <p style={{ fontWeight: 'bold', color: 'gray' }}>
+        <p style={{ fontWeight: "bold", color: "gray" }}>
           Fecha inicio: {date_begin.format(dateFormat)}
         </p>
-        <div style={{ marginTop: 10, fontWeight: 'bold', color: 'gray' }}>
+        <div style={{ marginTop: 10, fontWeight: "bold", color: "gray" }}>
           <p>Fecha fin: {date_finish.format(dateFormat)}</p>
         </div>
 
@@ -255,7 +291,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
         ) : null}
         <Form form={form} component={false}>
           <Table
-            locale={{ emptyText: 'Sin evaluaciones' }}
+            locale={{ emptyText: "Sin evaluaciones" }}
             dataSource={listEvaluations}
             columns={columns}
             pagination={false}
@@ -264,14 +300,14 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
           <div className='steps-action' style={{ marginTop: 20 }}>
             <Row justify='space-between'>
               <Button
-                style={{ margin: '0 8px' }}
+                style={{ margin: "0 8px" }}
                 icon={<CloseOutlined />}
                 onClick={() => openModalCancel()}
               >
                 Cancelar
               </Button>
               <Button
-                style={{ margin: '0 8px' }}
+                style={{ margin: "0 8px" }}
                 onClick={() => prevStep()}
                 icon={<ArrowLeftOutlined />}
               >

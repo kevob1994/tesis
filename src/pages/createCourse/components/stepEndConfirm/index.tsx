@@ -75,6 +75,11 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
       key: "date",
     },
     {
+      title: "Tipo de evaluación",
+      dataIndex: "type",
+      key: "type",
+    },
+    {
       title: "Ponderación",
       dataIndex: "value",
       key: "value",
@@ -101,7 +106,7 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
               thematic_contents: JSON.stringify(thematicList),
               specific_goals: JSON.stringify(specificGoals),
               bibliographies: JSON.stringify(bibliographyList),
-							program: 'test'
+              program: "test",
             },
             Number(id)
           )
@@ -117,7 +122,7 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
             thematic_contents: JSON.stringify(thematicList),
             specific_goals: JSON.stringify(specificGoals),
             bibliographies: JSON.stringify(bibliographyList),
-						program: 'test'
+            program: "test",
           })
         );
       }
@@ -219,7 +224,24 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
                     header={<h3>Bibliografía</h3>}
                     bordered
                     dataSource={bibliographyList}
-                    renderItem={(item) => <List.Item>{`${item.author}. ${item.name}. ${item.editorial}. ${item.year}`}</List.Item>}
+                    renderItem={(item) => (
+                      <List.Item>
+                        <div>
+                          <div>
+                            <span>Título:</span>&nbsp;
+													{` ${item.name}`}
+                          </div>
+                          <div>
+                            <span>Autor:</span>&nbsp;
+                            {item.author}&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span>Editorial:</span>&nbsp;
+                            {item.editorial}&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span>Año:</span>&nbsp;
+                            {item.year}
+                          </div>
+                        </div>
+                      </List.Item>
+                    )}
                   />
                 </div>
               </div>

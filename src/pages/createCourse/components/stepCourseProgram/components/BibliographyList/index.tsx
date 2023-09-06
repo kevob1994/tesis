@@ -16,12 +16,13 @@ interface IThematicListProps {
   bibliographyList: IBibliography[];
   setBibliography: Dispatch<SetStateAction<IBibliography[]>>;
   formCourse: CourseFormI;
+  showError?: boolean;
 }
 
 export const BibliographyList: FC<IThematicListProps> = ({
   bibliographyList,
   setBibliography,
-  formCourse,
+  showError,
 }) => {
   const [form] = Form.useForm();
   const [emptyForm, setEmptyForm] = useState(false);
@@ -146,6 +147,11 @@ export const BibliographyList: FC<IThematicListProps> = ({
             columns={columns}
             pagination={false}
           />
+          {showError && (
+            <p style={{ color: "#ff4d4f" }}>
+              Debe tener al menos una Bibliografía
+            </p>
+          )}
         </Form>
       </div>
     </div>

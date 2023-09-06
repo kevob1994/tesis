@@ -1,21 +1,12 @@
 import React, {
-	Dispatch,
+  Dispatch,
   FC,
   SetStateAction,
   useEffect,
   useState,
 } from "react";
-import {                
-  CloseCircleTwoTone,
-} from "@ant-design/icons";
-import {
-  Alert,
-  Button,
-  Form,
-  Input,
-  Row,
-  Table,
-} from "antd";
+import { CloseCircleTwoTone } from "@ant-design/icons";
+import { Alert, Button, Form, Input, Row, Table } from "antd";
 import { ColumnProps } from "antd/lib/table";
 import { CourseFormI, IBibliography, IThematic } from "utils/interfaces";
 
@@ -25,12 +16,13 @@ interface IThematicListProps {
   thematicList: IThematic[];
   setThematicList: Dispatch<SetStateAction<IThematic[]>>;
   formCourse: CourseFormI;
+  showError?: boolean;
 }
 
 export const ThematicList: FC<IThematicListProps> = ({
   thematicList,
   setThematicList,
-  formCourse,
+  showError,
 }) => {
   const [form] = Form.useForm();
   const [emptyForm, setEmptyForm] = useState(false);
@@ -68,7 +60,7 @@ export const ThematicList: FC<IThematicListProps> = ({
 
   const columns: ColumnProps<IThematic>[] = [
     {
-      title: "Tematica",
+      title: "Temática",
       dataIndex: "content",
       key: "content",
       render: (text, record, index) => (
@@ -95,7 +87,7 @@ export const ThematicList: FC<IThematicListProps> = ({
     <div>
       <div>
         <Row justify='space-between' align='middle'>
-				<p className="custom-label">Contenido temático</p>
+          <p className='custom-label'>Contenido temático</p>
           <Button type='primary' onClick={() => addEvaluation()}>
             Agregar Contenido temático
           </Button>
@@ -111,6 +103,11 @@ export const ThematicList: FC<IThematicListProps> = ({
             columns={columns}
             pagination={false}
           />
+          {showError && (
+            <p style={{ color: "#ff4d4f" }}>
+              Debe tener al menos un contenido temático
+            </p>
+          )}
         </Form>
       </div>
     </div>

@@ -1,39 +1,29 @@
 import React, {
-	Dispatch,
+  Dispatch,
   FC,
   SetStateAction,
   useEffect,
   useState,
 } from "react";
-import {                
-  CloseCircleTwoTone,
-} from "@ant-design/icons";
-import {
-  Alert,
-  Button,
-  Form,
-  Input,
-  Row,
-  Table,
-} from "antd";
+import { CloseCircleTwoTone } from "@ant-design/icons";
+import { Alert, Button, Form, Input, Row, Table } from "antd";
 import { ColumnProps } from "antd/lib/table";
 import { CourseFormI, ISpecificGoals } from "utils/interfaces";
-
 
 interface ISpecificGoalsProps {
   specificGoals: ISpecificGoals[];
   setSpecificGoals: Dispatch<SetStateAction<ISpecificGoals[]>>;
   formCourse: CourseFormI;
+  showError?: boolean;
 }
 
 export const SpecificGoals: FC<ISpecificGoalsProps> = ({
   specificGoals,
   setSpecificGoals,
-  formCourse,
+  showError,
 }) => {
   const [form] = Form.useForm();
   const [emptyForm, setEmptyForm] = useState(false);
-
 
   const addEvaluation = () => {
     setSpecificGoals([
@@ -83,9 +73,9 @@ export const SpecificGoals: FC<ISpecificGoalsProps> = ({
 
   return (
     <div>
-      <div style={{marginTop: 30}}>
+      <div style={{ marginTop: 30 }}>
         <Row justify='space-between' align='middle'>
-				<p className="custom-label">Objetivos específicos</p>
+          <p className='custom-label'>Objetivos específicos</p>
           <Button type='primary' onClick={() => addEvaluation()}>
             Agregar Objetivo
           </Button>
@@ -101,6 +91,11 @@ export const SpecificGoals: FC<ISpecificGoalsProps> = ({
             columns={columns}
             pagination={false}
           />
+          {showError && (
+            <p style={{ color: "#ff4d4f" }}>
+              Debe tener al menos un objetivo específico
+            </p>
+          )}
         </Form>
       </div>
     </div>

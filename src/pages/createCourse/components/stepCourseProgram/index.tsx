@@ -11,7 +11,13 @@ import {
   ArrowRightOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
-import { Dispatch, FunctionComponent, SetStateAction, useState } from "react";
+import {
+  Dispatch,
+  FunctionComponent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
@@ -62,15 +68,30 @@ const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
   setBibliography,
 }) => {
   const { fundament, main_goal, competence, activity, onChange } = formCourse;
-  // const [editorValue, setEditorValue] = useState(
-  //   initEditorState(formCourse.program)
-  // );
-
-
+  const [errorSpecificGoals, setErrorSpecificGoals] = useState(false);
+  const [errorBibliography, setErrorBibliography] = useState(false);
+  const [errorThematicList, setErrorThematicList] = useState(false);
 
   const onFinish = (values: any) => {
+    if (
+      bibliographyList.length === 0 ||
+      specificGoals.length === 0 ||
+      thematicList.length === 0
+    ) {
+      setErrorSpecificGoals(specificGoals.length === 0);
+      setErrorThematicList(thematicList.length === 0);
+      setErrorBibliography(bibliographyList.length === 0);
+      return;
+    }
     nextStep();
   };
+
+  useEffect(() => {
+    setErrorSpecificGoals(specificGoals.length === 0);
+    setErrorThematicList(thematicList.length === 0);
+    setErrorBibliography(bibliographyList.length === 0);
+  }, [thematicList, specificGoals, bibliographyList]);
+
   return (
     <div className='content'>
       <div className='content-course-form-row '>
@@ -101,7 +122,7 @@ const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
                 />
               </Form.Item>
               <Form.Item
-                label='Objetivos'
+                label='Objetivo general'
                 name='main_goal'
                 rules={[{ required: true, message: "Campo requerido" }]}
                 initialValue={main_goal}
@@ -145,16 +166,19 @@ const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
                 formCourse={formCourse}
                 thematicList={thematicList}
                 setThematicList={setThematicList}
+                showError={errorThematicList}
               />
               <SpecificGoals
                 formCourse={formCourse}
                 specificGoals={specificGoals}
                 setSpecificGoals={setSpecificGoals}
+                showError={errorSpecificGoals}
               />
               <BibliographyList
                 formCourse={formCourse}
                 bibliographyList={bibliographyList}
                 setBibliography={setBibliography}
+                showError={errorBibliography}
               />
             </Col>
           </Row>

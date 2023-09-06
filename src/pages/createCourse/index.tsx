@@ -96,12 +96,13 @@ const CreateCoursePage = () => {
   useEffect(() => {
     if (evaluations.length > 0 && id) {
       setListEvaluations(
-        evaluations.map((evaluations) => ({
-          id: evaluations.id,
-          name: evaluations.name,
-          description: evaluations.description,
-          date: new Date(evaluations.date),
-          value: evaluations.value,
+        evaluations.map((evaluation) => ({
+          id: evaluation.id,
+          name: evaluation.name,
+          description: evaluation.description,
+          date: new Date(evaluation.date),
+          value: evaluation.value,
+					type: evaluation.type
         }))
       );
     } else {
@@ -111,6 +112,7 @@ const CreateCoursePage = () => {
           description: "",
           date: date_begin?.toDate(),
           value: "",
+					type: ""
         },
       ]);
     }
