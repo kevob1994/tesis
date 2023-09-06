@@ -229,7 +229,7 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
                         <div>
                           <div>
                             <span>Título:</span>&nbsp;
-													{` ${item.name}`}
+                            {` ${item.name}`}
                           </div>
                           <div>
                             <span>Autor:</span>&nbsp;
