@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const clientAxios = axios.create({
-  baseURL: 'http://localhost:8000/api/',
+  baseURL: 'https://backtesis-qzjx8.ondigitalocean.app/api/',
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
     'Access-Control-Allow-Origin': 'http://localhost:3000/'

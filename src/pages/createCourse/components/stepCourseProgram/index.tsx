@@ -39,21 +39,10 @@ interface IStepCourseProgramProps {
   setSpecificGoals: Dispatch<SetStateAction<any[]>>;
   bibliographyList: IBibliography[];
   setBibliography: Dispatch<SetStateAction<any[]>>;
+	firstLoad: boolean;
+	setFirstLoad: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const initEditorState = (value: string | undefined): EditorState => {
-  if (value) {
-    const blocksFromHtml = htmlToDraft(value);
-    const { contentBlocks, entityMap } = blocksFromHtml;
-    const contentState = ContentState.createFromBlockArray(
-      contentBlocks,
-      entityMap
-    );
-    return EditorState.createWithContent(contentState);
-  } else {
-    return EditorState.createEmpty();
-  }
-};
 
 const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
   formCourse,
@@ -66,6 +55,8 @@ const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
   setSpecificGoals,
   bibliographyList,
   setBibliography,
+	firstLoad,
+	setFirstLoad
 }) => {
   const { fundament, main_goal, competence, activity, onChange } = formCourse;
   const [errorSpecificGoals, setErrorSpecificGoals] = useState(false);
@@ -87,9 +78,13 @@ const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
   };
 
   useEffect(() => {
-    setErrorSpecificGoals(specificGoals.length === 0);
-    setErrorThematicList(thematicList.length === 0);
-    setErrorBibliography(bibliographyList.length === 0);
+    if (firstLoad) {
+      setErrorSpecificGoals(specificGoals.length === 0);
+      setErrorThematicList(thematicList.length === 0);
+      setErrorBibliography(bibliographyList.length === 0);
+    } else {
+      setFirstLoad(true);
+    }
   }, [thematicList, specificGoals, bibliographyList]);
 
   return (

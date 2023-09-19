@@ -118,7 +118,7 @@ const SlideNav: FunctionComponent = () => {
             icon={<MenuFoldOutlined />}
             onClick={() => handlerSubKey('1')}
           >
-            <Link to={`/home/${id}/course-program`}>Programa</Link>
+            <Link to={`/home/${id}/course-program`}>Contenido</Link>
           </Menu.Item>
           <Menu.Item
             key='2'

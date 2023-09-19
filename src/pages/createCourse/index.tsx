@@ -43,6 +43,7 @@ const CreateCoursePage = () => {
     []
   );
 
+  const [firstLoad, setFirstLoad] = useState(false);
   const dispatch = useDispatch();
   const loadEvaluations = (id: string) =>
     dispatch(getListEvaluationsCourse(id));
@@ -102,7 +103,7 @@ const CreateCoursePage = () => {
           description: evaluation.description,
           date: new Date(evaluation.date),
           value: evaluation.value,
-					type: evaluation.type
+          type: evaluation.type,
         }))
       );
     } else {
@@ -112,7 +113,7 @@ const CreateCoursePage = () => {
           description: "",
           date: date_begin?.toDate(),
           value: "",
-					type: ""
+          type: "",
         },
       ]);
     }
@@ -142,7 +143,7 @@ const CreateCoursePage = () => {
       setSpecificGoals(infoCourse.specific_goals);
       setBibliography(
         infoCourse.bibliographies.map((bibliography) => ({
-					id: bibliography.id,
+          id: bibliography.id,
           author: bibliography.author,
           name: bibliography.name,
           editorial: bibliography.editorial,
@@ -210,6 +211,8 @@ const CreateCoursePage = () => {
             setSpecificGoals={setSpecificGoals}
             bibliographyList={bibliographyList}
             setBibliography={setBibliography}
+            firstLoad={firstLoad}
+            setFirstLoad={setFirstLoad}
           />
         );
       case 2:

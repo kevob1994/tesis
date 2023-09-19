@@ -23,6 +23,13 @@ const columns: ColumnProps<ITableEvaluations>[] = [
     width: '40%',
   },
   {
+    title: 'Tipo de evaluación',
+    dataIndex: 'type',
+    key: 'type',
+
+    width: '20%',
+  },
+  {
     title: 'Fecha',
     dataIndex: 'date',
     key: 'date',
