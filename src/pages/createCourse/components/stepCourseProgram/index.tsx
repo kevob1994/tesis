@@ -39,10 +39,9 @@ interface IStepCourseProgramProps {
   setSpecificGoals: Dispatch<SetStateAction<any[]>>;
   bibliographyList: IBibliography[];
   setBibliography: Dispatch<SetStateAction<any[]>>;
-	firstLoad: boolean;
-	setFirstLoad: React.Dispatch<React.SetStateAction<boolean>>
+  firstLoad: boolean;
+  setFirstLoad: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
 
 const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
   formCourse,
@@ -55,10 +54,10 @@ const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
   setSpecificGoals,
   bibliographyList,
   setBibliography,
-	firstLoad,
-	setFirstLoad
+  firstLoad,
+  setFirstLoad,
 }) => {
-  const { fundament, main_goal, competence, activity, onChange } = formCourse;
+  const { fundament, main_goal, competence, onChange } = formCourse;
   const [errorSpecificGoals, setErrorSpecificGoals] = useState(false);
   const [errorBibliography, setErrorBibliography] = useState(false);
   const [errorThematicList, setErrorThematicList] = useState(false);
@@ -128,9 +127,15 @@ const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
                   value={main_goal}
                   onChange={({ target }) => onChange(target.value, "main_goal")}
                 />
-              </Form.Item>{" "}
+              </Form.Item>
+              <SpecificGoals
+                formCourse={formCourse}
+                specificGoals={specificGoals}
+                setSpecificGoals={setSpecificGoals}
+                showError={errorSpecificGoals}
+              />
               <Form.Item
-                label='Competencia'
+                label='Competencias'
                 name='competence'
                 rules={[{ required: true, message: "Campo requerido" }]}
                 initialValue={competence}
@@ -143,8 +148,14 @@ const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
                     onChange(target.value, "competence")
                   }
                 />
-              </Form.Item>{" "}
-              <Form.Item
+              </Form.Item>
+              <ThematicList
+                formCourse={formCourse}
+                thematicList={thematicList}
+                setThematicList={setThematicList}
+                showError={errorThematicList}
+              />
+              {/* <Form.Item
                 label='Tipos de actividades'
                 name='activity'
                 rules={[{ required: true, message: "Campo requerido" }]}
@@ -156,19 +167,7 @@ const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
                   value={activity}
                   onChange={({ target }) => onChange(target.value, "activity")}
                 />
-              </Form.Item>
-              <ThematicList
-                formCourse={formCourse}
-                thematicList={thematicList}
-                setThematicList={setThematicList}
-                showError={errorThematicList}
-              />
-              <SpecificGoals
-                formCourse={formCourse}
-                specificGoals={specificGoals}
-                setSpecificGoals={setSpecificGoals}
-                showError={errorSpecificGoals}
-              />
+              </Form.Item> */}
               <BibliographyList
                 formCourse={formCourse}
                 bibliographyList={bibliographyList}

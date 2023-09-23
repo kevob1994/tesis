@@ -32,6 +32,7 @@ const courseReducer = (state = initialState, action: TActionCourse) => {
         courses: action.payload,
         loading: false,
         loadingAction: false,
+				infoCourse: undefined
       };
     case ActionTypesCourse.DELETE_COURSE_SUCCESS:
       return {

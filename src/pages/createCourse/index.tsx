@@ -42,6 +42,7 @@ const CreateCoursePage = () => {
   const [listEvaluations, setListEvaluations] = useState<ITableEvaluations[]>(
     []
   );
+  const [rangeDates, setRangeDates] = useState<any>([null, null]);
 
   const [firstLoad, setFirstLoad] = useState(false);
   const dispatch = useDispatch();
@@ -63,28 +64,22 @@ const CreateCoursePage = () => {
     full_name,
     short_name,
     category,
-    date_begin,
-    date_finish,
     description,
     photo,
     fundament,
     main_goal,
     competence,
-    activity,
     onChange,
     updateForm,
   } = useForm({
     full_name: "",
     short_name: "",
     category: "",
-    date_begin: moment(new Date(), dateFormat),
-    date_finish: moment(new Date(), dateFormat).add(1, "day"),
     description: "",
     photo: "",
     fundament: "",
     main_goal: "",
     competence: "",
-    activity: "",
   });
 
   useEffect(() => {
@@ -106,38 +101,41 @@ const CreateCoursePage = () => {
           type: evaluation.type,
         }))
       );
-    } else {
-      setListEvaluations([
-        {
-          name: "",
-          description: "",
-          date: date_begin?.toDate(),
-          value: "",
-          type: "",
-        },
-      ]);
-    }
+    } 
   }, [evaluations]);
+
+	useEffect(() => {
+		if(listEvaluations.length === 0 && rangeDates[0]){
+			setListEvaluations([
+				{
+					name: "",
+					description: "",
+					date: rangeDates[0].toDate(),
+					value: "",
+					type: "",
+				},
+			]);
+		}
+		
+	}, [rangeDates])
+	
 
   useEffect(() => {
     if (infoCourse) {
-      console.log(infoCourse.course.date_begin);
-      console.log(infoCourse.course.date_finish);
+      setRangeDates([
+        moment(infoCourse.course.date_begin),
+        moment(infoCourse.course.date_finish),
+      ]);
       updateForm({
         full_name: infoCourse.course.full_name,
         short_name: infoCourse.course.short_name,
         category: infoCourse.course.category,
-        date_begin: moment(new Date(infoCourse.course.date_begin), dateFormat),
-        date_finish: moment(
-          new Date(infoCourse.course.date_finish),
-          dateFormat
-        ).add(1, "day"),
+
         description: infoCourse.course.description,
         photo: infoCourse.course.photo,
         fundament: infoCourse.infocourse.fundament,
         main_goal: infoCourse.infocourse.main_goal,
         competence: infoCourse.infocourse.competence,
-        activity: infoCourse.infocourse.activity,
       });
 
       setSpecificGoals(infoCourse.specific_goals);
@@ -173,14 +171,11 @@ const CreateCoursePage = () => {
     full_name,
     short_name,
     category,
-    date_begin,
-    date_finish,
     description,
     photo,
     fundament,
     main_goal,
     competence,
-    activity,
     onChange,
   };
 
@@ -196,6 +191,8 @@ const CreateCoursePage = () => {
             openModalCancel={openModalCancel}
             fileList={fileList}
             setFileList={setFileList}
+            rangeDates={rangeDates}
+            setRangeDates={setRangeDates}
           />
         );
       case 1:
@@ -224,6 +221,8 @@ const CreateCoursePage = () => {
             setListEvaluations={setListEvaluations}
             openModalCancel={openModalCancel}
             formCourse={formCourse}
+            rangeDates={rangeDates}
+            setRangeDates={setRangeDates}
           />
         );
       case 3:
@@ -237,6 +236,7 @@ const CreateCoursePage = () => {
             specificGoals={specificGoals}
             bibliographyList={bibliographyList}
             fileList={fileList}
+            rangeDates={rangeDates}
           />
         );
 
@@ -245,10 +245,31 @@ const CreateCoursePage = () => {
     }
   };
 
+	const validateEvaluationPlanEmpty = () => {
+    const list = listEvaluations
+      .map(({ date, description, name, value }: ITableEvaluations) => ({
+        date,
+        description,
+        name,
+        value,
+      }))
+      .filter((evaluation) =>
+        Object.values(evaluation).some(
+          (x) =>
+            x === null ||
+            x?.toString().trim() === "" ||
+            x === 0 ||
+            x === undefined
+        )
+      );
+
+    return list.length > 0;
+  }
+
   return (
     <>
       <Modal
-        title='Creación de curso'
+        title={id ? "Edición de curso" : "Creación de curso"}
         visible={visibleModal}
         onOk={() => setVisibleModal(false)}
         onCancel={() => navigate("/", { replace: true })}
@@ -258,22 +279,61 @@ const CreateCoursePage = () => {
         closable={false}
         maskClosable={false}
       >
-        <p>Se perderán todos los cambios. ¿Está seguro que desea cancelar?</p>
+        <p>
+          Se perderán todos los cambios realizados. ¿Está seguro que desea
+          cancelar?
+        </p>
       </Modal>
       <div className='content-create-course'>
         <Steps current={current}>
-          <Step key='step1' title='Información' icon={<ProfileOutlined />} />
+          <Step
+            key='step1'
+            title='Información'
+            icon={<ProfileOutlined />}
+            onClick={() => setCurrent(0)}
+            style={{ cursor: "pointer" }}
+          />
           <Step
             key='step2'
             title='Contenido de la materia'
             icon={<ReadOutlined />}
+            onClick={() => {
+              if (full_name && short_name && category && description)
+                setCurrent(1);
+            }}
+            style={{ cursor: "pointer" }}
           />
           <Step
             key='step3'
             title='Plan de Evaluación'
             icon={<CalendarOutlined />}
+            onClick={() => {
+              if (
+                bibliographyList.length !== 0 &&
+                specificGoals.length !== 0 &&
+                thematicList.length !== 0 &&
+                fundament &&
+                main_goal &&
+                competence 
+              ) {
+                setCurrent(2);
+              }
+            }}
+            style={{ cursor: "pointer" }}
           />
-          <Step key='step4' title='Finalizar' icon={<CheckCircleOutlined />} />
+          <Step
+            key='step4'
+            title='Finalizar'
+            icon={<CheckCircleOutlined />}
+            onClick={() => {
+              if (
+                listEvaluations.length > 0 &&
+                !validateEvaluationPlanEmpty()
+              )
+                setCurrent(3);
+            }}
+            style={{ cursor: "pointer" }}
+          />
         </Steps>
 
         {StepsComponents()}

@@ -73,7 +73,7 @@ export const SpecificGoals: FC<ISpecificGoalsProps> = ({
 
   return (
     <div>
-      <div style={{ marginTop: 30 }}>
+      <div style={{ marginTop: 30, marginBottom: 30 }}>
         <Row justify='space-between' align='middle'>
           <p className='custom-label'>Objetivos específicos</p>
           <Button type='primary' onClick={() => addEvaluation()}>

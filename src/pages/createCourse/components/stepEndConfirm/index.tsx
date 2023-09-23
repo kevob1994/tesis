@@ -30,6 +30,7 @@ interface IStepEndConfirmProps {
   thematicList: IThematic[];
   specificGoals: ISpecificGoals[];
   bibliographyList: IBibliography[];
+  rangeDates: any[];
 }
 
 const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
@@ -41,6 +42,7 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
   thematicList,
   specificGoals,
   bibliographyList,
+  rangeDates,
 }) => {
   const [imageUrl2, setImageUrl2] = useState<any>();
   const auth = useSelector((state: StoreI) => state.auth);
@@ -87,7 +89,7 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
   ];
 
   const saveCourse = () => {
-    const { onChange, date_begin, date_finish, ...obj } = formCourse;
+    const { onChange, ...obj } = formCourse;
     const evaluations = listEvaluations.map((course) => ({
       ...course,
       date: moment(course.date).format("YYYY-MM-DD HH:MM:00"),
@@ -99,8 +101,8 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
           editCourse(
             {
               ...obj,
-              date_begin: date_begin.format("YYYY/MM/DD"),
-              date_finish: date_finish.format("YYYY/MM/DD"),
+              date_begin: rangeDates[0].format("YYYY/MM/DD"),
+              date_finish: rangeDates[1].format("YYYY/MM/DD"),
               evaluations: JSON.stringify(evaluations),
               user_id: auth.user.id,
               thematic_contents: JSON.stringify(thematicList),
@@ -115,8 +117,8 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
         dispatch(
           createCourse({
             ...obj,
-            date_begin: date_begin.format("YYYY/MM/DD"),
-            date_finish: date_finish.format("YYYY/MM/DD"),
+            date_begin: rangeDates[0].format("YYYY/MM/DD"),
+            date_finish: rangeDates[1].format("YYYY/MM/DD"),
             evaluations: JSON.stringify(evaluations),
             user_id: auth.user.id,
             thematic_contents: JSON.stringify(thematicList),
@@ -162,12 +164,10 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
                 </span>
               </p>
               <p className='text-info'>
-                Fecha inicio:{" "}
-                <span>{formCourse.date_begin.format(dateFormat)}</span>
+                Fecha inicio: <span>{rangeDates[0].format(dateFormat)}</span>
               </p>
               <p className='text-info'>
-                Fecha fin:{" "}
-                <span>{formCourse.date_finish.format(dateFormat)}</span>
+                Fecha fin: <span>{rangeDates[1].format(dateFormat)}</span>
               </p>
               <p className='text-info'>
                 Descripción: <span>{formCourse.description}</span>
@@ -185,29 +185,8 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
 
                 <div className='content-text'>
                   {" "}
-                  <h3>Objetivos</h3>
+                  <h3>Objetivos generales</h3>
                   <p>{formCourse.main_goal}</p>
-                </div>
-
-                <div className='content-text'>
-                  {" "}
-                  <h3>Competencia</h3>
-                  <p>{formCourse.competence}</p>
-                </div>
-                <div className='content-text'>
-                  {" "}
-                  <h3>Tipos de actividades</h3>
-                  <p>{formCourse.activity}</p>
-                </div>
-                <div className='content-text'>
-                  {" "}
-                  <List
-                    size='small'
-                    header={<h3>Contenido temático</h3>}
-                    bordered
-                    dataSource={thematicList}
-                    renderItem={(item) => <List.Item>{item.content}</List.Item>}
-                  />
                 </div>
                 <div className='content-text'>
                   <List
@@ -216,6 +195,33 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
                     bordered
                     dataSource={specificGoals}
                     renderItem={(item) => <List.Item>{item.goal}</List.Item>}
+                  />
+                </div>
+
+                <div className='content-text'>
+                  {" "}
+                  <h3>Competencia</h3>
+                  <p>{formCourse.competence}</p>
+                </div>
+
+                <div className='content-text'>
+                  {" "}
+                  <List
+                    size='small'
+                    header={<h3>Contenido temático</h3>}
+                    bordered
+                    dataSource={thematicList}
+                    renderItem={(item) => (
+                      <List.Item>
+                        {" "}
+                        <div>
+                          <div style={{ marginBottom: 10 }}>
+                            Temática: {item.content}
+                          </div>
+                          <div>Actividad: {item.activity} </div>
+                        </div>
+                      </List.Item>
+                    )}
                   />
                 </div>
                 <div className='content-text'>

@@ -100,31 +100,8 @@ const CourseProgramPage = () => {
 
                   <div className='content-text'>
                     {" "}
-                    <h2>Objetivos</h2>
+                    <h2>Objetivos Generales</h2>
                     <p>{infoCourse?.infocourse.main_goal}</p>
-                  </div>
-
-                  <div className='content-text'>
-                    {" "}
-                    <h2>Competencia</h2>
-                    <p>{infoCourse?.infocourse.competence}</p>
-                  </div>
-                  <div className='content-text'>
-                    {" "}
-                    <h2>Tipos de actividades</h2>
-                    <p>{infoCourse?.infocourse.activity}</p>
-                  </div>
-                  <div className='content-text'>
-                    {" "}
-                    <List
-                      size='small'
-                      header={<h3>Contenido temático</h3>}
-                      bordered
-                      dataSource={infoCourse?.thematiccontents}
-                      renderItem={(item) => (
-                        <List.Item>{item.content}</List.Item>
-                      )}
-                    />
                   </div>
                   <div className='content-text'>
                     <List
@@ -135,6 +112,31 @@ const CourseProgramPage = () => {
                       renderItem={(item) => <List.Item>{item.goal}</List.Item>}
                     />
                   </div>
+                  <div className='content-text'>
+                    {" "}
+                    <h2>Competencias</h2>
+                    <p>{infoCourse?.infocourse.competence}</p>
+                  </div>
+
+                  <div className='content-text'>
+                    {" "}
+                    <List
+                      size='small'
+                      header={<h3>Contenido temático</h3>}
+                      bordered
+                      dataSource={infoCourse?.thematiccontents}
+                      renderItem={(item) => (
+                        <List.Item>
+                          {" "}
+                          <div>
+                            <div style={{marginBottom: 10}}>Temática: {item.content}</div>
+                            <div>Actividad: {item.activity} </div>
+                          </div>
+                        </List.Item>
+                      )}
+                    />
+                  </div>
+
                   <div className='content-text'>
                     <List
                       size='small'

@@ -32,6 +32,7 @@ export const ThematicList: FC<IThematicListProps> = ({
       ...thematicList,
       {
         content: "",
+        activity: "",
       },
     ]);
   };
@@ -69,6 +70,15 @@ export const ThematicList: FC<IThematicListProps> = ({
       width: "20%",
     },
     {
+      title: "Actividad",
+      dataIndex: "activity",
+      key: "activity",
+      render: (text, record, index) => (
+        <Input value={text} onChange={onInputChange("activity", index)} />
+      ),
+      width: "20%",
+    },
+    {
       title: "Eliminar",
       dataIndex: "delete",
       key: "delete",
@@ -85,7 +95,7 @@ export const ThematicList: FC<IThematicListProps> = ({
 
   return (
     <div>
-      <div>
+      <div style={{ marginBottom: 30 }}>
         <Row justify='space-between' align='middle'>
           <p className='custom-label'>Contenido temático</p>
           <Button type='primary' onClick={() => addEvaluation()}>

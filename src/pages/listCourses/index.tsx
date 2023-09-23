@@ -1,14 +1,18 @@
-import { Button, Col, Form, Input, Modal, Row, Spin } from 'antd';
-import './index.scss';
-import { Link, useNavigate } from 'react-router-dom';
-import { HeaderNav, ListElements } from '../../components';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { deleteCourse, getCourses, joinCourse } from '../../actions/course';
-import { listItemsI, RoleE, StoreI } from '../../utils/interfaces';
-import { useForm } from '../../hooks/useForm';
-import LoaderSpin from 'components/LoaderSpin';
-import { closeModal } from 'actions/alert';
+import { Button, Col, Form, Input, Modal, Row, Spin } from "antd";
+import "./index.scss";
+import { Link, useNavigate } from "react-router-dom";
+import { HeaderNav, ListElements } from "../../components";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteCourse, getCourses, joinCourse } from "../../actions/course";
+import { listItemsI, RoleE, StoreI } from "../../utils/interfaces";
+import { useForm } from "../../hooks/useForm";
+import LoaderSpin from "components/LoaderSpin";
+import { closeModal } from "actions/alert";
+import { CopyOutlined } from "@ant-design/icons";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import Tooltip from "antd/es/tooltip";
+import { toast } from "react-toastify";
 
 const ListCourses = () => {
   const [form] = Form.useForm();
@@ -16,7 +20,7 @@ const ListCourses = () => {
   const [openModalShareCode, setOpenModalShareCode] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [courseSelected, setCourseSelected] = useState<listItemsI>();
-  const [codeCourse, setCodeCourse] = useState('');
+  const [codeCourse, setCodeCourse] = useState("");
   const dispatch = useDispatch();
   const loadCourses = () => dispatch(getCourses());
   const removeCourse = (id: number) => dispatch(deleteCourse(id));
@@ -26,14 +30,14 @@ const ListCourses = () => {
   );
   const auth = useSelector((state: StoreI) => state.auth);
   const { code, onChange } = useForm({
-    code: '',
+    code: "",
   });
 
   const role = auth.user?.role;
 
   useEffect(() => {
     loadCourses();
-		closeModal()
+    closeModal();
   }, []);
 
   const showModal = (code: string) => {
@@ -46,9 +50,9 @@ const ListCourses = () => {
   };
 
   const resetValues = () => {
-    onChange('', 'code');
+    onChange("", "code");
     form.resetFields();
-    setCodeCourse('');
+    setCodeCourse("");
     setOpenModalShareCode(false);
   };
 
@@ -85,6 +89,9 @@ const ListCourses = () => {
       },
     }));
   };
+  const handleCopy = () => {
+		toast.success('Código copiado');
+  };
 
   return (
     <>
@@ -107,10 +114,10 @@ const ListCourses = () => {
         destroyOnClose={true}
         visible={openModalShareCode}
         title={
-          role === RoleE.TEACHER ? 'Código del curso' : 'Unirse a un curso'
+          role === RoleE.TEACHER ? "Código del curso" : "Unirse a un curso"
         }
         afterClose={handleCancel}
-				onCancel={resetValues}
+        onCancel={resetValues}
         footer={null}
         centered
         forceRender
@@ -118,7 +125,23 @@ const ListCourses = () => {
         {role === RoleE.TEACHER ? (
           <div>
             <p>El código del curso es:</p>
-            {codeCourse}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <p className='text-code'>{codeCourse}</p>
+              <CopyToClipboard text={codeCourse} onCopy={handleCopy}>
+                <Tooltip title='Copiar'>
+                  <Button style={{ width: "30px", height: "30px", marginLeft: 20}}>
+                    <CopyOutlined style={{ cursor: "pointer" }} />
+                  </Button>
+                </Tooltip>
+              </CopyToClipboard>
+            </div>
+
             <Row justify='space-between' style={{ marginTop: 20 }}>
               <Button type='primary' onClick={handleCancel}>
                 Aceptar
@@ -138,13 +161,13 @@ const ListCourses = () => {
             >
               <Form.Item
                 name='code'
-                rules={[{ required: true, message: 'Campo requerido' }]}
+                rules={[{ required: true, message: "Campo requerido" }]}
               >
                 <Input
                   size='large'
                   value={code}
                   defaultValue={code}
-                  onChange={({ target }) => onChange(target.value, 'code')}
+                  onChange={({ target }) => onChange(target.value, "code")}
                 />
               </Form.Item>
               <Row justify='space-between' style={{ marginTop: 20 }}>
@@ -188,25 +211,29 @@ const ListCourses = () => {
             <Col span={24}>
               <ListElements
                 listItems={transformListCourse()}
-                deleteItem={auth.user?.role === RoleE.TEACHER ? openModalRemoveCourse : undefined}
+                deleteItem={
+                  auth.user?.role === RoleE.TEACHER
+                    ? openModalRemoveCourse
+                    : undefined
+                }
                 editItem={
                   auth.user?.role === RoleE.TEACHER ? handlerEdit : undefined
                 }
                 shareElement={showModal}
                 url='/home/id/course-program'
                 textDelete={
-                  role === RoleE.TEACHER ? 'Eliminar' : 'Salir del curso'
+                  role === RoleE.TEACHER ? "Eliminar" : "Salir del curso"
                 }
                 textEmpty={
                   role === RoleE.TEACHER
-                    ? 'No tiene cursos creados'
-                    : 'No se ha unido a ningun curso'
+                    ? "No tiene cursos creados"
+                    : "No se ha unido a ningun curso"
                 }
               />
             </Col>
           </Row>
         ) : (
-					<LoaderSpin />
+          <LoaderSpin />
         )}
       </div>
     </>

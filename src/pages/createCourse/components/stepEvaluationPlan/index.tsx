@@ -36,6 +36,8 @@ interface IStepEvaluationPlanProps {
   setListEvaluations: Dispatch<SetStateAction<ITableEvaluations[]>>;
   openModalCancel: () => void;
   formCourse: CourseFormI;
+  rangeDates: any[];
+  setRangeDates: Dispatch<SetStateAction<any[]>>;
 }
 
 const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
@@ -45,11 +47,12 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
   listEvaluations,
   setListEvaluations,
   formCourse,
+  rangeDates,
 }) => {
   const [form] = Form.useForm();
   const [emptyForm, setEmptyForm] = useState(false);
 
-  const { date_begin, date_finish } = formCourse;
+  const [showError, setShowError] = useState<string | null>(null);
 
   const addEvaluation = () => {
     setListEvaluations([
@@ -58,7 +61,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
         name: "",
         description: "",
         type: "",
-        date: date_begin.toDate(),
+        date: rangeDates[0].toDate(),
         value: "",
       },
     ]);
@@ -111,7 +114,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
         {
           name: "",
           description: "",
-          date: date_begin.toDate(),
+          date: rangeDates[0].toDate(),
           value: "",
         },
       ]);
@@ -134,7 +137,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
       render: (text, record, index) => (
         <Input value={text} onChange={onInputChange("description", index)} />
       ),
-      width: "45%",
+      width: "30%",
     },
     {
       title: "Fecha",
@@ -153,8 +156,8 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
             }}
             onPanelChange={() => {}}
             disabledDate={(current) => {
-              let starDate = moment(date_begin).format("YYYY-MM-DD");
-              let endDate = moment(date_finish).format("YYYY-MM-DD");
+              let starDate = moment(rangeDates[0]).format("YYYY-MM-DD");
+              let endDate = moment(rangeDates[1]).format("YYYY-MM-DD");
               return (
                 current &&
                 (current > moment(endDate, "YYYY-MM-DD").add(1, "day") ||
@@ -164,7 +167,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
           />
         );
       },
-      width: "15%",
+      width: "25%",
     },
     {
       title: "Tipo de evaluación",
@@ -178,7 +181,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
             selectChange("type", index, e);
             console.log(e);
           }}
-					value={text}
+          value={text}
           options={[
             {
               value: "Teórico",
@@ -194,7 +197,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
       width: "20%",
     },
     {
-      title: "Nota",
+      title: "Porcentaje (%)",
       dataIndex: "value",
       key: "value",
       render: (text, record, index) => (
@@ -226,16 +229,27 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
 
   const submitNext = () => {
     if (validateEvaluationPlanEmpty())
-      return toast.error("Todos los campos son requeridos");
+      return setShowError("Todos los campos son requeridos");
 
     if (validateDate())
-      return toast.error(
+      return setShowError(
         "Todas las fechas deben estar entre la fecha de inicio y fecha fin del curso"
       );
 
-    if (listEvaluations.length === 0)
-      return toast.error("Requiere al menos una evaluación");
+    if (listEvaluations.length === 0) {
+      return setShowError("Requiere al menos una evaluación");
+    }
 
+    if (!validatePercent()) {
+      return setShowError(
+        "La suma total de las notas debe ser 100% y actualmente es " +
+          listEvaluations.reduce(
+            (sum, evaluation) => sum + +evaluation.value,
+            0
+          ) + "%"
+      );
+    }
+    setShowError(null);
     setEmptyForm(false);
     nextStep();
   };
@@ -264,11 +278,19 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
   const validateDate = () => {
     const list = listEvaluations.filter((evaluation) => {
       return !(
-        moment(evaluation.date).isBetween(date_begin, date_finish) ||
-        moment(evaluation.date).isSame(date_begin, "date")
+        moment(evaluation.date).isBetween(rangeDates[0], rangeDates[1]) ||
+        moment(evaluation.date).isSame(rangeDates[0], "date")
       );
     });
     return list.length > 0;
+  };
+
+  const validatePercent = () => {
+    const total = listEvaluations.reduce(
+      (sum, evaluation) => sum + +evaluation.value,
+      0
+    );
+    return total === 100;
   };
   return (
     <div className='content'>
@@ -280,15 +302,12 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
           </Button>
         </Row>
         <p style={{ fontWeight: "bold", color: "gray" }}>
-          Fecha inicio: {date_begin.format(dateFormat)}
+          Fecha inicio: {rangeDates[0].format(dateFormat)}
         </p>
         <div style={{ marginTop: 10, fontWeight: "bold", color: "gray" }}>
-          <p>Fecha fin: {date_finish.format(dateFormat)}</p>
+          <p>Fecha fin: {rangeDates[1].format(dateFormat)}</p>
         </div>
 
-        {emptyForm ? (
-          <Alert description='Todos los campos son requeridos' type='error' />
-        ) : null}
         <Form form={form} component={false}>
           <Table
             locale={{ emptyText: "Sin evaluaciones" }}
@@ -296,7 +315,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
             columns={columns}
             pagination={false}
           />
-
+          {showError && <p style={{ color: "#ff4d4f" }}>{showError}</p>}
           <div className='steps-action' style={{ marginTop: 20 }}>
             <Row justify='space-between'>
               <Button

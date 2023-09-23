@@ -91,28 +91,22 @@ export interface CourseFormI {
   full_name: string;
   short_name: string;
   category: string;
-  date_begin: moment.Moment;
-  date_finish: moment.Moment;
   description: string;
   photo: string;
   fundament: string;
   main_goal: string;
   competence: string;
-  activity: string;
   onChange: (
     value: string | Date | number | moment.Moment,
     field:
       | "full_name"
       | "short_name"
       | "category"
-      | "date_begin"
-      | "date_finish"
       | "description"
       | "photo"
       | "fundament"
       | "main_goal"
       | "competence"
-      | "activity"
   ) => void;
 }
 export interface ITableEvaluations {
@@ -198,7 +192,6 @@ export interface CourseI extends CourseParamsI {
   fundament: string;
   main_goal: string;
   competence: string;
-  activity: string;
 }
 export interface EvaluationsI {
   id: number;
@@ -230,7 +223,6 @@ export interface CourseParamsI {
   fundament?: string;
   main_goal?: string;
   competence?: string;
-  activity?: string;
 }
 
 export interface ForumParamsI {
@@ -334,6 +326,7 @@ export interface AssignmentI {
 export interface IThematic {
 	id?: number;
   content: string;
+	activity: string;
 }
 
 export interface ISpecificGoals {
@@ -388,7 +381,6 @@ export interface Infocourse {
   fundament: string;
   main_goal: string;
   competence: string;
-  activity: string;
 }
 
 export interface SpecificGoal {
@@ -400,6 +392,7 @@ export interface SpecificGoal {
 export interface Thematiccontent {
   id: number;
   content: string;
+	activity: string;
   infocourse_id: number;
 }
 
