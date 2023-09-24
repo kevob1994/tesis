@@ -229,6 +229,7 @@ const ListCourses = () => {
                     ? "No tiene cursos creados"
                     : "No se ha unido a ningun curso"
                 }
+								
               />
             </Col>
           </Row>

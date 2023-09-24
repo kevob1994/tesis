@@ -29,22 +29,21 @@ export const RoutesPath = () => {
   const auth = useSelector((state: StoreI) => state.auth);
   useEffect(() => {
     const fetchCsrf = async () => {
-    //   try {
-    //     const response = await clientAxios.get<any[]>(
-    //       `https://backtesis-qzjx8.ondigitalocean.app/sanctum/csrf-cookie`
-    //     );
-    //      // Access cookies from the 'set-cookie' header in the response
-    // const cookiesHeader = response.headers['set-cookie'];
-		// 			console.log('cookiesHeader')
-		// 			console.log(cookiesHeader)
-    // // Split the 'set-cookie' header to extract individual cookies
-    // const cookiesArray = cookiesHeader?.map(cookie => cookie.split(';')[0]);
-
-    // // Now you have an array of cookies
-    // console.log('Cookies:', cookiesArray);
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //   }
+      //   try {
+      //     const response = await clientAxios.get<any[]>(
+      //       `https://backtesis-qzjx8.ondigitalocean.app/sanctum/csrf-cookie`
+      //     );
+      //      // Access cookies from the 'set-cookie' header in the response
+      // const cookiesHeader = response.headers['set-cookie'];
+      // 			console.log('cookiesHeader')
+      // 			console.log(cookiesHeader)
+      // // Split the 'set-cookie' header to extract individual cookies
+      // const cookiesArray = cookiesHeader?.map(cookie => cookie.split(';')[0]);
+      // // Now you have an array of cookies
+      // console.log('Cookies:', cookiesArray);
+      //   } catch (error) {
+      //     console.error("Error fetching data:", error);
+      //   }
     };
     fetchCsrf();
   }, []);
@@ -129,5 +128,3 @@ export const RoutesPath = () => {
     </>
   );
 };
-
-
