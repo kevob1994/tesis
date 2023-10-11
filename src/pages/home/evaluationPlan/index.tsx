@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { Table } from 'antd';
-import { ITableEvaluations, StoreI } from '../../../utils/interfaces';
+import { Button, Table } from 'antd';
+import { ITableEvaluations, RoleE, StoreI } from '../../../utils/interfaces';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getListEvaluationsCourse } from '../../../actions/course';
 import { ColumnProps } from 'antd/lib/table';
 import LoaderSpin from 'components/LoaderSpin';
@@ -13,21 +13,18 @@ const columns: ColumnProps<ITableEvaluations>[] = [
     dataIndex: 'name',
     key: 'name',
 
-    width: '20%',
   },
   {
     title: 'Descripción',
     dataIndex: 'description',
     key: 'description',
 
-    width: '40%',
   },
   {
     title: 'Tipo de evaluación',
     dataIndex: 'type',
     key: 'type',
 
-    width: '20%',
   },
   {
     title: 'Fecha',
@@ -36,18 +33,18 @@ const columns: ColumnProps<ITableEvaluations>[] = [
     render: (text, record, index) => {
       return <p>{text}</p>;
     },
-    width: '20%',
   },
   {
-    title: 'Nota',
+    title: 'Porcentaje (%)',
     dataIndex: 'value',
     key: 'value',
-    width: '20%',
   },
 ];
 
 const EvaluationPlanPage = () => {
+  let navigate = useNavigate();
   const dispatch = useDispatch();
+  const { user } = useSelector((state: StoreI) => state.auth);
   const loadEvaluations = (id: string) =>
     dispatch(getListEvaluationsCourse(id));
   const { id } = useParams();
@@ -61,7 +58,22 @@ const EvaluationPlanPage = () => {
 
   return (
     <div>
-      <h1>Plan de evaluación</h1>
+       <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <h1>Contenido del curso</h1>
+        {user?.role === RoleE.TEACHER ? (
+          <Button type='primary' onClick={() => {navigate(`/edit-course/${id}`)}} style={{ height: 40 }}>
+            Editar
+          </Button>
+        ) : (
+          <div></div>
+        )}
+      </div>
       {loading ? (
         <LoaderSpin />
       ) : (

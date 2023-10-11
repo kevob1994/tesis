@@ -40,7 +40,7 @@ export const NotesStudent: React.FC = () => {
         width: '50%',
       },
       {
-        title: 'Notas',
+        title: 'Porcentajes',
         dataIndex: `note`,
         key: 1,
         width: '50%',

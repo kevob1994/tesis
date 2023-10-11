@@ -61,7 +61,7 @@ export const ThematicList: FC<IThematicListProps> = ({
 
   const columns: ColumnProps<IThematic>[] = [
     {
-      title: "Temática",
+      title: "Contenido Temático",
       dataIndex: "content",
       key: "content",
       render: (text, record, index) => (

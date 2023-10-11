@@ -1,10 +1,13 @@
 @import './../../styles/index.scss';
 
 .content-list-courses {
-  padding: 100px 200px;
-  height: 100vh;
+	padding: 10px 10px;
+	height: calc(100vh - 90px);
+	overflow: scroll;
+	@media (min-width: 1000px) {
+		padding: 20px 80px;
+	}
   background: $background;
-  padding-top: 40px;
 }
 .content-spiner {
   margin: 20px 0;
@@ -17,4 +20,8 @@
 	letter-spacing: 0.1em;
 	text-align: center;
 	font-size: 2.5rem;
+}
+
+.title-course {
+	margin-bottom: 0px !important;
 }

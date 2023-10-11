@@ -38,7 +38,7 @@ const ListFiles = ({
       {listItems.length > 0 ? (
         listItems.map((item) => (
           <Col span={span} key={item.id}>
-            <div className='content-list'>
+            <div className='content-list-files'>
               <div className='item-list'>
                 <Row>
                   <div className='content-img-file'>

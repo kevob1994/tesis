@@ -101,24 +101,22 @@ const CreateCoursePage = () => {
           type: evaluation.type,
         }))
       );
-    } 
+    }
   }, [evaluations]);
 
-	useEffect(() => {
-		if(listEvaluations.length === 0 && rangeDates[0]){
-			setListEvaluations([
-				{
-					name: "",
-					description: "",
-					date: rangeDates[0].toDate(),
-					value: "",
-					type: "",
-				},
-			]);
-		}
-		
-	}, [rangeDates])
-	
+  useEffect(() => {
+    if (listEvaluations.length === 0 && rangeDates[0]) {
+      setListEvaluations([
+        {
+          name: "",
+          description: "",
+          date: rangeDates[0].toDate(),
+          value: "",
+          type: "",
+        },
+      ]);
+    }
+  }, [rangeDates]);
 
   useEffect(() => {
     if (infoCourse) {
@@ -245,7 +243,7 @@ const CreateCoursePage = () => {
     }
   };
 
-	const validateEvaluationPlanEmpty = () => {
+  const validateEvaluationPlanEmpty = () => {
     const list = listEvaluations
       .map(({ date, description, name, value }: ITableEvaluations) => ({
         date,
@@ -264,7 +262,23 @@ const CreateCoursePage = () => {
       );
 
     return list.length > 0;
-  }
+  };
+  const validateStep = (step: number) => {
+    switch (step) {
+      case 1:
+        return !!(full_name && short_name && category && description);
+      case 2:
+        return !!(
+          bibliographyList.length !== 0 &&
+          specificGoals.length !== 0 &&
+          thematicList.length !== 0 &&
+          fundament &&
+          main_goal
+        );
+      case 3:
+        return !!(listEvaluations.length > 0 && !validateEvaluationPlanEmpty());
+    }
+  };
 
   return (
     <>
@@ -272,7 +286,7 @@ const CreateCoursePage = () => {
         title={id ? "Edición de curso" : "Creación de curso"}
         visible={visibleModal}
         onOk={() => setVisibleModal(false)}
-        onCancel={() => navigate("/", { replace: true })}
+        onCancel={() => navigate(-1)}
         okText='No'
         cancelText='Si'
         centered
@@ -291,48 +305,42 @@ const CreateCoursePage = () => {
             title='Información'
             icon={<ProfileOutlined />}
             onClick={() => setCurrent(0)}
-            style={{ cursor: "pointer" }}
+            style={{
+              cursor: "pointer",
+            }}
+            className={current === 0 ? "step-selected" : ""}
           />
           <Step
             key='step2'
-            title='Contenido de la materia'
+            title='Contenido'
             icon={<ReadOutlined />}
             onClick={() => {
-              if (full_name && short_name && category && description)
-                setCurrent(1);
+              if (validateStep(1)) setCurrent(1);
             }}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: validateStep(1) ? "pointer" : "auto" }}
+            className={current === 1 ? "step-selected" : ""}
           />
           <Step
             key='step3'
-            title='Plan de Evaluación'
+            title='Evaluaciones'
             icon={<CalendarOutlined />}
             onClick={() => {
-              if (
-                bibliographyList.length !== 0 &&
-                specificGoals.length !== 0 &&
-                thematicList.length !== 0 &&
-                fundament &&
-                main_goal &&
-                competence 
-              ) {
+              if (validateStep(2)) {
                 setCurrent(2);
               }
             }}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: validateStep(2) ? "pointer" : "auto" }}
+            className={current === 2 ? "step-selected" : ""}
           />
           <Step
             key='step4'
             title='Finalizar'
             icon={<CheckCircleOutlined />}
             onClick={() => {
-              if (
-                listEvaluations.length > 0 &&
-                !validateEvaluationPlanEmpty()
-              )
-                setCurrent(3);
+              if (validateStep(3)) setCurrent(3);
             }}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: validateStep(3) ? "pointer" : "auto" }}
+            className={current === 3 ? "step-selected" : ""}
           />
         </Steps>
 

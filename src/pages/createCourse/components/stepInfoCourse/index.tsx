@@ -62,9 +62,9 @@ const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
 
   useEffect(() => {
     if (id) {
-      setImageUrl2(photo);
+      setImageUrl2(formCourse.photo);
     }
-  }, []);
+  }, [formCourse]);
 
   const onFinish = (values: any) => {
     nextStep();
@@ -112,7 +112,7 @@ const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
             key={`date_finish-${rangeDates[0]}}`}
           >
             <Row gutter={50}>
-              <Col span={12} flex={1}>
+              <Col xs={24} sm={24} md={12}  flex={1}>
                 <Form.Item
                   label='Nombre completo del curso'
                   name='full_name'
@@ -129,7 +129,7 @@ const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
                 </Form.Item>
               </Col>
 
-              <Col span={12}>
+              <Col xs={24} sm={24} md={12}>
                 <Form.Item
                   label='Nombre corto del curso'
                   name='short_name'
@@ -146,7 +146,7 @@ const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
                 </Form.Item>
               </Col>
 
-              <Col span={12}>
+              <Col xs={24} sm={24} md={12}>
                 <Form.Item
                   label='Categoría del curso'
                   name='category'
@@ -167,7 +167,7 @@ const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
                 </Form.Item>
               </Col>
 
-              <Col span={12}>
+              <Col xs={24} sm={24} md={12}>
                 <Form.Item
                   label='Descripción'
                   name='description'
@@ -185,11 +185,11 @@ const StepInfoCourse: FunctionComponent<IStepInfoCourseProps> = ({
                 </Form.Item>
               </Col>
 
-              <Col span={12}>
+              <Col xs={24} sm={24} md={12}>
                 <Form.Item
                   label='Fecha inicio y fin del curso'
                   rules={[{ required: true, message: "Campo requerido" }]}
-                  initialValue={[rangeDates[0], rangeDates[1]]}
+                  initialValue={rangeDates[1]}
                 >
                   <RangePicker
                     format={dateFormat}

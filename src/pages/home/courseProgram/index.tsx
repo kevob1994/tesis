@@ -2,10 +2,10 @@ import { getCourse, getProgram } from "actions/course";
 import LoaderSpin from "components/LoaderSpin";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { StoreI } from "../../../utils/interfaces";
+import { useNavigate, useParams } from "react-router-dom";
+import { RoleE, StoreI } from "../../../utils/interfaces";
 import "./index.scss";
-import { Col, Image, List, Row } from "antd";
+import { Button, Col, Image, List, Row } from "antd";
 import { categoryClass, dateFormat } from "utils/const";
 import moment from "moment";
 
@@ -13,6 +13,8 @@ const CourseProgramPage = () => {
   const { program, loading, infoCourse } = useSelector(
     (state: StoreI) => state.courses
   );
+  let navigate = useNavigate();
+  const { user } = useSelector((state: StoreI) => state.auth);
   const dispatch = useDispatch();
   const { id } = useParams();
 
@@ -22,8 +24,6 @@ const CourseProgramPage = () => {
     if (id) getCourseData(id);
   }, [id]);
 
-  console.log("infoCourse");
-  console.log(infoCourse);
   console.log(
     infoCourse
       ? moment(new Date(infoCourse.course.date_begin), dateFormat)
@@ -31,13 +31,29 @@ const CourseProgramPage = () => {
   );
   return (
     <div>
-      <h1>Contenido de la materia</h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <h1>Contenido del curso</h1>
+        {user?.role === RoleE.TEACHER ? (
+          <Button type='primary' onClick={() => {navigate(`/edit-course/${id}`)}} style={{ height: 40 }}>
+            Editar
+          </Button>
+        ) : (
+          <div></div>
+        )}
+      </div>
+
       {loading && !infoCourse ? (
         <LoaderSpin />
       ) : (
         <>
-          <Row gutter={20}>
-            <Col span={5} flex={1}>
+          <div className='content-program'>
+            <div>
               <Image
                 preview={false}
                 src={
@@ -89,8 +105,8 @@ const CourseProgramPage = () => {
                   Descripción: <span>{infoCourse?.course.description}</span>
                 </p>
               </div>
-            </Col>
-            <Col span={18} flex={1}>
+            </div>
+            <div>
               <div style={{ marginBottom: 40 }}>
                 <div style={{ paddingLeft: 15 }}>
                   <div className='content-text'>
@@ -129,7 +145,9 @@ const CourseProgramPage = () => {
                         <List.Item>
                           {" "}
                           <div>
-                            <div style={{marginBottom: 10}}>Temática: {item.content}</div>
+                            <div style={{ marginBottom: 10 }}>
+                              contenido Temático: {item.content}
+                            </div>
                             <div>Actividad: {item.activity} </div>
                           </div>
                         </List.Item>
@@ -165,8 +183,8 @@ const CourseProgramPage = () => {
                   </div>
                 </div>
               </div>
-            </Col>
-          </Row>
+            </div>
+          </div>
         </>
       )}
     </div>

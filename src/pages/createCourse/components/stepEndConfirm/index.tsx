@@ -82,7 +82,7 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
       key: "type",
     },
     {
-      title: "Ponderación",
+      title: "Porcentaje (%)",
       dataIndex: "value",
       key: "value",
     },
@@ -176,7 +176,7 @@ const StepEndConfirm: FunctionComponent<IStepEndConfirmProps> = ({
           </Col>
           <Col span={18} flex={1}>
             <div style={{ marginBottom: 40 }}>
-              <h2>Contenido de la materia</h2>
+              <h2>Contenido del curso</h2>
               <div style={{ paddingLeft: 15 }}>
                 <div className='content-text'>
                   <h3>Fundamentos</h3>

@@ -1,18 +1,18 @@
-import Modal from 'antd/lib/modal/Modal';
-import FlexView from 'react-flexview/lib';
-import classNames from 'classnames';
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import React, { useEffect } from 'react';
-import * as _ from 'lodash';
-import moment from 'moment';
-import './index.scss';
-import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
-import { translateMonth } from '../../../utils/utils';
-import { useDispatch, useSelector } from 'react-redux';
-import { getListEvaluationsCourse } from '../../../actions/course';
-import { useParams } from 'react-router-dom';
-import { EvaluationsI, StoreI } from '../../../utils/interfaces';
-import LoaderSpin from 'components/LoaderSpin';
+import Modal from "antd/lib/modal/Modal";
+import FlexView from "react-flexview/lib";
+import classNames from "classnames";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import React, { useEffect } from "react";
+import * as _ from "lodash";
+import moment from "moment";
+import "./index.scss";
+import useBreakpoint from "antd/lib/grid/hooks/useBreakpoint";
+import { translateMonth } from "../../../utils/utils";
+import { useDispatch, useSelector } from "react-redux";
+import { getListEvaluationsCourse } from "../../../actions/course";
+import { useParams } from "react-router-dom";
+import { EvaluationsI, StoreI } from "../../../utils/interfaces";
+import LoaderSpin from "components/LoaderSpin";
 
 export interface ICalendarData {
   date: string;
@@ -60,24 +60,31 @@ const CalendarPage = () => {
   }, []);
 
   useEffect(() => {
-    setEvaluationsByMonth(
-      evaluations.filter(
-        (evaluations) =>
-          moment(evaluations.date).format('M') ===
-          moment().add(monthOffset, 'month').format('M')
-      )
+    const items = evaluations.filter(
+      (evaluations) =>
+        moment(evaluations.date).format("M") ===
+          moment().add(monthOffset, "month").format("M") ||
+        moment(evaluations.date).format("M") ===
+          moment()
+            .add(monthOffset - 1, "month")
+            .format("M") ||
+        moment(evaluations.date).format("M") ===
+          moment()
+            .add(monthOffset + 1, "month")
+            .format("M")
     );
+    setEvaluationsByMonth(items);
   }, [evaluations, monthOffset]);
 
   return (
     <>
-		<h1>Calendario</h1>
+      <h1>Calendario</h1>
       {loading ? (
         <LoaderSpin />
       ) : (
         <FlexView column className='calendarContainer'>
           <>
-            {' '}
+            {" "}
             <Header
               monthOffset={monthOffset}
               increaseMonth={(qty: number) => setMonthOffset(monthOffset + qty)}
@@ -103,7 +110,7 @@ const Header = (props: ICalendarProps) => {
       className='calendarHeader'
       vAlignContent='center'
       style={{
-        justifyContent: !!props.increaseMonth ? 'space-between' : 'center',
+        justifyContent: !!props.increaseMonth ? "space-between" : "center",
       }}
     >
       {!!props.increaseMonth && (
@@ -114,13 +121,13 @@ const Header = (props: ICalendarProps) => {
         <p className='month'>
           {translateMonth(
             moment()
-              .add(props.monthOffset, 'month')
-              .format('MMMM')
+              .add(props.monthOffset, "month")
+              .format("MMMM")
               .toLocaleUpperCase()
           )}
         </p>
         <p className='year'>
-          {moment().add(props.monthOffset, 'month').format('YYYY')}
+          {moment().add(props.monthOffset, "month").format("YYYY")}
         </p>
       </FlexView>
       {!!props.increaseMonth && (
@@ -145,22 +152,22 @@ const Days = () => {
 };
 
 const Dates = (props: ICalendarProps) => {
-  let d = moment().add(props.monthOffset, 'month').startOf('month');
+  let d = moment().add(props.monthOffset, "month").startOf("month");
   // debugger;
   const bp = useBreakpoint();
   const startOffset = d.day();
-  const restOffset = 7 - d.clone().add(1, 'month').day();
-  const d_start = d.clone().subtract(startOffset, 'day');
+  const restOffset = 7 - d.clone().add(1, "month").day();
+  const d_start = d.clone().subtract(startOffset, "day");
   const [detailsModal, setDetailsModal] = React.useState<any>(null);
 
   return (
     <div className='dates'>
       {_.range(0, d.daysInMonth() + startOffset + restOffset + 3).map((n) => {
-        const date = d_start.clone().add(n, 'day');
+        const date = d_start.clone().add(n, "day");
         let booking: any = null;
-        if (date.month() === moment().add(props.monthOffset, 'month').month()) {
+        if (date.month() === moment().add(props.monthOffset, "month").month()) {
           booking = props.data?.find((v) => {
-            const d = moment(v.date).startOf('day');
+            const d = moment(v.date).startOf("day");
             if (d.date() === date.date() && d.month() === date.month()) {
               return true;
             } else {
@@ -172,27 +179,31 @@ const Dates = (props: ICalendarProps) => {
 
         const isToday = date
           .clone()
-          .startOf('day')
-          .isSame(moment().startOf('day'));
+          .startOf("day")
+          .isSame(moment().startOf("day"));
         const disabledDate =
-          date.month() != moment().add(props.monthOffset, 'month').month();
+          date.month() != moment().add(props.monthOffset, "month").month();
 
         // if (!!props.startEnd && props.startEnd.length >= 2) {
         //   if (date.isBetween(props.startEnd[0], props.startEnd[1])) {
 
-        const infoEvaluation = (day: number) => {
+        const infoEvaluation = (day: number, month: number, year: number, disabledDate: boolean) => {
           const { evaluationsByMonth } = props;
           if (evaluationsByMonth) {
             const evaluationInDay = evaluationsByMonth.filter((evaluation) => {
-              return +moment(evaluation.date).format('D') === day;
+              return (
+                +moment(evaluation.date).format("D") === day &&
+                moment(evaluation.date).month() === month &&
+                moment(evaluation.date).year() === year
+              );
             });
             if (evaluationInDay.length == 0) return null;
 
             return (
               <>
-                <div className='active'>
+                <div className={disabledDate ? 'disable-evaluation': 'active'}>
                   <p>{evaluationInDay[0].name}</p>
-                  <span>{moment(evaluationInDay[0].date).format('HH:MM')}</span>
+                  <span>{moment(evaluationInDay[0].date).format("HH:MM")}</span>
                 </div>
               </>
             );
@@ -201,10 +212,11 @@ const Dates = (props: ICalendarProps) => {
           }
         };
 
+
         return (
           <FlexView
             column
-            className={classNames('date', {
+            className={classNames("date", {
               today: isToday && !disabledDate,
               disabled: disabledDate,
               classroomDate:
@@ -227,7 +239,10 @@ const Dates = (props: ICalendarProps) => {
             >
               {date.date()}
             </span>
-            {bp.md ? infoEvaluation(date.date()) : null}
+
+            {bp.md
+              ? infoEvaluation(date.date(), date.month(), date.year(), disabledDate)
+              : null}
           </FlexView>
         );
       })}

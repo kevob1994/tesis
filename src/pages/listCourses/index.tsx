@@ -76,6 +76,10 @@ const ListCourses = () => {
     navigate(`edit-course/${id}`);
   };
 
+  const goView = (id: number) => {
+    navigate(`edit-course/${id}`);
+  };
+
   const transformListCourse = () => {
     return courses.map((course) => ({
       id: course.id,
@@ -90,7 +94,7 @@ const ListCourses = () => {
     }));
   };
   const handleCopy = () => {
-		toast.success('Código copiado');
+    toast.success("Código copiado");
   };
 
   return (
@@ -135,7 +139,9 @@ const ListCourses = () => {
               <p className='text-code'>{codeCourse}</p>
               <CopyToClipboard text={codeCourse} onCopy={handleCopy}>
                 <Tooltip title='Copiar'>
-                  <Button style={{ width: "30px", height: "30px", marginLeft: 20}}>
+                  <Button
+                    style={{ width: "50px", height: "50px", marginLeft: 20 }}
+                  >
                     <CopyOutlined style={{ cursor: "pointer" }} />
                   </Button>
                 </Tooltip>
@@ -185,11 +191,9 @@ const ListCourses = () => {
 
       <div className='content-list-courses'>
         {!loadingCourse ? (
-          <Row align='middle' gutter={50}>
-            <Col span={20}>
-              <h1>Cursos</h1>
-            </Col>
-            <Col span={4}>
+          <Row align='middle'>
+            <div style={{ width: '100%', display: "flex", justifyContent: 'space-between',alignItems: 'center' }}>
+              <h1 className="title-course">Cursos</h1>
               {role === RoleE.TEACHER ? (
                 <Link to='/create-course'>
                   <Button size='large' type='primary' block>
@@ -206,10 +210,11 @@ const ListCourses = () => {
                   Unirse
                 </Button>
               )}
-            </Col>
+            </div>
 
             <Col span={24}>
               <ListElements
+                textGoItem={"Ver curso"}
                 listItems={transformListCourse()}
                 deleteItem={
                   auth.user?.role === RoleE.TEACHER
@@ -229,7 +234,6 @@ const ListCourses = () => {
                     ? "No tiene cursos creados"
                     : "No se ha unido a ningun curso"
                 }
-								
               />
             </Col>
           </Row>

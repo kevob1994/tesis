@@ -3,7 +3,6 @@
 .content-list {
   margin-top: 20px;
   position: relative;
-  cursor: pointer;
 
   .open-item {
     position: absolute;
@@ -25,6 +24,7 @@
     }
     .info-course {
       margin-left: 30px;
+			
       flex-direction: column;
       justify-content: space-between;
       flex: 1;
@@ -59,19 +59,10 @@
       }
     }
 
-    &:hover {
-      transform: scale(1.01);
-      box-shadow: 1px 1px 11px 4px rgb(0 0 0 / 5%);
-      transition: transform 0.5s;
-    }
+
   }
 }
 
-.is-hover {
-  transform: scale(1.01);
-  box-shadow: 1px 1px 11px 4px rgb(0 0 0 / 5%);
-  transition: transform 0.5s;
-}
 
 p {
   margin: 0px !important;
@@ -88,4 +79,29 @@ a {
   font-size: 1.5rem;
   color: $primary;
   font-weight: bold;
+}
+
+.text-description {
+	overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* start showing ellipsis when 3rd line is reached */
+  white-space: pre-wrap;
+	min-height: 70px;
+}
+
+.text-title {
+	overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    white-space: pre-wrap;
+
+		
+}
+
+.content-margin {
+	@media (max-width: 990px) {
+		margin-top: 10px;
+	}
 }

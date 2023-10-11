@@ -242,11 +242,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
 
     if (!validatePercent()) {
       return setShowError(
-        "La suma total de las notas debe ser 100% y actualmente es " +
-          listEvaluations.reduce(
-            (sum, evaluation) => sum + +evaluation.value,
-            0
-          ) + "%"
+        "La suma total de las notas debe ser 100%"
       );
     }
     setShowError(null);
@@ -308,6 +304,15 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
           <p>Fecha fin: {rangeDates[1].format(dateFormat)}</p>
         </div>
 
+        <div style={{ marginTop: 10, fontWeight: "bold", color: "gray" }}>
+          <p>
+            Porcentaje total:{" "}
+            {listEvaluations.reduce(
+              (sum, evaluation) => sum + +evaluation.value,
+              0
+            )} %
+          </p>
+        </div>
         <Form form={form} component={false}>
           <Table
             locale={{ emptyText: "Sin evaluaciones" }}
@@ -315,7 +320,7 @@ const StepEvaluationPlan: FunctionComponent<IStepEvaluationPlanProps> = ({
             columns={columns}
             pagination={false}
           />
-          {showError && <p style={{ color: "#ff4d4f" }}>{showError}</p>}
+          {showError && <p style={{ color: "#ff4d4f" }}>{showError} </p>}
           <div className='steps-action' style={{ marginTop: 20 }}>
             <Row justify='space-between'>
               <Button

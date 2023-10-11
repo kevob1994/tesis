@@ -89,7 +89,7 @@ const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
   return (
     <div className='content'>
       <div className='content-course-form-row '>
-        <h1>Contenido de la materia</h1>
+        <h1>Contenido del curso</h1>
         <Form
           name='basic'
           layout='vertical'
@@ -137,7 +137,6 @@ const StepCourseProgram: FunctionComponent<IStepCourseProgramProps> = ({
               <Form.Item
                 label='Competencias'
                 name='competence'
-                rules={[{ required: true, message: "Campo requerido" }]}
                 initialValue={competence}
               >
                 <TextArea

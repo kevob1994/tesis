@@ -276,6 +276,7 @@ const ForumRoomPage = () => {
           <Row align='middle' gutter={50} className='row-forum'>
             <Col span={24}>
               <ListElements
+                textGoItem={"Ver tema"}
                 listItems={transformListForum()}
                 deleteItem={openModalRemoveCourse}
                 url={`${location.pathname}/id`}

@@ -1,13 +1,15 @@
 import {
   DeleteOutlined,
   EditOutlined,
+  EyeFilled,
+  EyeOutlined,
   LaptopOutlined,
   MoreOutlined,
   ShareAltOutlined,
-} from '@ant-design/icons';
-import { Button, Dropdown, Menu } from 'antd';
-import React, { FunctionComponent } from 'react';
-import { listItemsI } from 'utils/interfaces';
+} from "@ant-design/icons";
+import { Button, Dropdown, Menu } from "antd";
+import React, { FunctionComponent } from "react";
+import { listItemsI } from "utils/interfaces";
 
 interface MenuItemPropsI {
   item: listItemsI;
@@ -16,6 +18,8 @@ interface MenuItemPropsI {
   editItem?: (id: number) => void;
   textDelete?: string;
   handlerShare: (code: string) => void;
+  goItem: () => void;
+  textGoItem: string;
 }
 
 export const MenuItem: FunctionComponent<MenuItemPropsI> = ({
@@ -24,9 +28,22 @@ export const MenuItem: FunctionComponent<MenuItemPropsI> = ({
   deleteItem,
   editItem,
   handlerShare,
+  goItem,
+	textGoItem
 }) => {
   const menu = (
     <Menu>
+      
+        <Menu.Item
+          key='view'
+          icon={<EyeOutlined />}
+          onClick={(e) => {
+            goItem();
+          }}
+        >
+          {textGoItem}
+        </Menu.Item>
+      
       {shareElement && (
         <Menu.Item
           key='share'
@@ -63,7 +80,7 @@ export const MenuItem: FunctionComponent<MenuItemPropsI> = ({
     </Menu>
   );
   return (
-    <Dropdown overlay={menu} placement='bottomCenter' trigger={['click']}>
+    <Dropdown overlay={menu} placement='bottomCenter' trigger={["click"]}>
       <Button
         type='primary'
         shape='circle'

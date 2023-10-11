@@ -1,7 +1,6 @@
 @import './../../styles/index.scss';
 
 .content-login {
-  padding: 100px 200px;
   height: 100vh;
 	background: $background;
   &-row {
@@ -30,6 +29,9 @@
     .content-slide {
       border-bottom-right-radius: 20px;
       border-top-right-radius: 20px;
+			// @media (max-width: 450px) {
+			// 		display: none;
+			// }
     }
   }
 }

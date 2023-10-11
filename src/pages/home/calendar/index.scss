@@ -89,6 +89,21 @@
           line-height: 27px;
         }
       }
+			
+      .disable-evaluation {
+        // height: 27px;
+        background-color: #65af9da2;
+        width: 100%;
+        padding: 0px 5px;
+				border-radius: 5px;
+        span {
+          font-weight: bold;
+          font-size: 12px;
+          color: #fff;
+          margin-left: 4px;
+          line-height: 27px;
+        }
+      }
       .activeMobile {
         background: #a9e1af;
         /* padding: 13px; */
