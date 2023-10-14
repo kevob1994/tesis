@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Table,
   Tag,
@@ -10,29 +10,29 @@ import {
   message,
   Upload,
   Spin,
-} from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { ColumnProps } from 'antd/lib/table';
+} from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { ColumnProps } from "antd/lib/table";
 import {
   DownloadOutlined,
   EditOutlined,
   UploadOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 import {
   EvaluationFileParamsI,
   EvaluationStudentI,
   StoreI,
-} from '../../../../utils/interfaces';
+} from "../../../../utils/interfaces";
 import {
   getListEvaluationsCourseByStudent,
   updateEvaluationFile,
   uploadEvaluationFile,
-} from '../../../../actions/course';
-import { TypeFiles } from '../../../../utils/const';
-import { clientAxios, headerAuthToken } from '../../../../config/axios';
-import './index.scss';
-import LoaderSpin from 'components/LoaderSpin';
+} from "../../../../actions/course";
+import { TypeFiles } from "../../../../utils/const";
+import { clientAxios, headerAuthToken } from "../../../../config/axios";
+import "./index.scss";
+import LoaderSpin from "components/LoaderSpin";
 
 export const TableStudent = () => {
   const [listEvaluations, setListEvaluations] = useState<EvaluationStudentI[]>(
@@ -72,7 +72,7 @@ export const TableStudent = () => {
     },
     beforeUpload: (file: any) => {
       const type = file.name
-        .substr(file.name.lastIndexOf('.') + 1 - file.name.length)
+        .substr(file.name.lastIndexOf(".") + 1 - file.name.length)
         .toLowerCase();
 
       const isValidFormat =
@@ -90,7 +90,7 @@ export const TableStudent = () => {
           id_evaluation: selectEvaluation!.evaluation_id.toString(),
         };
 
-        if(id) saveFile(obj, id);
+        if (id) saveFile(obj, id);
       } else {
         message.error(
           `${file.name} debe tener formato pdf, word, excel, png, jpg`
@@ -111,7 +111,7 @@ export const TableStudent = () => {
     },
     beforeUpload: (file: any) => {
       const type = file.name
-        .substr(file.name.lastIndexOf('.') + 1 - file.name.length)
+        .substr(file.name.lastIndexOf(".") + 1 - file.name.length)
         .toLowerCase();
 
       const isValidFormat =
@@ -129,7 +129,7 @@ export const TableStudent = () => {
           id_evaluation: selectEvaluation!.file_id!.toString(),
         };
 
-        if(id) updateFile(obj, id);
+        if (id) updateFile(obj, id);
       } else {
         message.error(
           `${file.name} debe tener formato pdf, word, excel, png, jpg`
@@ -157,7 +157,7 @@ export const TableStudent = () => {
     return clientAxios.get(
       `evaluation/${evaluation_id}/assignment?student_id=${student_id}`,
       {
-        responseType: 'arraybuffer',
+        responseType: "arraybuffer",
         headers: headerAuthToken(),
       }
     );
@@ -165,10 +165,10 @@ export const TableStudent = () => {
 
   const downloadFile = (evaluation: EvaluationStudentI, student_id: string) => {
     getFileToDownload(evaluation.evaluation_id, student_id).then((response) => {
-      const type = response.headers['content-type'];
+      const type = response.headers["content-type"];
       const blob = new Blob([response.data], { type: type });
-      const link = document.createElement('a');
-      link.setAttribute('download', evaluation.evaluation_name);
+      const link = document.createElement("a");
+      link.setAttribute("download", evaluation.evaluation_name);
       link.href = window.URL.createObjectURL(blob);
       // link.download = 'file.xlsx';
       link.click();
@@ -177,16 +177,16 @@ export const TableStudent = () => {
 
   const columnsStudent: ColumnProps<EvaluationStudentI>[] = [
     {
-      title: 'Evaluación',
-      dataIndex: 'evaluation_name',
-      key: 'evaluation_name',
-      width: '33%',
+      title: "Evaluación",
+      dataIndex: "evaluation_name",
+      key: "evaluation_name",
+      width: "33%",
     },
     {
-      title: 'Estado',
-      dataIndex: 'upload',
-      key: 'upload',
-      width: '33%',
+      title: "Estado",
+      dataIndex: "upload",
+      key: "upload",
+      width: "33%",
       render: (text, record, index) => {
         return (
           <>
@@ -203,18 +203,21 @@ export const TableStudent = () => {
     },
 
     {
-      title: 'Acciones',
-      dataIndex: 'actions',
-      key: 'actions',
-      width: '33%',
+      title: "Acciones",
+      dataIndex: "actions",
+      key: "actions",
+      width: "33%",
       render: (text, record, index) => {
         return (
           <>
             <div>
               {record.upload ? (
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Upload {...propsUpdate} showUploadList={false} 
-						disabled={record.evaluation_available === 0}>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <Upload
+                    {...propsUpdate}
+                    showUploadList={false}
+                    disabled={!record?.evaluation_available}
+                  >
                     <div
                       onClick={() => {
                         setSelectEvaluation(record);
@@ -229,6 +232,7 @@ export const TableStudent = () => {
                           shape='circle'
                           icon={<EditOutlined />}
                           size='large'
+													disabled={!record?.evaluation_available}
                         />
                       </Tooltip>
                     </div>
@@ -237,19 +241,23 @@ export const TableStudent = () => {
                     style={{ marginLeft: 20 }}
                     onClick={() => downloadFile(record, user!.id.toString())}
                   >
-                    <Tooltip placement='bottom' title='Descargar archivo'>
+                    <Tooltip placement='bottom' title='Descargar archivo' >
                       <Button
                         type='primary'
                         shape='circle'
                         icon={<DownloadOutlined />}
                         size='large'
-						disabled={record.evaluation_available === 0}
+												
                       />
                     </Tooltip>
                   </div>
                 </div>
               ) : (
-                <Upload {...props} showUploadList={false} disabled={record.evaluation_available === 0}>
+                <Upload
+                  {...props}
+                  showUploadList={false}
+                  disabled={!record?.evaluation_available}
+                >
                   <div
                     onClick={() => {
                       setSelectEvaluation(record);
@@ -261,7 +269,7 @@ export const TableStudent = () => {
                         shape='circle'
                         icon={<UploadOutlined />}
                         size='large'
-						disabled={record.evaluation_available === 0}
+												disabled={!record?.evaluation_available}
                       />
                     </Tooltip>
                   </div>
@@ -278,7 +286,7 @@ export const TableStudent = () => {
     <div>
       {!loading ? (
         <Row>
-          <Col span={24} style={{ padding: '0px 10px' }}>
+          <Col span={24} style={{ padding: "0px 10px" }}>
             <div>
               <Table
                 pagination={false}

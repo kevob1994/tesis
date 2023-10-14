@@ -192,8 +192,15 @@ const ListCourses = () => {
       <div className='content-list-courses'>
         {!loadingCourse ? (
           <Row align='middle'>
-            <div style={{ width: '100%', display: "flex", justifyContent: 'space-between',alignItems: 'center' }}>
-              <h1 className="title-course">Cursos</h1>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <h1 className='title-course'>Cursos</h1>
               {role === RoleE.TEACHER ? (
                 <Link to='/create-course'>
                   <Button size='large' type='primary' block>
@@ -201,14 +208,16 @@ const ListCourses = () => {
                   </Button>
                 </Link>
               ) : (
-                <Button
-                  size='large'
-                  type='primary'
-                  block
-                  onClick={() => setOpenModalShareCode(true)}
-                >
-                  Unirse
-                </Button>
+                <div style={{ width: 150 }}>
+                  <Button
+                    size='large'
+                    type='primary'
+                    block
+                    onClick={() => setOpenModalShareCode(true)}
+                  >
+                    Unirse
+                  </Button>
+                </div>
               )}
             </div>
 

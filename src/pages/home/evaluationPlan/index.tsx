@@ -65,7 +65,7 @@ const EvaluationPlanPage = () => {
           alignItems: "center",
         }}
       >
-        <h1>Contenido del curso</h1>
+        <h1>Plan de Evaluación</h1>
         {user?.role === RoleE.TEACHER ? (
           <Button type='primary' onClick={() => {navigate(`/edit-course/${id}`)}} style={{ height: 40 }}>
             Editar
